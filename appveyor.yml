@@ -43,5 +43,5 @@ after_test:
 
 artifacts:
   # Dll to check if and how version information is added.
-- path: src\Playground.Calculator\bin\Release\**\*.dll
+- path: src\Z85e\bin\Release\**\*.dll
   name: Library
