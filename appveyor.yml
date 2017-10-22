@@ -1,0 +1,47 @@
+# see https://www.appveyor.com/docs/build-configuration/
+environment:
+  # see https://docs.microsoft.com/en-us/dotnet/core/tools/telemetry
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+version: 1.0.{build}
+image: Visual Studio 2017
+configuration: Release
+platform: Any CPU
+
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+
+install:
+# install giversion.
+# gitversion will set some appveyor settings with version information
+- choco install gitversion.portable -pre -y
+- C:\ProgramData\chocolatey\lib/gitversion.portable/tools/gitversion.exe /l console /output buildserver
+
+before_build:
+- dotnet restore
+
+build_script:
+- dotnet build
+# - dotnet msbuild
+
+after_build:
+#
+
+before_test:
+# install opencover and codecov for exporting the coverage results.
+- choco install opencover.portable
+- choco install codecov
+
+test_script:
+- C:\ProgramData\chocolatey\lib\opencover.portable\tools\OpenCover.Console.exe -register:user -target:dotnet.exe -targetargs:"test src/Z85e.Test/Z85e.Test.csproj" -oldstyle -filter:"+[CoenM*]* -[CoenM*.Test]*" -hideskipped:Filter -returntargetcode -mergeoutput -output:".\coverage-dotnet.xml"
+
+after_test:
+- codecov -f coverage-dotnet.xml
+
+artifacts:
+  # Dll to check if and how version information is added.
+- path: src\Playground.Calculator\bin\Release\netstandard2.0\*.dll
+  name: Library
