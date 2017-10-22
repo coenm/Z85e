@@ -6,4 +6,8 @@
     <AssemblyName>CoenM.Z85e</AssemblyName>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <DebugType>full</DebugType>
+    <DebugSymbols>True</DebugSymbols>
+  </PropertyGroup>
 </Project>
