@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <RootNamespace>CoenM.Z85e</RootNamespace>
+    <AssemblyName>CoenM.Z85e</AssemblyName>
+  </PropertyGroup>
+
+</Project>
