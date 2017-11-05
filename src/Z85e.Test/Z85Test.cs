@@ -1,3 +1,4 @@
+using System;
 using Xunit;
 
 namespace CoenM.Z85e.Test
@@ -17,6 +18,37 @@ namespace CoenM.Z85e.Test
         public void HelloWorldEncodeTest()
         {
             Assert.Equal(Z85.Encode(_helloWorldBytes), HelloWorldString);
+        }
+
+        [Fact]
+        public void EncodeThrowsExceptionWhenInputIsNullTest()
+        {
+            Assert.Throws<ArgumentNullException>(() => Z85.Encode(null));
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        public void EncodeThrowsExceptionWhenInputHasWrongSizeTest(int size)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => Z85.Encode(new byte[size]));
+        }
+
+        [Fact]
+        public void DecodeThrowsExceptionWhenInputIsNullTest()
+        {
+            Assert.Throws<ArgumentNullException>(() => Z85.Decode(null));
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        public void DecodeThrowsExceptionWhenInputHasWrongSizeTest(int size)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => Z85.Decode(new String('a', size)));
         }
     }
 }
