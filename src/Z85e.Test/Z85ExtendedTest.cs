@@ -58,6 +58,7 @@ namespace CoenM.Z85e.Test
 
 
         [Fact]
+        [Trait(XUnitConst.Catagory, XUnitConst.Categories.StressTest)]
         public void StressTest()
         {
             // arrange
