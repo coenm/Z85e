@@ -50,5 +50,21 @@ namespace CoenM.Z85e.Test
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => Z85.Decode(new String('a', size)));
         }
+
+
+        [Fact]
+        public void MultipleEncodedStringsDecodeToSameBytes()
+        {
+            // arrange
+            var encoded1 = "00000";
+            var encoded2 = "%nSc1";
+
+            // act
+            var result1 = Z85.Decode(encoded1);
+            var result2 = Z85.Decode(encoded2);
+
+            // assert
+            Assert.Equal(result1, result2);
+        }
     }
 }
