@@ -6,7 +6,7 @@ namespace CoenM.Z85e
     public static class Z85
     {
         //  Maps base 256 to base 85
-        public static readonly char[] Encoder =
+        internal static readonly char[] Encoder =
         {
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
@@ -22,7 +22,7 @@ namespace CoenM.Z85e
 
         //  Maps base 85 to base 256
         //  We chop off lower 32 and higher 128 ranges
-        public static readonly byte[] Decoder =
+        internal static readonly byte[] Decoder =
         {
             0x00, 0x44, 0x00, 0x54, 0x53, 0x52, 0x48, 0x00,
             0x4B, 0x4C, 0x46, 0x41, 0x00, 0x3F, 0x3E, 0x45,
@@ -41,7 +41,7 @@ namespace CoenM.Z85e
         public static IEnumerable<byte> Decode(string input)
         {
             if (input == null)
-                throw new ArgumentNullException(nameof(input));
+                return null;
 
             var len = (uint)input.Length;
 
@@ -78,7 +78,7 @@ namespace CoenM.Z85e
         public static string Encode(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException(nameof(data));
+                return null;
 
             var size = (uint)data.Length;
 

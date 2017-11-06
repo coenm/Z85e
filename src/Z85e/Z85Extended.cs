@@ -8,7 +8,7 @@ namespace CoenM.Z85e
         public static IEnumerable<byte> Decode(string input)
         {
             if (input == null)
-                throw new ArgumentNullException(nameof(input));
+                return null;
 
             var size = (uint)input.Length;
             var remainder = size % 5;
@@ -66,7 +66,7 @@ namespace CoenM.Z85e
         public static string Encode(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException(nameof(data));
+                return null;
 
             var size = (uint)data.Length;
             var remainder = size % 4;

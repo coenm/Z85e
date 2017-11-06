@@ -56,6 +56,24 @@ namespace CoenM.Z85e.Test
             Assert.Equal(Z85Extended.Decode("Hellojt#7"), bytes3);
         }
 
+        [Fact]
+        public void DecodeNullReturnsNullTest()
+        {
+            Assert.Null(Z85Extended.Decode(null));
+        }
+
+        [Fact]
+        public void EncodeNullReturnsNullTest()
+        {
+            Assert.Null(Z85Extended.Encode(null));
+        }
+
+        [Fact]
+        public void StringToDecodeCannotHaveSizeOneTest()
+        {
+            // 5n+1 chars is not allowed.
+            Assert.Throws<ArgumentException>(() => Z85Extended.Decode("123456"));
+        }
 
         [Fact]
         [Trait(XUnitConst.Catagory, XUnitConst.Categories.StressTest)]

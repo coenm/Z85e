@@ -20,12 +20,6 @@ namespace CoenM.Z85e.Test
             Assert.Equal(Z85.Encode(_helloWorldBytes), HelloWorldString);
         }
 
-        [Fact]
-        public void EncodeThrowsExceptionWhenInputIsNullTest()
-        {
-            Assert.Throws<ArgumentNullException>(() => Z85.Encode(null));
-        }
-
         [Theory]
         [InlineData(1)]
         [InlineData(2)]
@@ -36,9 +30,15 @@ namespace CoenM.Z85e.Test
         }
 
         [Fact]
-        public void DecodeThrowsExceptionWhenInputIsNullTest()
+        public void DecodeNullReturnsNullTest()
         {
-            Assert.Throws<ArgumentNullException>(() => Z85.Decode(null));
+            Assert.Null(Z85.Decode(null));
+        }
+
+        [Fact]
+        public void EncodeNullReturnsNullTest()
+        {
+            Assert.Null(Z85.Encode(null));
         }
 
         [Theory]
@@ -48,7 +48,7 @@ namespace CoenM.Z85e.Test
         [InlineData(4)]
         public void DecodeThrowsExceptionWhenInputHasWrongSizeTest(int size)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => Z85.Decode(new String('a', size)));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Z85.Decode(new string('a', size)));
         }
 
 
@@ -56,8 +56,8 @@ namespace CoenM.Z85e.Test
         public void MultipleEncodedStringsDecodeToSameBytes()
         {
             // arrange
-            var encoded1 = "00000";
-            var encoded2 = "%nSc1";
+            const string encoded1 = "00000";
+            const string encoded2 = "%nSc1";
 
             // act
             var result1 = Z85.Decode(encoded1);
