@@ -47,21 +47,21 @@ artifacts:
   - path: '**\*.nupkg'
     name: NuGet Packages
 
-# deploy:
-#   - provider: NuGet
-#     name: pre-release
-#     server: https://www.myget.org/F/infinitesoul/api/v2/package
-#     api_key:
-#         secure: /ZVEy+qqj8rmVkcPvuEuEsJCvEAG1chXaYhZCcLDEnhLIK+TkEIfGG/JDdMn7Qrf
-#     skip_symbols: false
-#     artifact: '*.nupkg'
-#     on:
-#         branch: master
+deploy:
+  - provider: NuGet
+    name: pre-release
+    server: https://www.myget.org/F/coenm/api/v2/package
+    api_key:
+        secure: t8JtzPkpHidqOii+bLuSiOKgqzsdoSCBI3Sc/Uy6D9jWfxNd7zUUhhTgGHj5rpV9
+    skip_symbols: false
+    artifact: '*.nupkg'
+    # on:
+    #     branch: master
 
 #   - provider: NuGet
 #     name: production
 #     api_key:
-#         secure: 8mKFfgwriyN1kzevZjQeDR8b3RdWPWnxDMZ2j5RZbQYquEhTo9YjPsNRaoqpWHaw
+#         secure: 
 #     skip_symbols: false
 #     artifact: '*.nupkg'
 #     on:
