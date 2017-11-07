@@ -3,7 +3,7 @@ environment:
   # see https://docs.microsoft.com/en-us/dotnet/core/tools/telemetry
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
 
-version: 1.0.{build}
+version: {GitVersion_LegacySemVerPadded}
 image: Visual Studio 2017
 configuration: Release
 platform: Any CPU
@@ -11,8 +11,8 @@ platform: Any CPU
 dotnet_csproj:
   patch: true
   file: '**\*.csproj'
-  version: '{version}'
-  package_version: '{version}'
+  version: '{GitVersion_LegacySemVerPadded}'
+  package_version: '{GitVersion_LegacySemVerPadded}'
 
 install:
 # install giversion.
