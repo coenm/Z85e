@@ -11,8 +11,8 @@ platform: Any CPU
 dotnet_csproj:
   patch: true
   file: '**\*.csproj'
-  version: '%GitVersion_LegacySemVerPadded%'
-  package_version: '%GitVersion_LegacySemVerPadded%'
+  version: '%GitVersion_FullSemVer%'
+  package_version: '%GitVersion_FullSemVer%'
 
 install:
 # install giversion.
@@ -25,8 +25,6 @@ before_build:
 
 build_script:
 - dotnet build
-# dotnet pack -c Release --include-symbols
-# - dotnet msbuild
 
 after_build:
 #
