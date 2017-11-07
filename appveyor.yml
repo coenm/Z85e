@@ -54,7 +54,7 @@ deploy:
     api_key:
         secure: t8JtzPkpHidqOii+bLuSiOKgqzsdoSCBI3Sc/Uy6D9jWfxNd7zUUhhTgGHj5rpV9
     skip_symbols: false
-    artifact: '*.nupkg'
+    artifact: '**\*.nupkg'
     # on:
     #     branch: master
 
@@ -63,6 +63,6 @@ deploy:
 #     api_key:
 #         secure: 
 #     skip_symbols: false
-#     artifact: '*.nupkg'
+#     artifact: '**\*.nupkg'
 #     on:
 #         appveyor_repo_tag: true
