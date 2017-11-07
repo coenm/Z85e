@@ -12,7 +12,8 @@ dotnet_csproj:
   patch: true
   file: '**\*.csproj'
   version: '%GitVersion_FullSemVer%'
-  package_version: '%GitVersion_FullSemVer%'
+  package_version: '%GitVersion_LegacySemVerPadded%'
+
 
 install:
 # install giversion.
