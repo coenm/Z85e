@@ -11,8 +11,9 @@ platform: Any CPU
 dotnet_csproj:
   patch: true
   file: '**\*.csproj'
-  version: '{version}'
-  package_version: '{version}'
+  version: '%GitVersion_FullSemVer%'
+  package_version: '%GitVersion_LegacySemVerPadded%'
+
 
 install:
 # install giversion.
@@ -25,7 +26,6 @@ before_build:
 
 build_script:
 - dotnet build
-# - dotnet msbuild
 
 after_build:
 #
@@ -40,8 +40,31 @@ test_script:
 
 after_test:
 - codecov -f coverage-dotnet.xml
+- ps: .scripts\pack.ps1
 
 artifacts:
-  # Dll to check if and how version information is added.
-- path: src\Z85e\bin\Release\**\*.dll
-  name: Library
+  - path: '**\*.nupkg'
+    name: NuGet Packages
+
+deploy:
+  - provider: NuGet
+    name: pre-release
+    server: https://www.myget.org/F/coenm/api/v2/package
+    api_key:
+        secure: t8JtzPkpHidqOii+bLuSiOKgqzsdoSCBI3Sc/Uy6D9jWfxNd7zUUhhTgGHj5rpV9
+    skip_symbols: true
+    # symbol_server: https://www.myget.org/F/coenm/symbols/api/v2/package
+    artifact: /.*\.nupkg/
+    
+
+    # on:
+    #     branch: master
+
+#   - provider: NuGet
+#     name: production
+#     api_key:
+#         secure: 
+#     skip_symbols: false
+#     artifact: '**\*.nupkg'
+#     on:
+#         appveyor_repo_tag: true

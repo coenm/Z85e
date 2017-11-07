@@ -5,9 +5,9 @@
 
     <IsPackable>false</IsPackable>
 
-    <AssemblyName>CoenM.Z85e.Test</AssemblyName>
+    <AssemblyName>Coen.Encoding.Z85e.Test</AssemblyName>
 
-    <RootNamespace>CoenM.Z85e.Test</RootNamespace>
+    <RootNamespace>Coen.Encoding.Test</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CoenM.Z85e
+namespace Coen.Encoding
 {
+    /// <summary>
+    /// Z85 Encoding library
+    /// </summary>
+    /// <remarks>This implementation is heavily based on https://github.com/zeromq/rfc/blob/master/src/spec_32.c </remarks>
     public static class Z85
     {
         //  Maps base 256 to base 85
@@ -38,6 +42,13 @@ namespace CoenM.Z85e
             0x21, 0x22, 0x23, 0x4F, 0x00, 0x50, 0x00, 0x00
         };
 
+        /// <summary>
+        /// Decode an encoded string into a byte array. Output size will be length of <paramref name="input"/> * 4 / 5.
+        /// </summary>
+        /// <remarks>This method will not check if <paramref name="input"/> only exists of Z85 characters.</remarks>
+        /// <param name="input">encoded string. Should have length multiple of 5.</param>
+        /// <returns><c>null</c> when input is null, otherwise bytes containing the decoded input string.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="input"/> is not a multiple of 5.</exception>
         public static IEnumerable<byte> Decode(string input)
         {
             if (input == null)
@@ -75,6 +86,12 @@ namespace CoenM.Z85e
             return decoded;
         }
 
+        /// <summary>
+        /// Encode a byte array as a string. Output size will be length of <paramref name="data"/> / 4 * 5.
+        /// </summary>
+        /// <param name="data"><c>byte[]</c> to encode. Length should be multiple of 4.</param>
+        /// <returns>Encoded string or <c>null</c> when the <paramref name="data"/> was null.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="data"/> is not a multiple of 4.</exception>
         public static string Encode(byte[] data)
         {
             if (data == null)

@@ -1,4 +1,4 @@
-﻿namespace CoenM.Z85e.Test
+﻿namespace Coen.Encoding.Test
 {
     public static class XUnitConst
     {
