@@ -25,6 +25,7 @@ before_build:
 
 build_script:
 - dotnet build
+# dotnet pack -c Release --include-symbols
 # - dotnet msbuild
 
 after_build:
@@ -40,8 +41,28 @@ test_script:
 
 after_test:
 - codecov -f coverage-dotnet.xml
+- ps .scripts\pack.ps1
 
 artifacts:
-  # Dll to check if and how version information is added.
-- path: src\Z85e\bin\Release\**\*.dll
-  name: Library
+  - path: '**\*.nupkg'
+    name: NuGet Packages
+
+# deploy:
+#   - provider: NuGet
+#     name: pre-release
+#     server: https://www.myget.org/F/infinitesoul/api/v2/package
+#     api_key:
+#         secure: /ZVEy+qqj8rmVkcPvuEuEsJCvEAG1chXaYhZCcLDEnhLIK+TkEIfGG/JDdMn7Qrf
+#     skip_symbols: false
+#     artifact: '*.nupkg'
+#     on:
+#         branch: master
+
+#   - provider: NuGet
+#     name: production
+#     api_key:
+#         secure: 8mKFfgwriyN1kzevZjQeDR8b3RdWPWnxDMZ2j5RZbQYquEhTo9YjPsNRaoqpWHaw
+#     skip_symbols: false
+#     artifact: '*.nupkg'
+#     on:
+#         appveyor_repo_tag: true

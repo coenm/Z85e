@@ -1,10 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CoenM.Z85e
+namespace Coen.Encoding
 {
+    /// <summary>
+    /// Z85 Extended Encoding library.
+    /// </summary>
     public static class Z85Extended
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public static IEnumerable<byte> Decode(string input)
         {
             if (input == null)
@@ -62,7 +70,11 @@ namespace CoenM.Z85e
             return decoded;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static string Encode(byte[] data)
         {
             if (data == null)
@@ -104,7 +116,6 @@ namespace CoenM.Z85e
                 }
                 value = 0;
             }
-
 
             // Take care of the remainder.
             divisor = (uint) Math.Pow(85, remainder);

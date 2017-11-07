@@ -1,12 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.6</TargetFramework>
-    <RootNamespace>CoenM.Z85e</RootNamespace>
-    <AssemblyName>CoenM.Z85e</AssemblyName>
+    <!-- do not manually update version, this will be done using appvayor -->
+    <Version>1.1.1</Version>
+    <Description>ZeroMQ's Z85 Encoding and the extended version. Formats for representing binary data as printable text.</Description>
+    <Authors>Coen van den Munckhof</Authors>
+    <TargetFrameworks>netstandard1.6;netstandard2.0</TargetFrameworks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <RootNamespace>Coen.Encoding</RootNamespace>
+    <AssemblyName>Coen.Encoding.Z85e</AssemblyName>    
+    <PackageId>Coen.Encoding.Z85e</PackageId>
+    <PackageTags>Z85;Z85extended;encoding;zeromq</PackageTags>
+    <PackageProjectUrl>https://github.com/coenm/Z85e</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/coenm/Z85e.git</RepositoryUrl>
   </PropertyGroup>
 
-  <PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebugType>full</DebugType>
     <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>

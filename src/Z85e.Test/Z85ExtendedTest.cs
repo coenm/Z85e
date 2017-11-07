@@ -1,9 +1,8 @@
 using System;
 using System.Security.Cryptography;
-using System.Text;
 using Xunit;
 
-namespace CoenM.Z85e.Test
+namespace Coen.Encoding.Test
 {
     public class Z85ExtendedTest
     {
@@ -91,7 +90,7 @@ namespace CoenM.Z85e.Test
 
         private static string CreateSha256Z85Encoded(string input)
         {
-            var bytes = Encoding.Unicode.GetBytes(input);
+            var bytes = System.Text.Encoding.Unicode.GetBytes(input);
             var hashstring = new SHA256Managed();
             return Z85.Encode(hashstring.ComputeHash(bytes));
         }
