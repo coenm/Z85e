@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-namespace Coen.Encoding.Test
+namespace CoenM.Encoding.Test
 {
     public class Z85Test
     {
