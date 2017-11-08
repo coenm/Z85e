@@ -10,7 +10,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <RootNamespace>CoenM.Encoding</RootNamespace>
     <AssemblyName>CoenM.Encoding.Z85e</AssemblyName>    
-    <PackageId>Coen.Encoding.Z85e</PackageId>
+    <PackageId>CoenM.Encoding.Z85e</PackageId>
     <PackageTags>Z85;Z85extended;encoding;zeromq</PackageTags>
     <PackageProjectUrl>https://github.com/coenm/Z85e</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
