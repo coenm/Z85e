@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Coen.Encoding
+namespace CoenM.Encoding
 {
     /// <summary>
     /// Z85 Encoding library
@@ -89,7 +89,7 @@ namespace Coen.Encoding
         /// <summary>
         /// Encode a byte array as a string. Output size will be length of <paramref name="data"/> / 4 * 5.
         /// </summary>
-        /// <param name="data"><c>byte[]</c> to encode. Length should be multiple of 4.</param>
+        /// <param name="data">byte[] to encode. Length should be multiple of 4.</param>
         /// <returns>Encoded string or <c>null</c> when the <paramref name="data"/> was null.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="data"/> is not a multiple of 4.</exception>
         public static string Encode(byte[] data)

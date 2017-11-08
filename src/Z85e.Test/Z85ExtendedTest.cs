@@ -2,7 +2,7 @@ using System;
 using System.Security.Cryptography;
 using Xunit;
 
-namespace Coen.Encoding.Test
+namespace CoenM.Encoding.Test
 {
     public class Z85ExtendedTest
     {
