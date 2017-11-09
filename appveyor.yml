@@ -60,8 +60,8 @@ deploy:
     # note, the NuGet api key expires on 2018-11-09
     api_key:
         secure: QNK9GUakj8Eu2o2ljO/BlKQcOk4abyfrv0WwwGgu1iFCB034Cs3mb09lTXT0qYNM
-    skip_symbols: false
-    artifact: /.*\.nupkg/
+    # skip_symbols: false
+    # artifact: /.*\.nupkg/
     # on:
     #     branch: master    
     # on:

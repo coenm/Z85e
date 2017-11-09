@@ -71,17 +71,17 @@ namespace CoenM.Encoding
             {
                 //  Accumulate value in base 85
                 value = value * 85 + Decoder[(byte)input[(int)charNbr++] - 32];
-                if (charNbr % 5 == 0)
+                if (charNbr % 5 != 0)
+                    continue;
+                
+                //  Output value in base 256
+                uint divisor = 256 * 256 * 256;
+                while (divisor != 0)
                 {
-                    //  Output value in base 256
-                    uint divisor = 256 * 256 * 256;
-                    while (divisor != 0)
-                    {
-                        decoded[byteNbr++] = (byte)(value / divisor % 256);
-                        divisor /= 256;
-                    }
-                    value = 0;
+                    decoded[byteNbr++] = (byte)(value / divisor % 256);
+                    divisor /= 256;
                 }
+                value = 0;
             }
             return decoded;
         }
@@ -114,17 +114,17 @@ namespace CoenM.Encoding
             {
                 //  Accumulate value in base 256 (binary)
                 value = value * 256 + data[byteNbr++];
-                if (byteNbr % 4 == 0)
+                if (byteNbr % 4 != 0)
+                    continue;
+                
+                //  Output value in base 85
+                uint divisor = 85 * 85 * 85 * 85;
+                while (divisor != 0)
                 {
-                    //  Output value in base 85
-                    uint divisor = 85 * 85 * 85 * 85;
-                    while (divisor != 0)
-                    {
-                        encoded[charNbr++] = Encoder[value / divisor % 85];
-                        divisor /= 85;
-                    }
-                    value = 0;
+                    encoded[charNbr++] = Encoder[value / divisor % 85];
+                    divisor /= 85;
                 }
+                value = 0;
             }
 
             return new string(encoded);

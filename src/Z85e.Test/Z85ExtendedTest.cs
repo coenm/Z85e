@@ -29,13 +29,13 @@ namespace CoenM.Encoding.Test
             byte[] bytes2 = { 0xB5, 0x59 };
             byte[] bytes3 = { 0xB5, 0x59, 0xF7 };
 
-            Assert.Equal(Z85Extended.Encode(bytes1), "2b");
-            Assert.Equal(Z85Extended.Encode(bytes2), "6Af");
-            Assert.Equal(Z85Extended.Encode(bytes3), "jt#7");
+            Assert.Equal("2b", Z85Extended.Encode(bytes1));
+            Assert.Equal("6Af", Z85Extended.Encode(bytes2));
+            Assert.Equal("jt#7", Z85Extended.Encode(bytes3));
 
-            Assert.Equal(Z85Extended.Decode("2b"), bytes1);
-            Assert.Equal(Z85Extended.Decode("6Af"), bytes2);
-            Assert.Equal(Z85Extended.Decode("jt#7"), bytes3);
+            Assert.Equal(bytes1, Z85Extended.Decode("2b"));
+            Assert.Equal(bytes2, Z85Extended.Decode("6Af"));
+            Assert.Equal(bytes3, Z85Extended.Decode("jt#7"));
         }
 
 
@@ -46,13 +46,13 @@ namespace CoenM.Encoding.Test
             byte[] bytes2 = { 0x86, 0x4F, 0xD2, 0x6F, 0xB5, 0x59 };
             byte[] bytes3 = { 0x86, 0x4F, 0xD2, 0x6F, 0xB5, 0x59, 0xF7 };
 
-            Assert.Equal(Z85Extended.Encode(bytes1), "Hello2b");
-            Assert.Equal(Z85Extended.Encode(bytes2), "Hello6Af");
-            Assert.Equal(Z85Extended.Encode(bytes3), "Hellojt#7");
+            Assert.Equal("Hello2b", Z85Extended.Encode(bytes1));
+            Assert.Equal("Hello6Af", Z85Extended.Encode(bytes2));
+            Assert.Equal("Hellojt#7", Z85Extended.Encode(bytes3));
 
-            Assert.Equal(Z85Extended.Decode("Hello2b"), bytes1);
-            Assert.Equal(Z85Extended.Decode("Hello6Af"), bytes2);
-            Assert.Equal(Z85Extended.Decode("Hellojt#7"), bytes3);
+            Assert.Equal(bytes1, Z85Extended.Decode("Hello2b"));
+            Assert.Equal(bytes2, Z85Extended.Decode("Hello6Af"));
+            Assert.Equal(bytes3, Z85Extended.Decode("Hellojt#7"));
         }
 
         [Fact]
