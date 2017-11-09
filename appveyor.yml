@@ -66,6 +66,13 @@ deploy:
         secure: QNK9GUakj8Eu2o2ljO/BlKQcOk4abyfrv0WwwGgu1iFCB034Cs3mb09lTXT0qYNM
     on:
         branch: master
+       
+  - provider: NuGet
+    name: production
+    # note, the NuGet api key expires on 2018-11-09
+    api_key:
+        secure: QNK9GUakj8Eu2o2ljO/BlKQcOk4abyfrv0WwwGgu1iFCB034Cs3mb09lTXT0qYNM
+    on:       
         branch: /release.*/
     # on:
     #     appveyor_repo_tag: true
