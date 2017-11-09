@@ -3,6 +3,13 @@ Z85 encoding extended dotnet standard 1.6, and 2.0
 
 This project implements the Z85 encoding standard as described in this [rfc](https://rfc.zeromq.org/spec:32/Z85/) together with an extended version where you can encode bytes with no restriction on the length of the bytes (ie. it is not required to have a length of a multiple of 4).
 
+## Branching model
+We use [GitFlow](http://nvie.com/posts/a-successful-git-branching-model/) as branching model.
+
+## Nuget
+The alpha releases can be found using this [MyGet feed](https://www.myget.org/F/coenm/api/v3/index.json).
+Beta and final releases --are-- will be located at NuGet.
+
 
 # Example encoding Z85
 Data and definitions are taken from the extended documentation of [Z85](https://rfc.zeromq.org/spec:32/Z85/).
@@ -22,7 +29,6 @@ Z85 uses this representation for each base-85 value from zero to 84:
 
 
 The following 4 bytes:
-
 ```
 +------+------+------+------+
 | 0x86 | 0x4F | 0xD2 | 0x6F |
@@ -30,7 +36,6 @@ The following 4 bytes:
 ```
 
 should encode as the following 5 characters:
-
 ```
 +---+---+---+---+---+ 
 | H | e | l | l | o | 
@@ -54,7 +59,7 @@ For the first character:
 2253378159 / (85 ^ 4) = 43 
 2253378159 % (85 ^ 4) = 8751284
 ```
-Looking at the table, you see that 43 maps an 'H'.
+Looking at the table, you'll see that 43 maps to an 'H'.
 The remainder 8751284 is used for the second character:
 
 ```
@@ -71,14 +76,14 @@ For the third character we use 153534:
 
 The fourth character:
 ```
-1809 / 85 = 21 
-1809 % 85 = 24
+1809 / (85 ^ 1) = 21 
+1809 % (85 ^ 1) = 24
 ```
 
-And the last (fifth) character:
+And the last character:
 ```
-24 / 85 = 0 
-24 % 85 = 24
+24 / (85 ^ 0) = 24 
+24 % (85 ^ 0) = 0
 ```
 
 
@@ -88,7 +93,7 @@ The following values are found:
 | 43 | 14 | 21 | 21 | 24 | 
 +----+----+----+----+----+ 
 ```
-that maps to 
+and these map to:
 ```
 +---+---+---+---+---+ 
 | H | e | l | l | o | 
@@ -96,11 +101,9 @@ that maps to
 ```
 
 
-# Nuget
-The beta releases can be found at [this feed](https://www.myget.org/F/coenm/api/v3/index.json).
 
 
-## Continuous integration status
+# Continuous integration status
 
 | Service | Status |
 | :--- | :--- |
