@@ -48,8 +48,6 @@ artifacts:
     name: NuGet Packages
 
 deploy:
-  - provider: local
-
   - provider: NuGet
     name: pre-release
     server: https://www.myget.org/F/coenm/api/v2/package
@@ -65,14 +63,14 @@ deploy:
     api_key:
         secure: QNK9GUakj8Eu2o2ljO/BlKQcOk4abyfrv0WwwGgu1iFCB034Cs3mb09lTXT0qYNM
     on:
-        branch: master
+        branch: /(master|release.*)/
        
-  - provider: NuGet
-    name: production
-    # note, the NuGet api key expires on 2018-11-09
-    api_key:
-        secure: QNK9GUakj8Eu2o2ljO/BlKQcOk4abyfrv0WwwGgu1iFCB034Cs3mb09lTXT0qYNM
-    on:       
-        branch: /release.*/
+  # - provider: NuGet
+  #   name: production
+  #   # note, the NuGet api key expires on 2018-11-09
+  #   api_key:
+  #       secure: QNK9GUakj8Eu2o2ljO/BlKQcOk4abyfrv0WwwGgu1iFCB034Cs3mb09lTXT0qYNM
+  #   on:       
+  #       branch: /release.*/
     # on:
     #     appveyor_repo_tag: true
