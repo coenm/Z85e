@@ -10,8 +10,10 @@ platform: Any CPU
 dotnet_csproj:
   patch: true
   file: '**\*.csproj'
-  version: '%GitVersion_FullSemVer%'
-  package_version: '%GitVersion_LegacySemVerPadded%'
+  # version: '%GitVersion_FullSemVer%'
+  version: '%GitVersion_NuGetVersion%'
+  # package_version: '%GitVersion_LegacySemVerPadded%'
+  package_version: '%GitVersion_NuGetVersion%'
 
 
 install:
@@ -56,7 +58,7 @@ deploy:
     artifact: /.*\.nupkg/
   
   - provider: NuGet
-    name: production
+    # name: production
     # note, the NuGet api key expires on 2018-11-09
     api_key:
         secure: QNK9GUakj8Eu2o2ljO/BlKQcOk4abyfrv0WwwGgu1iFCB034Cs3mb09lTXT0qYNM
