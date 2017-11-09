@@ -7,8 +7,15 @@ This project implements the Z85 encoding standard as described in this [rfc](htt
 We use [GitFlow](http://nvie.com/posts/a-successful-git-branching-model/) as branching model.
 
 ## Nuget
-The alpha releases can be found using this [MyGet feed](https://www.myget.org/F/coenm/api/v3/index.json).
-Beta and final releases --are-- will be located at NuGet.
+The alpha releases can be found using this [MyGet feed](https://www.myget.org/F/coenm/api/v3/index.json). 
+Beta and final releases will be located at NuGet.
+
+| Type | Package |
+| :--- | :--- | 
+| Alpha | [![MyGet Pre Release](https://img.shields.io/myget/coenm/vpre/CoenM.Encoding.Z85e.svg?label=myget)](https://www.myget.org/feed/Packages/coenm/) |
+| Beta | not yet | 
+| Final | not yet |
+| :--- | :--- | 
 
 
 # Example encoding Z85
