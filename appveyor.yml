@@ -1,0 +1,76 @@
+environment:
+  # see https://docs.microsoft.com/en-us/dotnet/core/tools/telemetry
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+version: 1.0.{build}
+image: Visual Studio 2017
+configuration: Release
+platform: Any CPU
+
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  # version: '%GitVersion_FullSemVer%'
+  version: '%GitVersion_NuGetVersion%'
+  # package_version: '%GitVersion_LegacySemVerPadded%'
+  package_version: '%GitVersion_NuGetVersion%'
+
+
+install:
+# install giversion.
+# gitversion will set some appveyor settings with version information
+- choco install gitversion.portable -pre -y
+- C:\ProgramData\chocolatey\lib/gitversion.portable/tools/gitversion.exe /l console /output buildserver
+
+before_build:
+- dotnet restore
+
+build_script:
+- dotnet build
+
+after_build:
+#
+
+before_test:
+# install opencover and codecov for exporting the coverage results.
+- choco install opencover.portable
+- choco install codecov
+
+test_script:
+- C:\ProgramData\chocolatey\lib\opencover.portable\tools\OpenCover.Console.exe -register:user -target:dotnet.exe -targetargs:"test src/Z85e.Test/Z85e.Test.csproj --filter Category!=StressTest" -oldstyle -filter:"+[CoenM*]* -[CoenM*.Test]*" -hideskipped:Filter -returntargetcode -mergeoutput -output:".\coverage-dotnet.xml"
+
+after_test:
+- codecov -f coverage-dotnet.xml
+- ps: .scripts\pack.ps1
+
+artifacts:
+  - path: '**\*.nupkg'
+    name: NuGet Packages
+
+deploy:
+  - provider: NuGet
+    name: pre-release
+    server: https://www.myget.org/F/coenm/api/v2/package
+    api_key:
+        secure: t8JtzPkpHidqOii+bLuSiOKgqzsdoSCBI3Sc/Uy6D9jWfxNd7zUUhhTgGHj5rpV9
+    skip_symbols: true
+    # symbol_server: https://www.myget.org/F/coenm/symbols/api/v2/package
+    artifact: /.*\.nupkg/
+  
+  - provider: NuGet
+    name: production
+    # note, the NuGet api key expires on 2018-11-09
+    api_key:
+        secure: QNK9GUakj8Eu2o2ljO/BlKQcOk4abyfrv0WwwGgu1iFCB034Cs3mb09lTXT0qYNM
+    on:
+        branch: /(master|release.*)/
+       
+  # - provider: NuGet
+  #   name: production
+  #   # note, the NuGet api key expires on 2018-11-09
+  #   api_key:
+  #       secure: QNK9GUakj8Eu2o2ljO/BlKQcOk4abyfrv0WwwGgu1iFCB034Cs3mb09lTXT0qYNM
+  #   on:       
+  #       branch: /release.*/
+    # on:
+    #     appveyor_repo_tag: true
