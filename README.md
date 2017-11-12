@@ -1,5 +1,5 @@
 # About this project
-Z85 encoding extended dotnet standard 1.6, and 2.0
+Z85 encoding extended dotnet standard 1.0, and 2.0
 
 This project implements the Z85 encoding standard as described in this [rfc](https://rfc.zeromq.org/spec:32/Z85/) together with an extended version where you can encode bytes with no restriction on the length of the bytes (ie. it is not required to have a length of a multiple of 4).
 
@@ -16,6 +16,17 @@ Beta and final releases will be located at NuGet.
 | Beta | not yet | 
 | Final | not yet |
 | :--- | :--- | 
+
+
+# Z85e
+Originally, Z85 only encodes blocks of 4 bytes. To allow blocks of all lengths this library introduces Z85e (extended).
+
+## Goals
+- Z85e uses the same output characters as Z85;
+- Z85e encodes an input byte array (with a length multiple of 4) exactly the same as Z85;
+- Z85e decodes an input string (with a length multiple of 5) exactly the same as Z85;
+
+
 
 
 # Example encoding Z85
@@ -48,7 +59,6 @@ should encode as the following 5 characters:
 | H | e | l | l | o | 
 +---+---+---+---+---+ 
 ```
-
 
 ## Explanation of the calculations:
 
