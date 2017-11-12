@@ -26,13 +26,15 @@ Originally, Z85 only encodes blocks of 4 bytes. To allow blocks of all lengths t
 - Z85e encodes an input byte array (with a length multiple of 4) exactly the same as Z85;
 - Z85e decodes an input string (with a length multiple of 5) exactly the same as Z85;
 
+## Definition
+todo
 
 
+# Example encoding
 
-# Example encoding Z85
 Data and definitions are taken from the extended documentation of [Z85](https://rfc.zeromq.org/spec:32/Z85/).
 
-Z85 uses this representation for each base-85 value from zero to 84:
+Z85, and Z85e uses this representation for each base-85 value from zero to 84:
 ```
  0 -  9:  0 1 2 3 4 5 6 7 8 9
 10 - 19:  a b c d e f g h i j
@@ -45,22 +47,25 @@ Z85 uses this representation for each base-85 value from zero to 84:
 80 - 84:  } @ % $ #
 ```
 
+## Example encoding Z85
+Z85 encodes blocks of 4 bytes. From the original documentation we know that : 
 
-The following 4 bytes:
+The following 8 bytes:
 ```
-+------+------+------+------+
-| 0x86 | 0x4F | 0xD2 | 0x6F |
-+------+------+------+------+
-```
-
-should encode as the following 5 characters:
-```
-+---+---+---+---+---+ 
-| H | e | l | l | o | 
-+---+---+---+---+---+ 
++------+------+------+------+  +------+------+------+------+
+| 0x86 | 0x4F | 0xD2 | 0x6F |  | 0xB5 | 0x59 | 0xF7 | 0x5B |
++------+------+------+------+  +------+------+------+------+
 ```
 
-## Explanation of the calculations:
+should encode as the following 10 characters:
+```
++---+---+---+---+---+  +---+---+---+---+---+ 
+| H | e | l | l | o |  | W | o | r | l | d |
++---+---+---+---+---+  +---+---+---+---+---+ 
+```
+
+### Explanation of the calculations
+For the first four bytes:
 
 ```
 0x86 * 0xFF * 0xFF * 0xFF 
@@ -117,7 +122,64 @@ and these map to:
 +---+---+---+---+---+ 
 ```
 
+## Example encoding Z85e
 
+The following 6 bytes:
+```
++------+------+------+------+  +------+------+
+| 0x86 | 0x4F | 0xD2 | 0x6F |  | 0x1C | 0xE6 |
++------+------+------+------+  +------+------+
+```
+
+should encode as the following 8 characters:
+```
++---+---+---+---+---+  +---+---+---+
+| H | e | l | l | o |  | 1 | 2 | 3 |
++---+---+---+---+---+  +---+---+---+
+```
+
+### Explanation of the calculations
+The first four bytes are encoded the same as using Z85. The last two bytes are encoded as follows
+
+```
+0x1C * 0xFF
+0xE6                       +
+----------------------------
+7398
+```
+
+For the first character:
+```
+7398 / (85 ^ 2) = 1 
+7398 % (85 ^ 2) = 173
+```
+Looking at the table, you'll see that 1 maps to an '1'.
+The remainder 173 is used for the second character:
+
+For the second character:
+```
+173 / (85 ^ 1) = 2 
+173 % (85 ^ 1) = 3
+```
+
+And the last character
+```
+173 / (85 ^ 0) = 3 
+173 % (85 ^ 0) = 0
+```
+
+The following values are found:
+```
++---+---+---+
+| 1 | 2 | 3 |
++---+---+---+
+```
+and these map to:
+```
++---+---+---+
+| 1 | 2 | 3 |
++---+---+---+
+```
 
 
 # Continuous integration status
