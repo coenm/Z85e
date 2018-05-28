@@ -80,12 +80,12 @@ namespace CoenM.Encoding
         /// </summary>
         /// <param name="data">byte[] to encode. No restrictions on the length.</param>
         /// <returns>Encoded string or <c>null</c> when the <paramref name="data"/> was null.</returns>
-        public static string Encode(byte[] data)
+        public static string Encode(ReadOnlySpan<byte> data)
         {
             if (data == null)
                 return null;
 
-            var size = (uint)data.Length;
+            var size = data.Length;
             var remainder = size % 4;
 
             if (remainder == 0)
@@ -96,9 +96,11 @@ namespace CoenM.Encoding
             // three byte -> four chars
             var extraChars = remainder + 1;
 
-            var encodedSize = (int)(size - remainder) * 5 / 4 + extraChars;
+            var encodedSize = (size - remainder) * 5 / 4 + extraChars;
+            Span<char> encoded = encodedSize <= 128
+                ? stackalloc char[encodedSize]
+                : new char[encodedSize];
 
-            var encoded = new char[encodedSize];
             uint charNbr = 0;
             uint byteNbr = 0;
             uint value = 0;
@@ -107,7 +109,7 @@ namespace CoenM.Encoding
             while (byteNbr < size)
             {
                 //  Accumulate value in base 256 (binary)
-                value = value * 256 + data[byteNbr++];
+                value = value * 256 + data[(int) byteNbr++];
 
                 if (byteNbr % 4 != 0)
                     continue;
@@ -116,7 +118,7 @@ namespace CoenM.Encoding
                 divisor = 85 * 85 * 85 * 85;
                 while (divisor != 0)
                 {
-                    encoded[charNbr++] = Z85.Encoder[value / divisor % 85];
+                    encoded[(int) charNbr++] = Z85.Encoder[value / divisor % 85];
                     divisor /= 85;
                 }
                 value = 0;
@@ -126,11 +128,12 @@ namespace CoenM.Encoding
             divisor = (uint) Math.Pow(85, remainder);
             while (divisor != 0)
             {
-                encoded[charNbr++] = Z85.Encoder[value / divisor % 85];
+                encoded[(int) charNbr++] = Z85.Encoder[value / divisor % 85];
                 divisor /= 85;
             }
 
-            return new string(encoded);
+            // todo not sure if this is the way to do this.
+            return new string(encoded.ToArray());
         }
     }
 }

@@ -95,12 +95,12 @@ namespace CoenM.Encoding
         /// <param name="data">byte[] to encode. Length should be multiple of 4.</param>
         /// <returns>Encoded string or <c>null</c> when the <paramref name="data"/> was null.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="data"/> is not a multiple of 4.</exception>
-        public static string Encode(byte[] data)
+        public static string Encode(ReadOnlySpan<byte> data)
         {
             if (data == null)
                 return null;
 
-            var size = (uint)data.Length;
+            var size = data.Length;
 
             //  Accepts only byte arrays bounded to 4 bytes
             if (size % 4 != 0)
@@ -108,7 +108,9 @@ namespace CoenM.Encoding
 
 
             var encodedSize = size * 5 / 4;
-            var encoded = new char[encodedSize];
+            Span<char> encoded = encodedSize <= 128
+                ? stackalloc char[encodedSize]
+                : new char[encodedSize];
             uint charNbr = 0;
             uint byteNbr = 0;
             uint value = 0;
@@ -116,7 +118,7 @@ namespace CoenM.Encoding
             while (byteNbr < size)
             {
                 //  Accumulate value in base 256 (binary)
-                value = value * 256 + data[byteNbr++];
+                value = value * 256 + data[(int) byteNbr++];
                 if (byteNbr % 4 != 0)
                     continue;
 
@@ -124,13 +126,14 @@ namespace CoenM.Encoding
                 uint divisor = 85 * 85 * 85 * 85;
                 while (divisor != 0)
                 {
-                    encoded[charNbr++] = Encoder[value / divisor % 85];
+                    encoded[(int) charNbr++] = Encoder[value / divisor % 85];
                     divisor /= 85;
                 }
                 value = 0;
             }
 
-            return new string(encoded);
+            // todo not sure if this is the way to do this.
+            return new string(encoded.ToArray());
         }
     }
 }
