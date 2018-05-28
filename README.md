@@ -1,10 +1,10 @@
 # About this project
-Z85 encoding extended dotnet standard 1.0, and 2.0
+Z85 encoding extended dotnet standard 1.1, 1.6, and 2.0
 
 This project implements the Z85 encoding standard as described in this [rfc](https://rfc.zeromq.org/spec:32/Z85/) together with an extended version where you can encode bytes with no restriction on the length of the bytes (ie. it is not required to have a length of a multiple of 4).
 
 ## Branching model
-We use [GitFlow](http://nvie.com/posts/a-successful-git-branching-model/) as branching model.
+This project uses [GitFlow](http://nvie.com/posts/a-successful-git-branching-model/) as branching model.
 
 ## Nuget
 The alpha releases can be found using this [MyGet feed](https://www.myget.org/F/coenm/api/v3/index.json). 
@@ -15,7 +15,6 @@ Beta and final releases will be located at NuGet.
 | Alpha | [![MyGet Pre Release](https://img.shields.io/myget/coenm/vpre/CoenM.Encoding.Z85e.svg?label=myget)](https://www.myget.org/feed/Packages/coenm/) |
 | Beta | not yet | 
 | Final | not yet |
-| :--- | :--- | 
 
 
 # Z85e
