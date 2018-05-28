@@ -56,14 +56,16 @@ deploy:
     skip_symbols: true
     # symbol_server: https://www.myget.org/F/coenm/symbols/api/v2/package
     artifact: /.*\.nupkg/
-  
-  - provider: NuGet
-    name: production
-    # note, the NuGet api key expires on 2018-11-09
-    api_key:
-        secure: QNK9GUakj8Eu2o2ljO/BlKQcOk4abyfrv0WwwGgu1iFCB034Cs3mb09lTXT0qYNM
     on:
-        branch: /(master|release.*)/
+        branch: /(master|release.*|develop)/	
+  
+  # - provider: NuGet
+  #  name: production
+  #  # note, the NuGet api key expires on 2018-11-09
+  #  api_key:
+  #      secure: QNK9GUakj8Eu2o2ljO/BlKQcOk4abyfrv0WwwGgu1iFCB034Cs3mb09lTXT0qYNM
+  #  on:
+  #      branch: /(master|release.*)/
        
   # - provider: NuGet
   #   name: production
