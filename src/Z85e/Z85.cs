@@ -73,7 +73,7 @@ namespace CoenM.Encoding
                 value = value * 85 + Decoder[(byte)input[(int)charNbr++] - 32];
                 if (charNbr % 5 != 0)
                     continue;
-                
+
                 //  Output value in base 256
                 uint divisor = 256 * 256 * 256;
                 while (divisor != 0)
@@ -116,7 +116,7 @@ namespace CoenM.Encoding
                 value = value * 256 + data[byteNbr++];
                 if (byteNbr % 4 != 0)
                     continue;
-                
+
                 //  Output value in base 85
                 uint divisor = 85 * 85 * 85 * 85;
                 while (divisor != 0)

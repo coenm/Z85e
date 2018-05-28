@@ -5,11 +5,12 @@
     <Version>1.1.1</Version>
     <Description>ZeroMQ's Z85 Encoding and the extended version. Formats for representing binary data as printable text.</Description>
     <Authors>Coen van den Munckhof</Authors>
-    <TargetFrameworks>netstandard1.0;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard1.1;netstandard1.6;netstandard2.0</TargetFrameworks>
+	<RuntimeFrameworkVersion>2.0.7</RuntimeFrameworkVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <RootNamespace>CoenM.Encoding</RootNamespace>
-    <AssemblyName>CoenM.Encoding.Z85e</AssemblyName>    
+    <AssemblyName>CoenM.Encoding.Z85e</AssemblyName>
     <PackageId>CoenM.Encoding.Z85e</PackageId>
     <PackageTags>Z85;Z85extended;encoding;zeromq</PackageTags>
     <PackageProjectUrl>https://github.com/coenm/Z85e</PackageProjectUrl>
@@ -21,4 +22,27 @@
     <DebugType>full</DebugType>
     <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.1'">
+    <PackageReference Include="System.Memory">
+      <Version>4.5.0-rc1</Version>
+    </PackageReference>
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.6'">
+    <PackageReference Include="System.Memory">
+      <Version>4.5.0-rc1</Version>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="System.Memory">
+      <Version>4.5.0-rc1</Version>
+    </PackageReference>
+  </ItemGroup>
+
 </Project>
