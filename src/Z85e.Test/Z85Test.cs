@@ -11,7 +11,7 @@ namespace CoenM.Encoding.Test
         [Fact]
         public void HelloWorldDecodeTest()
         {
-            Assert.Equal(Z85.Decode(HelloWorldString), _helloWorldBytes);
+            Assert.Equal(Z85.Decode(HelloWorldString).ToArray(), _helloWorldBytes);
         }
 
         [Fact]
@@ -32,7 +32,9 @@ namespace CoenM.Encoding.Test
         [Fact]
         public void DecodeNullReturnsNullTest()
         {
-            Assert.Null(Z85.Decode(null));
+            var result = Z85.Decode(null);
+
+            Assert.Equal(0, result.Length);
         }
 
         [Fact]
@@ -64,7 +66,7 @@ namespace CoenM.Encoding.Test
             var result2 = Z85.Decode(encoded2);
 
             // assert
-            Assert.Equal(result1, result2);
+            Assert.Equal(result1.ToArray(), result2.ToArray());
         }
     }
 }

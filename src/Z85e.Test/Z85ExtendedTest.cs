@@ -9,11 +9,11 @@ namespace CoenM.Encoding.Test
         private readonly byte[] _helloWorldBytes = { 0x86, 0x4F, 0xD2, 0x6F, 0xB5, 0x59, 0xF7, 0x5B };
         private const string HelloWorldString = "HelloWorld";
 
-        
+
         [Fact]
         public void HelloWorldDecodeTest()
         {
-            Assert.Equal(Z85Extended.Decode(HelloWorldString), _helloWorldBytes);
+            Assert.Equal(Z85Extended.Decode(HelloWorldString).ToArray(), _helloWorldBytes);
         }
 
         [Fact]
@@ -33,9 +33,9 @@ namespace CoenM.Encoding.Test
             Assert.Equal("6Af", Z85Extended.Encode(bytes2));
             Assert.Equal("jt#7", Z85Extended.Encode(bytes3));
 
-            Assert.Equal(bytes1, Z85Extended.Decode("2b"));
-            Assert.Equal(bytes2, Z85Extended.Decode("6Af"));
-            Assert.Equal(bytes3, Z85Extended.Decode("jt#7"));
+            Assert.Equal(bytes1, Z85Extended.Decode("2b").ToArray());
+            Assert.Equal(bytes2, Z85Extended.Decode("6Af").ToArray());
+            Assert.Equal(bytes3, Z85Extended.Decode("jt#7").ToArray());
         }
 
 
@@ -50,15 +50,17 @@ namespace CoenM.Encoding.Test
             Assert.Equal("Hello6Af", Z85Extended.Encode(bytes2));
             Assert.Equal("Hellojt#7", Z85Extended.Encode(bytes3));
 
-            Assert.Equal(bytes1, Z85Extended.Decode("Hello2b"));
-            Assert.Equal(bytes2, Z85Extended.Decode("Hello6Af"));
-            Assert.Equal(bytes3, Z85Extended.Decode("Hellojt#7"));
+            Assert.Equal(bytes1, Z85Extended.Decode("Hello2b").ToArray());
+            Assert.Equal(bytes2, Z85Extended.Decode("Hello6Af").ToArray());
+            Assert.Equal(bytes3, Z85Extended.Decode("Hellojt#7").ToArray());
         }
 
         [Fact]
         public void DecodeNullReturnsNullTest()
         {
-            Assert.Null(Z85Extended.Decode(null));
+            var result = Z85Extended.Decode(null);
+
+            Assert.Equal(0, result.Length);
         }
 
         [Fact]

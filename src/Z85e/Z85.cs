@@ -47,9 +47,9 @@ namespace CoenM.Encoding
         /// </summary>
         /// <remarks>This method will not check if <paramref name="input"/> only exists of Z85 characters.</remarks>
         /// <param name="input">encoded string. Should have length multiple of 5.</param>
-        /// <returns><c>null</c> when input is null, otherwise bytes containing the decoded input string.</returns>
+        /// <returns>empty bytes when <paramref name="input"/> is null, otherwise bytes containing the decoded input string.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="input"/> is not a multiple of 5.</exception>
-        public static IEnumerable<byte> Decode(string input)
+        public static ReadOnlySpan<byte> Decode(string input)
         {
             if (input == null)
                 return null;
