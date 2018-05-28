@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace CoenM.Encoding
 {
@@ -54,14 +53,16 @@ namespace CoenM.Encoding
             if (input == null)
                 return null;
 
-            var len = (uint)input.Length;
+            var len = input.Length;
 
             //  Accepts only strings bounded to 5 bytes
             if (len % 5 != 0)
                 throw new ArgumentOutOfRangeException(nameof(input), "Length of Input should be multiple of 5.");
 
             var decodedSize = len * 4 / 5;
-            var decoded = new byte[decodedSize];
+            Span<byte> decoded = decodedSize <= 128
+                ? stackalloc byte[decodedSize]
+                : new byte[decodedSize];
 
             uint byteNbr = 0;
             uint charNbr = 0;
@@ -78,12 +79,14 @@ namespace CoenM.Encoding
                 uint divisor = 256 * 256 * 256;
                 while (divisor != 0)
                 {
-                    decoded[byteNbr++] = (byte)(value / divisor % 256);
+                    decoded[(int) byteNbr++] = (byte)(value / divisor % 256);
                     divisor /= 256;
                 }
                 value = 0;
             }
-            return decoded;
+
+            // todo: is this the way to do this?
+            return decoded.ToArray();
         }
 
         /// <summary>

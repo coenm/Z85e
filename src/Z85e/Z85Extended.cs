@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace CoenM.Encoding
 {
@@ -35,8 +34,10 @@ namespace CoenM.Encoding
 
             var extraBytes = remainder - 1;
             var decodedSize = (int)((size - extraBytes) * 4 / 5 + extraBytes);
+            Span<byte> decoded = decodedSize <= 128
+                ? stackalloc byte[decodedSize]
+                : new byte[decodedSize];
 
-            var decoded = new byte[decodedSize];
 
             uint byteNbr = 0;
             uint charNbr = 0;
@@ -55,7 +56,7 @@ namespace CoenM.Encoding
                 divisor = 256 * 256 * 256;
                 while (divisor != 0)
                 {
-                    decoded[byteNbr++] = (byte)(value / divisor % 256);
+                    decoded[(int) byteNbr++] = (byte)(value / divisor % 256);
                     divisor /= 256;
                 }
                 value = 0;
@@ -65,11 +66,13 @@ namespace CoenM.Encoding
             divisor = (uint)Math.Pow(256, extraBytes - 1);
             while (divisor != 0)
             {
-                decoded[byteNbr++] = (byte)(value / divisor % 256);
+                decoded[(int) byteNbr++] = (byte)(value / divisor % 256);
                 divisor /= 256;
             }
 
-            return decoded;
+
+            // todo: is this the way to do this?
+            return decoded.ToArray();
         }
 
         /// <summary>
