@@ -56,17 +56,15 @@ namespace CoenM.Encoding.Test
         }
 
         [Fact]
-        public void DecodeNullReturnsNullTest()
+        public void DecodeNullThrowsETest()
         {
-            var result = Z85Extended.Decode(null);
-
-            Assert.Equal(0, result.Length);
+            Assert.Throws<ArgumentNullException>(() => Z85Extended.Decode(null));
         }
 
         [Fact]
-        public void EncodeNullReturnsNullTest()
+        public void EncodeNullReturnsEmptyStringTest()
         {
-            Assert.Null(Z85Extended.Encode(null));
+            Assert.Equal(string.Empty, Z85Extended.Encode(null));
         }
 
         [Fact]

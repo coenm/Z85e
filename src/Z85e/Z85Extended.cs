@@ -1,4 +1,5 @@
 ﻿using System;
+using CoenM.Encoding.Internals.Guards;
 
 namespace CoenM.Encoding
 {
@@ -18,8 +19,7 @@ namespace CoenM.Encoding
         /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="input"/> is a multiple of 5 plus 1.</exception>
         public static ReadOnlySpan<byte> Decode(string input)
         {
-            if (input == null)
-                return null;
+            Guard.NotNull(input, nameof(input));
 
             var size = (uint)input.Length;
             var remainder = size % 5;
@@ -84,9 +84,6 @@ namespace CoenM.Encoding
         /// <returns>Encoded string or <c>null</c> when the <paramref name="data"/> was null.</returns>
         public static string Encode(ReadOnlySpan<byte> data)
         {
-            if (data == null)
-                return null;
-
             var size = data.Length;
             var remainder = size % 4;
 

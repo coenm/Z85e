@@ -1,4 +1,5 @@
 ﻿using System;
+using CoenM.Encoding.Internals.Guards;
 
 namespace CoenM.Encoding
 {
@@ -19,8 +20,7 @@ namespace CoenM.Encoding
         /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="input"/> is not a multiple of 5.</exception>
         public static ReadOnlySpan<byte> Decode(string input)
         {
-            if (input == null)
-                return null;
+            Guard.NotNull(input, nameof(input));
 
             var len = input.Length;
 
@@ -66,9 +66,6 @@ namespace CoenM.Encoding
         /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="data"/> is not a multiple of 4.</exception>
         public static string Encode(ReadOnlySpan<byte> data)
         {
-            if (data == null)
-                return null;
-
             var size = data.Length;
 
             //  Accepts only byte arrays bounded to 4 bytes
