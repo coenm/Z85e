@@ -2,6 +2,8 @@
 
 namespace CoenM.Encoding
 {
+    using Internals;
+
     /// <summary>
     /// Z85 Extended Encoding library. Z85 Extended doesn't require the length of the bytes to be a multiple of 4.
     /// </summary>
@@ -47,7 +49,7 @@ namespace CoenM.Encoding
             while (charNbr < size)
             {
                 //  Accumulate value in base 85
-                value = value * 85 + Z85.Decoder[(byte)input[(int)charNbr++] - 32];
+                value = value * 85 + Map.Decoder[(byte)input[(int)charNbr++] - 32];
 
                 if (charNbr % 5 != 0)
                     continue;
@@ -118,7 +120,7 @@ namespace CoenM.Encoding
                 divisor = 85 * 85 * 85 * 85;
                 while (divisor != 0)
                 {
-                    encoded[(int) charNbr++] = Z85.Encoder[value / divisor % 85];
+                    encoded[(int) charNbr++] = Map.Encoder[value / divisor % 85];
                     divisor /= 85;
                 }
                 value = 0;
@@ -128,7 +130,7 @@ namespace CoenM.Encoding
             divisor = (uint) Math.Pow(85, remainder);
             while (divisor != 0)
             {
-                encoded[(int) charNbr++] = Z85.Encoder[value / divisor % 85];
+                encoded[(int) charNbr++] = Map.Encoder[value / divisor % 85];
                 divisor /= 85;
             }
 
