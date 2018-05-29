@@ -26,7 +26,7 @@ namespace CoenM.Encoding.Test
         [InlineData(3)]
         public void EncodeThrowsExceptionWhenInputHasWrongSizeTest(int size)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => Z85.Encode(new byte[size]));
+            Assert.Throws<ArgumentException>(() => Z85.Encode(new byte[size]));
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace CoenM.Encoding.Test
         [InlineData(4)]
         public void DecodeThrowsExceptionWhenInputHasWrongSizeTest(int size)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => Z85.Decode(new string('a', size)));
+            Assert.Throws<ArgumentException>(() => Z85.Decode(new string('a', size)));
         }
 
 
