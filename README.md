@@ -24,8 +24,76 @@ Originally, Z85 only encodes blocks of 4 bytes. To allow blocks of all lengths t
 - Z85e uses the same output characters as Z85;
 - Z85e encodes an input byte array (with a length multiple of 4) exactly the same as Z85;
 - Z85e decodes an input string (with a length multiple of 5) exactly the same as Z85;
+- Z85e should be as fast and cheap as possible. Yes, this is rather vague. Lets compare it with a base64 encoding decoding (todo).
 
 ## Definition
+todo
+
+## API
+
+This is Z85.
+### Encode bytes to z85 encoded string
+```csharp
+using CoenM.Encoding;
+
+//
+// option 1
+// best performance using Span<T>
+//
+ReadOnlySpan<byte> source = new byte[8] { /* data */ };
+Span<char> encodedResult = new char[10]; // make sure the spans size is large enough.
+int charsWritten = Z85.Encode(source, encodedResult);
+
+// optionally slice the resulting span
+Span<char> slicedEncodedResut = encodedResult.slice(0, charsWritten);
+
+
+//
+// option 2
+// less performance using string (construction)
+//
+ReadOnlySpan<byte> source = new byte[8] { /* data */ };
+string encodedResult Z85.Encode(source);
+```
+
+
+### Decode z85 encoded string to bytes
+```csharp
+using CoenM.Encoding;
+
+//
+// option 1
+//
+ReadOnlySpan<char> source = "textTEXT!?".AsSpan();
+Span<byte> decodedResult = new byte[8]; // make sure the spans size is large enough.
+int bytesWritten = Z85.Decode(source, decodedResult);
+
+// optionally slice the resulting span
+Span<byte> slicedDecodedResult = decodedResult.slice(0, bytesWritten);
+
+//
+// option 2
+//
+ReadOnlySpan<char> source = "textTEXT!?".AsSpan();
+ReadOnlySpan<char> encodedResult = Z85.Decode(source);
+```
+
+
+### Misc
+```csharp
+using CoenM.Encoding;
+
+ReadOnlySpan<byte> source = new byte[8] { /* data */ };
+int size = Z85.CalcuateEncodedSize(source);
+
+
+ReadOnlySpan<char> source = "TextText!!".AsSpan();
+int size = Z85.CalcuateDecodedSize(source);
+```
+
+or just go to [dotnetapis](http://dotnetapis.com/pkg/CoenM.Encoding.Z85e).
+
+## Performance
 todo
 
 
