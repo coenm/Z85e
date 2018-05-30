@@ -56,7 +56,7 @@ namespace CoenM.Encoding.Test
         }
 
         [Fact]
-        public void DecodeNullThrowsETest()
+        public void DecodeNullThrowsExceptionTest()
         {
             Assert.Throws<ArgumentNullException>(() => Z85Extended.Decode(null));
         }
