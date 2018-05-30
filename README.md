@@ -14,7 +14,7 @@ Beta and final releases will be located at NuGet.
 | :--- | :--- | 
 | Alpha | [![MyGet Pre Release](https://img.shields.io/myget/coenm/vpre/CoenM.Encoding.Z85e.svg?label=myget)](https://www.myget.org/feed/Packages/coenm/) |
 | Beta | not yet | 
-| Final | not yet |
+| Final | [![NuGet](https://img.shields.io/nuget/v/CoenM.Encoding.Z85e.svg)](https://www.nuget.org/packages/CoenM.Encoding.Z85e/) |
 
 
 # Z85e
