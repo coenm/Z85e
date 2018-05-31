@@ -5,8 +5,9 @@
     <Version>1.1.1</Version>
     <Description>ZeroMQ's Z85 Encoding and the extended version. Formats for representing binary data as printable text.</Description>
     <Authors>Coen van den Munckhof</Authors>
-    <TargetFrameworks>netstandard1.1;netstandard1.6;netstandard2.0;netcoreapp2.1</TargetFrameworks>
-    <!--<RuntimeFrameworkVersion>2.1.300</RuntimeFrameworkVersion>-->
+    <!--disable netcoreapp2.1 until AppVeyor supports this.-->
+    <!-- <TargetFrameworks>netstandard1.1;netstandard1.6;netstandard2.0;netcoreapp2.1</TargetFrameworks> -->
+    <TargetFrameworks>netstandard1.1;netstandard1.6;netstandard2.0</TargetFrameworks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <RootNamespace>CoenM.Encoding</RootNamespace>
@@ -32,7 +33,6 @@
       <Version>4.5.0</Version>
     </PackageReference>
   </ItemGroup>
-
 
   <ItemGroup>
     <Folder Include="Internals\Guards\" />
