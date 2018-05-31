@@ -17,7 +17,7 @@ namespace CoenM.Encoding
         /// <param name="input">encoded string.</param>
         /// <returns>empty bytes when <paramref name="input"/> is null, otherwise bytes containing the decoded input string.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="input"/> is a multiple of 5 plus 1.</exception>
-        public static ReadOnlySpan<byte> Decode(string input)
+        public static ReadOnlyMemory<byte> Decode(string input)
         {
             Guard.NotNull(input, nameof(input));
 
@@ -36,10 +36,11 @@ namespace CoenM.Encoding
 
             var extraBytes = remainder - 1;
             var decodedSize = (int)((size - extraBytes) * 4 / 5 + extraBytes);
-            Span<byte> decoded = decodedSize <= 128
-                ? stackalloc byte[decodedSize]
-                : new byte[decodedSize];
+//            Span<byte> decoded = decodedSize <= 128
+//                ? stackalloc byte[decodedSize]
+//                : new byte[decodedSize];
 
+            Memory<byte> decoded = new byte[decodedSize];
 
             uint byteNbr = 0;
             uint charNbr = 0;
@@ -58,7 +59,7 @@ namespace CoenM.Encoding
                 divisor = 256 * 256 * 256;
                 while (divisor != 0)
                 {
-                    decoded[(int) byteNbr++] = (byte)(value / divisor % 256);
+                    decoded.Span[(int) byteNbr++] = (byte)(value / divisor % 256);
                     divisor /= 256;
                 }
                 value = 0;
@@ -68,13 +69,11 @@ namespace CoenM.Encoding
             divisor = (uint)Math.Pow(256, extraBytes - 1);
             while (divisor != 0)
             {
-                decoded[(int) byteNbr++] = (byte)(value / divisor % 256);
+                decoded.Span[(int) byteNbr++] = (byte)(value / divisor % 256);
                 divisor /= 256;
             }
 
-
-            // todo: is this the way to do this?
-            return decoded.ToArray();
+            return decoded;
         }
 
         /// <summary>

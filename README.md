@@ -1,5 +1,5 @@
 # About this project
-Z85 encoding extended dotnet standard 1.1, 1.6, and 2.0
+Z85 encoding extended in dotnet standard 1.1, 1.6, 2.0, and coreapp 2.1
 
 This project implements the Z85 encoding standard as described in this [rfc](https://rfc.zeromq.org/spec:32/Z85/) together with an extended version where you can encode bytes with no restriction on the length of the bytes (ie. it is not required to have a length of a multiple of 4).
 
@@ -10,11 +10,10 @@ This project uses [GitFlow](http://nvie.com/posts/a-successful-git-branching-mod
 The alpha releases can be found using this [MyGet feed](https://www.myget.org/F/coenm/api/v3/index.json). 
 Beta and final releases will be located at NuGet.
 
-| Type | Package |
-| :--- | :--- | 
-| Alpha | [![MyGet Pre Release](https://img.shields.io/myget/coenm/vpre/CoenM.Encoding.Z85e.svg?label=myget)](https://www.myget.org/feed/Packages/coenm/) |
-| Beta | not yet | 
-| Final | [![NuGet](https://img.shields.io/nuget/v/CoenM.Encoding.Z85e.svg)](https://www.nuget.org/packages/CoenM.Encoding.Z85e/) |
+| Branch  | Package |
+| :---    | :---    | 
+| develop | [![MyGet Pre Release](https://img.shields.io/myget/coenm/vpre/CoenM.Encoding.Z85e.svg?label=myget)](https://www.myget.org/feed/Packages/coenm/) |
+| master  | [![NuGet](https://img.shields.io/nuget/v/CoenM.Encoding.Z85e.svg)](https://www.nuget.org/packages/CoenM.Encoding.Z85e/) |
 
 
 # Z85e
@@ -37,8 +36,7 @@ This is Z85.
 using CoenM.Encoding;
 
 //
-// option 1
-// best performance using Span<T>
+// option 1, best performance using Span<T> only
 //
 ReadOnlySpan<byte> source = new byte[8] { /* data */ };
 Span<char> encodedResult = new char[10]; // make sure the spans size is large enough.
@@ -49,8 +47,7 @@ Span<char> slicedEncodedResut = encodedResult.slice(0, charsWritten);
 
 
 //
-// option 2
-// less performance using string (construction)
+// option 2, less performance as a string is constructed from the Span<char> content.
 //
 ReadOnlySpan<byte> source = new byte[8] { /* data */ };
 string encodedResult Z85.Encode(source);
@@ -62,7 +59,7 @@ string encodedResult Z85.Encode(source);
 using CoenM.Encoding;
 
 //
-// option 1
+// option 1, best performance as resulting Span<byte> is constructed at caller
 //
 ReadOnlySpan<char> source = "textTEXT!?".AsSpan();
 Span<byte> decodedResult = new byte[8]; // make sure the spans size is large enough.
@@ -72,7 +69,7 @@ int bytesWritten = Z85.Decode(source, decodedResult);
 Span<byte> slicedDecodedResult = decodedResult.slice(0, bytesWritten);
 
 //
-// option 2
+// option 2, less performance as resulting ReadOnlySpan<byte> is constructed at implementation of Decode. Needs a copy.
 //
 ReadOnlySpan<char> source = "textTEXT!?".AsSpan();
 ReadOnlySpan<char> encodedResult = Z85.Decode(source);
