@@ -3,7 +3,8 @@
   <PropertyGroup>
     <!--disable netcoreapp2.1 until AppVeyor supports this.-->
     <!-- <TargetFrameworks>netcoreapp2.0;netcoreapp2.1;net461</TargetFrameworks> -->
-    <TargetFrameworks>netcoreapp2.0;net461</TargetFrameworks>
+    <!-- <TargetFrameworks>netcoreapp2.0;net461</TargetFrameworks> -->
+    <TargetFrameworks>net461;net471;netcoreapp2.0;netcoreapp2.1</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <RootNamespace>Z85e.Benchmarks</RootNamespace>

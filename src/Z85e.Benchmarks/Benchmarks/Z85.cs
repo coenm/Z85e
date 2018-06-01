@@ -6,11 +6,11 @@ using BenchmarkDotNet.Attributes.Jobs;
 
 namespace Z85e.Benchmarks.Benchmarks
 {
-    [MarkdownExporter, AsciiDocExporter, HtmlExporter, CsvExporter, RPlotExporter]
-    [ClrJob, CoreJob]
-    [LegacyJitX86Job, LegacyJitX64Job, RyuJitX64Job]
-    [MemoryDiagnoser]
-    [RankColumn]
+//    [MarkdownExporter, AsciiDocExporter, HtmlExporter, CsvExporter, RPlotExporter]
+//    [ClrJob, CoreJob]
+//    [LegacyJitX86Job, LegacyJitX64Job, RyuJitX64Job]
+//    [MemoryDiagnoser]
+//    [RankColumn]
     public class Z85
     {
         private Memory<byte> data;
