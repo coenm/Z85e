@@ -39,22 +39,40 @@ namespace CoenM.Encoding
         /// <param name="source">bytes to encode. Length should be multiple of 4.</param>
         /// <returns>Encoded string.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="source"/> is not a multiple of 4.</exception>
-        public static string Encode(ReadOnlySpan<byte> source)
+        public static string EncodeMemory(ReadOnlyMemory<byte> source)
+        {
+            var encodedSize = CalcuateEncodedSize(source.Span);
+
+#if NETCOREAPP2_1
+            return string.Create(encodedSize, source, (stringSpan, src) => Encode(source.Span, stringSpan));
+#else
+            Span<char> encoded = encodedSize <= 128
+                ? stackalloc char[encodedSize]
+                : new char[encodedSize];
+
+            var len = Encode(source.Span, encoded);
+            return new string(encoded.Slice(0, len).ToArray());
+#endif
+        }
+
+
+        /// <summary>Encode bytes as a string. Output size will be length of <paramref name="source"/> / 4 * 5. </summary>
+        /// <param name="source">bytes to encode. Length should be multiple of 4.</param>
+        /// <returns>Encoded string.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="source"/> is not a multiple of 4.</exception>
+        public static string EncodeSpan(ReadOnlySpan<byte> source)
         {
             var encodedSize = CalcuateEncodedSize(source);
 
 #if NETCOREAPP2_1
-            // this sucks. still need to use .ToArray()
-            return string.Create(encodedSize, source.ToArray(), (stringSpan, src) => Encode(null, stringSpan));
+            // Obviously, we cannot use a span as a Func argument.
+            return string.Create(encodedSize, source, (stringSpan, src.ToArray()) => Encode(source.Span, stringSpan));
 #else
             Span<char> encoded = encodedSize <= 128
                 ? stackalloc char[encodedSize]
                 : new char[encodedSize];
 
             var len = Encode(source, encoded);
-
-            // todo: is this the way to do this?
-            // maybe better to return a Memory<T>
             return new string(encoded.Slice(0, len).ToArray());
 #endif
         }

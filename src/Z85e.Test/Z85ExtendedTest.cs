@@ -82,7 +82,7 @@ namespace CoenM.Encoding.Test
             var bytes = CreatePseudoRandomByteArray(1024 * 1024 * 300, 2343429);
 
             // act
-            var result = Z85.Encode(bytes);
+            var result = Z85.EncodeSpan(bytes);
 
             // assert
             Assert.Equal("Q*}EDu2563cEvhD{]baI.r&ub^P[heR9UY=fIwkM", CreateSha256Z85Encoded(result));
@@ -92,7 +92,7 @@ namespace CoenM.Encoding.Test
         {
             var bytes = System.Text.Encoding.Unicode.GetBytes(input);
             var hashstring = new SHA256Managed();
-            return Z85.Encode(hashstring.ComputeHash(bytes));
+            return Z85.EncodeSpan(hashstring.ComputeHash(bytes));
         }
 
         private static byte[] CreatePseudoRandomByteArray(uint size, int seed)

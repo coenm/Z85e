@@ -17,7 +17,7 @@ namespace CoenM.Encoding.Test
         [Fact]
         public void HelloWorldEncodeTest()
         {
-            Assert.Equal(Z85.Encode(_helloWorldBytes), HelloWorldString);
+            Assert.Equal(Z85.EncodeSpan(_helloWorldBytes), HelloWorldString);
         }
 
         [Theory]
@@ -26,7 +26,7 @@ namespace CoenM.Encoding.Test
         [InlineData(3)]
         public void EncodeThrowsExceptionWhenInputHasWrongSizeTest(int size)
         {
-            Assert.Throws<ArgumentException>(() => Z85.Encode(new byte[size]));
+            Assert.Throws<ArgumentException>(() => Z85.EncodeSpan(new byte[size]));
         }
 
         [Fact]
@@ -38,7 +38,7 @@ namespace CoenM.Encoding.Test
         [Fact]
         public void EncodeNullReturnsEmptyStringTest()
         {
-            Assert.Equal(string.Empty, Z85.Encode(null));
+            Assert.Equal(string.Empty, Z85.EncodeSpan(null));
         }
 
         [Theory]
