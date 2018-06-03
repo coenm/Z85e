@@ -98,6 +98,8 @@ namespace CoenM.Encoding
         /// <returns>Encoded string or <c>null</c> when the <paramref name="data"/> was null.</returns>
         public static string Encode(ReadOnlySpan<byte> data)
         {
+            Guard.MustBeGreaterThanOrEqualTo(data.Length, 1, nameof(data));
+
             var size = data.Length;
             var remainder = size % 4;
 
@@ -110,6 +112,12 @@ namespace CoenM.Encoding
             var extraChars = remainder + 1;
 
             var encodedSize = (size - remainder) * 5 / 4 + extraChars;
+
+            var encodedSize2 = Z85Extended.CalcuateEncodedSize(data);
+
+            Debug.Assert(encodedSize == encodedSize2, "sizes should be the same");
+
+
             Span<char> encoded = encodedSize <= 128
                 ? stackalloc char[encodedSize]
                 : new char[encodedSize];

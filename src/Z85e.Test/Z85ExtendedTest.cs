@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using Xunit;
 
@@ -23,6 +24,7 @@ namespace CoenM.Encoding.Test
         }
 
         [Fact]
+        [InlineData(nameof(Z85Maps))]
         public void SomeEncodingAndDecodingOfPartialsTest()
         {
             byte[] bytes1 = { 0xB5 };
@@ -87,6 +89,21 @@ namespace CoenM.Encoding.Test
             // assert
             Assert.Equal("Q*}EDu2563cEvhD{]baI.r&ub^P[heR9UY=fIwkM", CreateSha256Z85Encoded(result));
         }
+
+        public static IEnumerable<Z85DataMap> Z85Maps
+        {
+            get
+            {
+                yield return new Z85DataMap(new byte[] { 0x86, 0x4F, 0xD2, 0x6F, 0xB5, 0x59, 0xF7, 0x5B }, "HelloWorld");
+                yield return new Z85DataMap(new byte[] { 0xB5 }, "2b");
+                yield return new Z85DataMap(new byte[] { 0xB5, 0x59 }, "6Af");
+                yield return new Z85DataMap(new byte[] { 0xB5, 0x59, 0xF7 }, "jt#7");
+                yield return new Z85DataMap(new byte[] { 0x86, 0x4F, 0xD2, 0x6F, 0xB5 }, "Hello2b");
+                yield return new Z85DataMap(new byte[] { 0x86, 0x4F, 0xD2, 0x6F, 0xB5, 0x59 }, "Hello6Af");
+                yield return new Z85DataMap(new byte[] { 0x86, 0x4F, 0xD2, 0x6F, 0xB5, 0x59, 0xF7 }, "Hellojt#7");
+            }
+        }
+
 
         private static string CreateSha256Z85Encoded(string input)
         {

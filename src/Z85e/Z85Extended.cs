@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using CoenM.Encoding.Internals.Guards;
 
 namespace CoenM.Encoding
@@ -73,31 +74,57 @@ namespace CoenM.Encoding
         /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="source"/> is not a multiple of 5, or when destination doesn't have sufficient space.</exception>
         public static int Decode(ReadOnlySpan<char> source, Span<byte> destination)
         {
-            Guard.MustHaveSizeMultipleOf(source, 5, nameof(source));
-
             var decodedSize = CalcuateDecodedSize(source);
             Guard.MustBeSizedAtLeast(destination, decodedSize, nameof(destination));
 
             var len = source.Length;
+
+            var remainder = len % 5;
+
+            if (remainder == 0)
+                return Z85.Decode(source, destination);
+
+            var extraBytes = remainder - 1;
+
+
+
             var byteNbr = 0;
             var charNbr = 0;
             uint value = 0;
+            uint divisor;
 
+
+            var firstPartLenChar = source.Length - remainder;
+            var firstPartLenByte = Z85.CalcuateDecodedSize(source.Slice(0, firstPartLenChar));
+
+            byteNbr = Z85.Decode(source.Slice(0, firstPartLenChar), destination);
+            Debug.Assert(byteNbr == firstPartLenChar / 5 * 4, "byteNbr == firstPartLenChar");
+            Debug.Assert(value == 0, "Value should be 0");
+            Debug.Assert(charNbr == firstPartLenChar, "charNbr should be firstPartLenChar");
+
+            charNbr = firstPartLenChar;
+
+
+
+            // remaining.
+            // then last part
             while (charNbr < len)
             {
                 //  Accumulate value in base 85
                 value = value * 85 + Map.Decoder[(byte)source[charNbr++] - 32];
+
                 if (charNbr % 5 != 0)
                     continue;
 
-                //  Output value in base 256
-                var divisor = 256 * 256 * 256;
-                while (divisor != 0)
-                {
-                    destination[byteNbr++] = (byte)(value / divisor % 256);
-                    divisor /= 256;
-                }
-                value = 0;
+                throw new Exception();
+            }
+
+            // Take care of the remainder.
+            divisor = (uint)Math.Pow(256, extraBytes - 1);
+            while (divisor != 0)
+            {
+                destination[byteNbr++] = (byte)(value / divisor % 256);
+                divisor /= 256;
             }
 
             return decodedSize;
