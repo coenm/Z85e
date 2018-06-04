@@ -66,6 +66,7 @@ namespace CoenM.Encoding
 
 #if NETCOREAPP2_1
             // Obviously, we cannot use a span as a Func argument.
+            // does not work.
             return string.Create(encodedSize, source, (stringSpan, src.ToArray()) => Encode(source.Span, stringSpan));
 #else
             Span<char> encoded = encodedSize <= 128
