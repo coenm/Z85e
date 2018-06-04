@@ -77,7 +77,8 @@ namespace CoenM.Encoding
         /// <param name="destination">placeholder for the ecoded result. Should have sufficient length.</param>
         /// <returns>number of characters written to <paramref name="destination"/></returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="source"/> is not a multiple of 4, or when destination doesn't have sufficient space.</exception>
-        public static int Encode(ReadOnlySpan<byte> source, Span<char> destination)
+        // [System.Security.SecuritySafeCritical]
+        public static unsafe int Encode(ReadOnlySpan<byte> source, Span<char> destination)
         {
             Guard.MustHaveSizeMultipleOf(source, 4, nameof(source));
 
@@ -85,24 +86,36 @@ namespace CoenM.Encoding
             Guard.MustBeSizedAtLeast(destination, encodedSize, nameof(destination));
 
             uint charNbr = 0;
-            uint byteNbr = 0;
-            uint value = 0;
+            int byteNbr = 0;
+            var len = source.Length;
 
-            while (byteNbr < source.Length)
+            const uint divisor4 = 85 * 85 * 85 * 85;
+            const uint divisor3 = 85 * 85 * 85;
+            const uint divisor2 = 85 * 85;
+            const uint divisor1 = 85;
+            const int byte3 = 256 * 256 * 256;
+            const int byte2 = 256 * 256 ;
+            const int byte1 = 256 ;
+
+            // Get a pointer to the Map.Encoder table to avoid unnecessary range checking
+            fixed (char* z85Encoder = Map.Encoder)
             {
-                //  Accumulate value in base 256 (binary)
-                value = value * 256 + source[(int)byteNbr++];
-                if (byteNbr % 4 != 0)
-                    continue;
-
-                //  Output value in base 85
-                uint divisor = 85 * 85 * 85 * 85;
-                while (divisor != 0)
+                while (byteNbr < len)
                 {
-                    destination[(int)charNbr++] = Map.Encoder[value / divisor % 85];
-                    divisor /= 85;
+                    // Accumulate value in base 256 (binary)
+                    ReadOnlySpan<byte> src = source.Slice(byteNbr, 4);
+                    var value = (uint) (src[0] * byte3 + src[1] * byte2 + src[2] * byte1 + src[3]);
+                    byteNbr += 4;
+
+                    //  Output value in base 85
+                    Span<char> dst = destination.Slice((int)charNbr, 5);
+                    dst[0] = z85Encoder[value / divisor4 % 85];
+                    dst[1] = z85Encoder[value / divisor3 % 85];
+                    dst[2] = z85Encoder[value / divisor2 % 85];
+                    dst[3] = z85Encoder[value / divisor1 % 85];
+                    dst[4] = z85Encoder[value % 85];
+                    charNbr += 5;
                 }
-                value = 0;
             }
 
             return encodedSize;

@@ -7,54 +7,12 @@ namespace CoenM.Encoding.Test
 {
     public class Z85ExtendedTest
     {
-        private readonly byte[] _helloWorldBytes = { 0x86, 0x4F, 0xD2, 0x6F, 0xB5, 0x59, 0xF7, 0x5B };
-        private const string HelloWorldString = "HelloWorld";
-
-
-        [Fact]
-        public void HelloWorldDecodeTest()
+        [Theory]
+        [MemberData(nameof(Z85Maps))]
+        public void SomeEncodingAndDecodingOfPartialsTest(byte[] rawData, string z85EncodedData)
         {
-            Assert.Equal(Z85Extended.Decode(HelloWorldString).ToArray(), _helloWorldBytes);
-        }
-
-        [Fact]
-        public void HelloWorldEncodeTest()
-        {
-            Assert.Equal(Z85Extended.Encode(_helloWorldBytes), HelloWorldString);
-        }
-
-        [Fact]
-        [InlineData(nameof(Z85Maps))]
-        public void SomeEncodingAndDecodingOfPartialsTest()
-        {
-            byte[] bytes1 = { 0xB5 };
-            byte[] bytes2 = { 0xB5, 0x59 };
-            byte[] bytes3 = { 0xB5, 0x59, 0xF7 };
-
-            Assert.Equal("2b", Z85Extended.Encode(bytes1));
-            Assert.Equal("6Af", Z85Extended.Encode(bytes2));
-            Assert.Equal("jt#7", Z85Extended.Encode(bytes3));
-
-            Assert.Equal(bytes1, Z85Extended.Decode("2b").ToArray());
-            Assert.Equal(bytes2, Z85Extended.Decode("6Af").ToArray());
-            Assert.Equal(bytes3, Z85Extended.Decode("jt#7").ToArray());
-        }
-
-
-        [Fact]
-        public void SomeEncodingAndDecodingOfPartialsPrefixedWithFourBytesTest()
-        {
-            byte[] bytes1 = { 0x86, 0x4F, 0xD2, 0x6F, 0xB5 };
-            byte[] bytes2 = { 0x86, 0x4F, 0xD2, 0x6F, 0xB5, 0x59 };
-            byte[] bytes3 = { 0x86, 0x4F, 0xD2, 0x6F, 0xB5, 0x59, 0xF7 };
-
-            Assert.Equal("Hello2b", Z85Extended.Encode(bytes1));
-            Assert.Equal("Hello6Af", Z85Extended.Encode(bytes2));
-            Assert.Equal("Hellojt#7", Z85Extended.Encode(bytes3));
-
-            Assert.Equal(bytes1, Z85Extended.Decode("Hello2b").ToArray());
-            Assert.Equal(bytes2, Z85Extended.Decode("Hello6Af").ToArray());
-            Assert.Equal(bytes3, Z85Extended.Decode("Hellojt#7").ToArray());
+            Assert.Equal(z85EncodedData, Z85Extended.Encode(rawData));
+            Assert.Equal(rawData, Z85Extended.Decode(z85EncodedData).ToArray());
         }
 
         [Fact]
@@ -90,17 +48,18 @@ namespace CoenM.Encoding.Test
             Assert.Equal("Q*}EDu2563cEvhD{]baI.r&ub^P[heR9UY=fIwkM", CreateSha256Z85Encoded(result));
         }
 
-        public static IEnumerable<Z85DataMap> Z85Maps
+
+        public static IEnumerable<object[]> Z85Maps
         {
             get
             {
-                yield return new Z85DataMap(new byte[] { 0x86, 0x4F, 0xD2, 0x6F, 0xB5, 0x59, 0xF7, 0x5B }, "HelloWorld");
-                yield return new Z85DataMap(new byte[] { 0xB5 }, "2b");
-                yield return new Z85DataMap(new byte[] { 0xB5, 0x59 }, "6Af");
-                yield return new Z85DataMap(new byte[] { 0xB5, 0x59, 0xF7 }, "jt#7");
-                yield return new Z85DataMap(new byte[] { 0x86, 0x4F, 0xD2, 0x6F, 0xB5 }, "Hello2b");
-                yield return new Z85DataMap(new byte[] { 0x86, 0x4F, 0xD2, 0x6F, 0xB5, 0x59 }, "Hello6Af");
-                yield return new Z85DataMap(new byte[] { 0x86, 0x4F, 0xD2, 0x6F, 0xB5, 0x59, 0xF7 }, "Hellojt#7");
+                yield return new object[] { new byte[] { 0x86, 0x4F, 0xD2, 0x6F, 0xB5, 0x59, 0xF7, 0x5B }, "HelloWorld" };
+                yield return new object[] { new byte[] { 0xB5 }, "2b"};
+                yield return new object[] { new byte[] { 0xB5, 0x59 }, "6Af"};
+                yield return new object[] { new byte[] { 0xB5, 0x59, 0xF7 }, "jt#7"};
+                yield return new object[] { new byte[] { 0x86, 0x4F, 0xD2, 0x6F, 0xB5 }, "Hello2b"};
+                yield return new object[] { new byte[] { 0x86, 0x4F, 0xD2, 0x6F, 0xB5, 0x59 }, "Hello6Af"};
+                yield return new object[] { new byte[] { 0x86, 0x4F, 0xD2, 0x6F, 0xB5, 0x59, 0xF7 }, "Hellojt#7"};
             }
         }
 

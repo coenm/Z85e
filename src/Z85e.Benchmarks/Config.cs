@@ -35,8 +35,8 @@ namespace Z85e.Benchmarks
 
             // exporters
             Add(MarkdownExporter.GitHub);
-            Add(CsvMeasurementsExporter.Default);
-            Add(RPlotExporter.Default);
+//            Add(CsvMeasurementsExporter.Default);
+//            Add(RPlotExporter.Default);
 
             // logger
             Add(new ConsoleLogger());
