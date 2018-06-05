@@ -1,4 +1,4 @@
-﻿using Z85e.Benchmarks.Benchmarks;
+using Z85e.Benchmarks.Benchmarks;
 
 namespace Z85e.Benchmarks
 {
@@ -8,12 +8,13 @@ namespace Z85e.Benchmarks
     {
         public static void Main(string[] args)
         {
-//            BenchmarkRunner.Run<Z85>(new MainConfig());
-            BenchmarkRunner.Run<EncodeZ85VsBase64>(new MainConfig());
+//            BenchmarkRunner.Run<EncodeZ85VsBase64>(new MainConfig());
 
-            // var summary = BenchmarkRunner.Run<Md5VsSha256>();
-//            new BenchmarkSwitcher(typeof(Program).GetTypeInfo().Assembly)
-//                .Run(args, new MainConfig());
+            var switcher = new BenchmarkSwitcher(new[] {
+                typeof(EncodeZ85VsBase64),
+                typeof(DecodeZ85VsBase64),
+            });
+            switcher.Run(args, new MainConfig());
         }
     }
 }

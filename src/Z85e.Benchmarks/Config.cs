@@ -1,14 +1,11 @@
-﻿using System.Collections.Generic;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Environments;
 using BenchmarkDotNet.Exporters;
-using BenchmarkDotNet.Exporters.Csv;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Order;
-using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Toolchains.CsProj;
 
 namespace Z85e.Benchmarks
@@ -19,7 +16,7 @@ namespace Z85e.Benchmarks
         public MainConfig()
         {
             var defaultJob = Job.ShortRun.With(Platform.X64);
-//            Add(defaultJob.With(CsProjClassicNetToolchain.Net461));
+            Add(defaultJob.With(CsProjClassicNetToolchain.Net461));
             Add(defaultJob.With(CsProjClassicNetToolchain.Net471));
             Add(defaultJob.With(CsProjCoreToolchain.NetCoreApp20));
             Add(defaultJob.With(CsProjCoreToolchain.NetCoreApp21));
