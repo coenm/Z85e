@@ -22,9 +22,11 @@ namespace Z85e.Benchmarks.Benchmarks
         }
 
         [Benchmark]
+        [BenchmarkCategory("Z85")]
         public IEnumerable<byte> Z85Decode() => CoenM.Encoding.Z85.Decode(_z85String);
 
         [Benchmark]
+        [BenchmarkCategory("Base64")]
         public byte[] Base64Decode() => Convert.FromBase64String(_base64String);
     }
 }
