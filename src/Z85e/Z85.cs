@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace CoenM.Encoding
 {
@@ -49,8 +50,10 @@ namespace CoenM.Encoding
         /// <param name="input">encoded string. Should have length multiple of 5.</param>
         /// <returns><c>null</c> when input is null, otherwise bytes containing the decoded input string.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="input"/> is not a multiple of 5.</exception>
-        public static IEnumerable<byte> Decode(string input)
+        public static IEnumerable<byte> Decode([NotNull] string input)
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            // ReSharper disable once HeuristicUnreachableCode
             if (input == null)
                 return null;
 
@@ -73,7 +76,7 @@ namespace CoenM.Encoding
                 value = value * 85 + Decoder[(byte)input[(int)charNbr++] - 32];
                 if (charNbr % 5 != 0)
                     continue;
-                
+
                 //  Output value in base 256
                 uint divisor = 256 * 256 * 256;
                 while (divisor != 0)
@@ -92,8 +95,10 @@ namespace CoenM.Encoding
         /// <param name="data">byte[] to encode. Length should be multiple of 4.</param>
         /// <returns>Encoded string or <c>null</c> when the <paramref name="data"/> was null.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="data"/> is not a multiple of 4.</exception>
-        public static string Encode(byte[] data)
+        public static string Encode([NotNull] byte[] data)
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            // ReSharper disable once HeuristicUnreachableCode
             if (data == null)
                 return null;
 
@@ -116,7 +121,7 @@ namespace CoenM.Encoding
                 value = value * 256 + data[byteNbr++];
                 if (byteNbr % 4 != 0)
                     continue;
-                
+
                 //  Output value in base 85
                 uint divisor = 85 * 85 * 85 * 85;
                 while (divisor != 0)
