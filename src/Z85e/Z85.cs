@@ -50,8 +50,10 @@ namespace CoenM.Encoding
         /// <param name="input">encoded string. Should have length multiple of 5.</param>
         /// <returns><c>null</c> when input is null, otherwise bytes containing the decoded input string.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="input"/> is not a multiple of 5.</exception>
-        public static IEnumerable<byte> Decode([NotNull]string input)
+        public static IEnumerable<byte> Decode([NotNull] string input)
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            // ReSharper disable once HeuristicUnreachableCode
             if (input == null)
                 return null;
 
@@ -95,6 +97,8 @@ namespace CoenM.Encoding
         /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="data"/> is not a multiple of 4.</exception>
         public static string Encode([NotNull] byte[] data)
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            // ReSharper disable once HeuristicUnreachableCode
             if (data == null)
                 return null;
 
