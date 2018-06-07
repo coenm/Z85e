@@ -18,9 +18,11 @@ namespace Z85e.Benchmarks.Benchmarks
         }
 
         [Benchmark]
+        [BenchmarkCategory("Z85")]
         public string Z85Encode() => CoenM.Encoding.Z85.Encode(_data);
 
         [Benchmark]
+        [BenchmarkCategory("Base64")]
         public string Base64Encode() => Convert.ToBase64String(_data);
     }
 }
