@@ -77,18 +77,16 @@ namespace CoenM.Encoding
         // [System.Security.SecuritySafeCritical]
         public static unsafe string Encode(Span<byte> data)
         {
-            var size = (uint)data.Length;
+            var size = data.Length;
 
             //  Accepts only byte arrays bounded to 4 bytes
             if (size % 4 != 0)
                 throw new ArgumentOutOfRangeException(nameof(data), "Data length should be multiple of 4.");
 
-
             var encodedSize = size * 5 / 4;
-            Span<char> destination = new char[encodedSize];
-            uint charNbr = 0;
+            var destination = new string('0', encodedSize);
+            int charNbr = 0;
             int byteNbr = 0;
-            ReadOnlySpan<byte> dataSpan = data;
 
             const uint divisor4 = 85 * 85 * 85 * 85;
             const uint divisor3 = 85 * 85 * 85;
@@ -98,28 +96,31 @@ namespace CoenM.Encoding
             const int byte2 = 256 * 256;
             const int byte1 = 256;
 
-            // Get a pointer to the Map.Encoder table to avoid unnecessary range checking
+            // Get pointers to avoid unnecessary range checking
             fixed (char* z85Encoder = Map.Encoder)
+            fixed (char* z85Dest = destination)
             {
                 while (byteNbr < size)
                 {
                     // Accumulate value in base 256 (binary)
-                    ReadOnlySpan<byte> src = dataSpan.Slice(byteNbr, 4);
-                    var value = (uint)(src[0] * byte3 + src[1] * byte2 + src[2] * byte1 + src[3]);
+                    var value = (uint)(data[byteNbr + 0] * byte3 +
+                                       data[byteNbr + 1] * byte2 +
+                                       data[byteNbr + 2] * byte1 +
+                                       data[byteNbr + 3]);
                     byteNbr += 4;
 
                     //  Output value in base 85
-                    Span<char> dst = destination.Slice((int)charNbr, 5);
-                    dst[0] = z85Encoder[value / divisor4 % 85];
-                    dst[1] = z85Encoder[value / divisor3 % 85];
-                    dst[2] = z85Encoder[value / divisor2 % 85];
-                    dst[3] = z85Encoder[value / divisor1 % 85];
-                    dst[4] = z85Encoder[value % 85];
+                    z85Dest[charNbr + 0] = z85Encoder[value / divisor4 % 85];
+                    z85Dest[charNbr + 1] = z85Encoder[value / divisor3 % 85];
+                    z85Dest[charNbr + 2] = z85Encoder[value / divisor2 % 85];
+                    z85Dest[charNbr + 3] = z85Encoder[value / divisor1 % 85];
+                    z85Dest[charNbr + 4] = z85Encoder[value % 85];
                     charNbr += 5;
                 }
             }
 
-            return new string(destination.ToArray());
+            return destination;
         }
+
     }
 }
