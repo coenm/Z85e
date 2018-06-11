@@ -5,11 +5,6 @@
       <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
     </parameter>
   </member>
-  <member name="M:CoenM.Encoding.Z85.Encode(System.Byte[])">
-    <parameter name="data">
-      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
-    </parameter>
-  </member>
   <member name="M:CoenM.Encoding.Z85Extended.Decode(System.String)">
     <parameter name="input">
       <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
