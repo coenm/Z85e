@@ -50,7 +50,7 @@ namespace CoenM.Encoding
             while (charNbr < size)
             {
                 //  Accumulate value in base 85
-                value = value * 85 + Map.Decoder[(byte)input[(int)charNbr++] - 32];
+                value = value * 85 + Map.Decoder[(byte)input[(int)charNbr++]];
 
                 if (charNbr % 5 != 0)
                     continue;

@@ -18,43 +18,54 @@ namespace CoenM.Encoding
         /// <param name="input">encoded string. Should have length multiple of 5.</param>
         /// <returns><c>null</c> when input is null, otherwise bytes containing the decoded input string.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="input"/> is not a multiple of 5.</exception>
-        public static IEnumerable<byte> Decode([NotNull] string input)
+        public static unsafe IEnumerable<byte> Decode([NotNull] string input)
         {
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             // ReSharper disable once HeuristicUnreachableCode
             if (input == null)
                 return null;
 
-            var len = (uint)input.Length;
+            var len = input.Length;
 
             //  Accepts only strings bounded to 5 bytes
             if (len % 5 != 0)
                 throw new ArgumentOutOfRangeException(nameof(input), "Length of Input should be multiple of 5.");
 
             var decodedSize = len * 4 / 5;
-            var decoded = new byte[decodedSize];
+            Span<byte> decoded = new byte[decodedSize];
 
-            uint byteNbr = 0;
-            uint charNbr = 0;
-            uint value = 0;
+            int byteNbr = 0;
+            int charNbr = 0;
 
-            while (charNbr < len)
+            const uint divisor3 = 256 * 256 * 256;
+            const uint divisor2 = 256 * 256;
+            const uint divisor1 = 256;
+
+            // Get a pointers to avoid unnecessary range checking
+            fixed (byte* z85Decoder = Map.Decoder)
+            fixed (char* src = input)
             {
-                //  Accumulate value in base 85
-                value = value * 85 + Map.Decoder[(byte)input[(int)charNbr++] - 32];
-                if (charNbr % 5 != 0)
-                    continue;
-
-                //  Output value in base 256
-                uint divisor = 256 * 256 * 256;
-                while (divisor != 0)
+                while (charNbr < len)
                 {
-                    decoded[byteNbr++] = (byte)(value / divisor % 256);
-                    divisor /= 256;
+                    //  Accumulate value in base 85
+                    uint value = z85Decoder[(byte)src[charNbr]];
+                    value = value * 85 + z85Decoder[(byte)src[charNbr + 1]];
+                    value = value * 85 + z85Decoder[(byte)src[charNbr + 2]];
+                    value = value * 85 + z85Decoder[(byte)src[charNbr + 3]];
+                    value = value * 85 + z85Decoder[(byte)src[charNbr + 4]];
+                    charNbr += 5;
+
+                    //  Output value in base 256
+                    Span<byte> dest = decoded.Slice(byteNbr, 4);
+                    dest[0] = (byte)(value / divisor3 % 256);
+                    dest[1] = (byte)(value / divisor2 % 256);
+                    dest[2] = (byte)(value / divisor1 % 256);
+                    dest[3] = (byte)(value % 256);
+                    byteNbr += 4;
                 }
-                value = 0;
             }
-            return decoded;
+
+            return decoded.ToArray();
         }
 
         /// <summary>
