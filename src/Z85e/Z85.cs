@@ -120,6 +120,5 @@ namespace CoenM.Encoding
 
             return destination;
         }
-
     }
 }
