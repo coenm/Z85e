@@ -32,7 +32,7 @@ namespace CoenM.Encoding
                 throw new ArgumentOutOfRangeException(nameof(input), "Length of Input should be multiple of 5.");
 
             var decodedSize = len * 4 / 5;
-            Span<byte> decoded = new byte[decodedSize];
+            byte[] decoded = new byte[decodedSize];
 
             int byteNbr = 0;
             int charNbr = 0;
@@ -56,16 +56,15 @@ namespace CoenM.Encoding
                     charNbr += 5;
 
                     //  Output value in base 256
-                    Span<byte> dest = decoded.Slice(byteNbr, 4);
-                    dest[0] = (byte)(value / divisor3 % 256);
-                    dest[1] = (byte)(value / divisor2 % 256);
-                    dest[2] = (byte)(value / divisor1 % 256);
-                    dest[3] = (byte)(value % 256);
+                    decoded[byteNbr + 0] = (byte)(value / divisor3 % 256);
+                    decoded[byteNbr + 1] = (byte)(value / divisor2 % 256);
+                    decoded[byteNbr + 2] = (byte)(value / divisor1 % 256);
+                    decoded[byteNbr + 3] = (byte)(value % 256);
                     byteNbr += 4;
                 }
             }
 
-            return decoded.ToArray();
+            return decoded;
         }
 
         /// <summary>

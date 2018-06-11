@@ -35,24 +35,24 @@ Intel Core i7-4700HQ CPU 2.40GHz (Haswell), 1 CPU, 8 logical and 4 physical core
 Frequency=2338344 Hz, Resolution=427.6531 ns, Timer=TSC
 .NET Core SDK=2.1.300
   [Host]     : .NET Core 2.0.7 (CoreCLR 4.6.26328.01, CoreFX 4.6.26403.03), 64bit RyuJIT
-  Job-ZHMHEE : .NET Core 2.0.7 (CoreCLR 4.6.26328.01, CoreFX 4.6.26403.03), 64bit RyuJIT
-  Job-RILDMS : .NET Core 2.1.0 (CoreCLR 4.6.26515.07, CoreFX 4.6.26515.06), 64bit RyuJIT
-  Job-JHJQPZ : .NET Framework 4.7.1 (CLR 4.0.30319.42000), 64bit RyuJIT-v4.7.3101.0
+  Job-WZXPDG : .NET Core 2.0.7 (CoreCLR 4.6.26328.01, CoreFX 4.6.26403.03), 64bit RyuJIT
+  Job-RGVZIG : .NET Core 2.1.0 (CoreCLR 4.6.26515.07, CoreFX 4.6.26515.06), 64bit RyuJIT
+  Job-SYWPUL : .NET Framework 4.7.1 (CLR 4.0.30319.42000), 64bit RyuJIT-v4.7.3101.0
 
 
 ```
 |       Method |     Toolchain | Categories | Size |        Mean |  Gen 0 | Allocated |
 |------------- |-------------- |----------- |----- |------------:|-------:|----------:|
-|    **Z85Decode** | **.NET Core 2.0** |        **Z85** |  **120** |    **265.6 ns** | **0.0911** |     **288 B** |
-|    Z85Decode | .NET Core 2.1 |        Z85 |  120 |    196.3 ns | 0.0913 |     288 B |
-|    Z85Decode |  CsProjnet471 |        Z85 |  120 |    265.2 ns | 0.0911 |     288 B |
-|    **Z85Decode** | **.NET Core 2.0** |        **Z85** | **6000** | **10,793.2 ns** | **3.8147** |   **12048 B** |
-|    Z85Decode | .NET Core 2.1 |        Z85 | 6000 |  9,013.4 ns | 3.8147 |   12048 B |
-|    Z85Decode |  CsProjnet471 |        Z85 | 6000 | 10,856.4 ns | 3.8147 |   12053 B |
+|    **Z85Decode** | **.NET Core 2.0** |        **Z85** |  **120** |    **201.2 ns** | **0.0455** |     **144 B** |
+|    Z85Decode | .NET Core 2.1 |        Z85 |  120 |    201.8 ns | 0.0455 |     144 B |
+|    Z85Decode |  CsProjnet471 |        Z85 |  120 |    198.8 ns | 0.0455 |     144 B |
+|    **Z85Decode** | **.NET Core 2.0** |        **Z85** | **6000** |  **9,677.4 ns** | **1.9073** |    **6024 B** |
+|    Z85Decode | .NET Core 2.1 |        Z85 | 6000 |  9,672.5 ns | 1.9073 |    6024 B |
+|    Z85Decode |  CsProjnet471 |        Z85 | 6000 |  9,605.0 ns | 1.9073 |    6026 B |
 |              |               |            |      |             |        |           |
-| **Base64Decode** | **.NET Core 2.0** |     **Base64** |  **120** |    **542.9 ns** | **0.0448** |     **144 B** |
-| Base64Decode | .NET Core 2.1 |     Base64 |  120 |    358.2 ns | 0.0453 |     144 B |
-| Base64Decode |  CsProjnet471 |     Base64 |  120 |    401.4 ns | 0.0453 |     144 B |
-| **Base64Decode** | **.NET Core 2.0** |     **Base64** | **6000** | **53,930.2 ns** | **1.8921** |    **6024 B** |
-| Base64Decode | .NET Core 2.1 |     Base64 | 6000 | 15,488.7 ns | 1.8921 |    6024 B |
-| Base64Decode |  CsProjnet471 |     Base64 | 6000 | 40,557.0 ns | 1.8921 |    6026 B |
+| **Base64Decode** | **.NET Core 2.0** |     **Base64** |  **120** |    **550.2 ns** | **0.0448** |     **144 B** |
+| Base64Decode | .NET Core 2.1 |     Base64 |  120 |    373.0 ns | 0.0453 |     144 B |
+| Base64Decode |  CsProjnet471 |     Base64 |  120 |    407.7 ns | 0.0453 |     144 B |
+| **Base64Decode** | **.NET Core 2.0** |     **Base64** | **6000** | **54,989.9 ns** | **1.8921** |    **6024 B** |
+| Base64Decode | .NET Core 2.1 |     Base64 | 6000 | 15,733.9 ns | 1.8921 |    6024 B |
+| Base64Decode |  CsProjnet471 |     Base64 | 6000 | 40,939.1 ns | 1.8921 |    6026 B |
