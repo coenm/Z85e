@@ -23,10 +23,10 @@ namespace Z85e.Benchmarks
             var defaultJob = Job.ShortRun.With(Platform.X64);
 
             // Toolchain
-            // Add(defaultJob.With(CsProjClassicNetToolchain.Net461));
-            Add(defaultJob.With(CsProjClassicNetToolchain.Net471));
-            Add(defaultJob.With(CsProjCoreToolchain.NetCoreApp20));
-            Add(defaultJob.With(CsProjCoreToolchain.NetCoreApp21));
+            // Add(defaultJob.With(CsProjClassicNetToolchain.Net461).WithId("Net461"));
+            Add(defaultJob.With(CsProjClassicNetToolchain.Net471).WithId("Net471"));
+            Add(defaultJob.With(CsProjCoreToolchain.NetCoreApp20).WithId("Core20"));
+            Add(defaultJob.With(CsProjCoreToolchain.NetCoreApp21).WithId("Core21"));
 
             // Extra diagnoser
             Add(MemoryDiagnoser.Default);

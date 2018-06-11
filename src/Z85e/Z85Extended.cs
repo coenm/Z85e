@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CoenM.Encoding.Internals;
 using JetBrains.Annotations;
 
 namespace CoenM.Encoding
@@ -49,7 +50,7 @@ namespace CoenM.Encoding
             while (charNbr < size)
             {
                 //  Accumulate value in base 85
-                value = value * 85 + Z85.Decoder[(byte)input[(int)charNbr++] - 32];
+                value = value * 85 + Map.Decoder[(byte)input[(int)charNbr++]];
 
                 if (charNbr % 5 != 0)
                     continue;
@@ -118,7 +119,7 @@ namespace CoenM.Encoding
                 divisor = 85 * 85 * 85 * 85;
                 while (divisor != 0)
                 {
-                    encoded[charNbr++] = Z85.Encoder[value / divisor % 85];
+                    encoded[charNbr++] = Map.Encoder[value / divisor % 85];
                     divisor /= 85;
                 }
                 value = 0;
@@ -128,7 +129,7 @@ namespace CoenM.Encoding
             divisor = (uint) Math.Pow(85, remainder);
             while (divisor != 0)
             {
-                encoded[charNbr++] = Z85.Encoder[value / divisor % 85];
+                encoded[charNbr++] = Map.Encoder[value / divisor % 85];
                 divisor /= 85;
             }
 

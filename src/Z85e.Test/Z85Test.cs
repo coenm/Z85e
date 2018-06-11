@@ -36,13 +36,6 @@ namespace CoenM.Encoding.Test
             Assert.Null(Z85.Decode(null));
         }
 
-        [Fact]
-        public void EncodeNullReturnsNullTest()
-        {
-            // ReSharper disable once AssignNullToNotNullAttribute
-            Assert.Null(Z85.Encode(null));
-        }
-
         [Theory]
         [InlineData(1)]
         [InlineData(2)]
