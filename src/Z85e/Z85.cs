@@ -18,6 +18,7 @@ namespace CoenM.Encoding
         /// <param name="input">encoded string. Should have length multiple of 5.</param>
         /// <returns><c>null</c> when input is null, otherwise bytes containing the decoded input string.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="input"/> is not a multiple of 5.</exception>
+        [PublicAPI]
         public static unsafe IEnumerable<byte> Decode([NotNull] string input)
         {
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
@@ -74,8 +75,14 @@ namespace CoenM.Encoding
         /// <returns>Encoded string or <c>null</c> when the <paramref name="data"/> was null.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="data"/> is not a multiple of 4.</exception>
         // [System.Security.SecuritySafeCritical]
-        public static unsafe string Encode(Span<byte> data)
+        [PublicAPI]
+        public static unsafe string Encode([NotNull] byte[] data)
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            // ReSharper disable once HeuristicUnreachableCode
+            if (data == null)
+                return null;
+
             var size = data.Length;
 
             //  Accepts only byte arrays bounded to 4 bytes

@@ -1,5 +1,5 @@
 # About this project
-Z85 encoding extended in dotnet standard 1.1, 1.6, 2.0, and coreapp 2.1
+Z85 encoding extended targeting dotnet standard 1.0
 
 This project implements the Z85 encoding standard as described in this [rfc](https://rfc.zeromq.org/spec:32/Z85/) together with an extended version where you can encode bytes with no restriction on the length of the bytes (ie. it is not required to have a length of a multiple of 4).
 
@@ -23,16 +23,16 @@ Originally, Z85 only encodes blocks of 4 bytes. To allow blocks of all lengths t
 - Z85e uses the same output characters as Z85;
 - Z85e encodes an input byte array (with a length multiple of 4) exactly the same as Z85;
 - Z85e decodes an input string (with a length multiple of 5) exactly the same as Z85;
-- Z85e should be as fast and cheap as possible. Yes, this is rather vague. Lets compare it with a base64 encoding decoding (todo).
+- Z85e should be as fast and cheap as possible. Yes, this is rather vague. Lets compare it with a base64 encoding decoding.
 
-## Definition
-todo
+## API
 
+See [DotNet APIs](http://dotnetapis.com/pkg/CoenM.Encoding.Z85e) for the API.
 
 ## Performance
 
-[Performance version 1.0.0](docs/PerformanceV1.0.0.md)
-
+- [Performance version 1.0.0](docs/PerformanceV1.0.0.md)
+- [Performance current working version](docs/Performance-Latest.md)
 
 # Example encoding
 
