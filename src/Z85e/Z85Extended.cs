@@ -17,7 +17,7 @@ namespace CoenM.Encoding
         /// <param name="input">encoded string.</param>
         /// <returns><c>null</c> when <paramref name="input"/> is null, otherwise bytes containing the decoded input string.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="input"/> is a multiple of 5 plus 1.</exception>
-        public static IEnumerable<byte> Decode([NotNull] string input)
+        public static unsafe IEnumerable<byte> Decode([NotNull] string input)
         {
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             // ReSharper disable once HeuristicUnreachableCode
@@ -44,29 +44,43 @@ namespace CoenM.Encoding
 
             uint byteNbr = 0;
             uint charNbr = 0;
-            uint value = 0;
-            uint divisor;
+            uint value;
 
-            while (charNbr < size)
+            const uint divisor3 = 256 * 256 * 256;
+            const uint divisor2 = 256 * 256;
+            const uint divisor1 = 256;
+
+            var size2 = size - remainder;
+
+            // Get a pointers to avoid unnecessary range checking
+            fixed (byte* z85Decoder = Map.Decoder)
+            fixed (char* src = input)
             {
-                //  Accumulate value in base 85
-                value = value * 85 + Map.Decoder[(byte)input[(int)charNbr++]];
-
-                if (charNbr % 5 != 0)
-                    continue;
-
-                //  Output value in base 256
-                divisor = 256 * 256 * 256;
-                while (divisor != 0)
+                while (charNbr < size2)
                 {
-                    decoded[byteNbr++] = (byte)(value / divisor % 256);
-                    divisor /= 256;
+                    //  Accumulate value in base 85
+                    value = z85Decoder[(byte)src[charNbr]];
+                    value = value * 85 + z85Decoder[(byte)src[charNbr + 1]];
+                    value = value * 85 + z85Decoder[(byte)src[charNbr + 2]];
+                    value = value * 85 + z85Decoder[(byte)src[charNbr + 3]];
+                    value = value * 85 + z85Decoder[(byte)src[charNbr + 4]];
+                    charNbr += 5;
+
+                    //  Output value in base 256
+                    decoded[byteNbr + 0] = (byte)(value / divisor3 % 256);
+                    decoded[byteNbr + 1] = (byte)(value / divisor2 % 256);
+                    decoded[byteNbr + 2] = (byte)(value / divisor1 % 256);
+                    decoded[byteNbr + 3] = (byte)(value % 256);
+                    byteNbr += 4;
                 }
-                value = 0;
             }
 
+            value = 0;
+            while (charNbr < size)
+                value = value * 85 + Map.Decoder[(byte) input[(int) charNbr++]];
+
             // Take care of the remainder.
-            divisor = (uint)Math.Pow(256, extraBytes - 1);
+            var divisor = (uint)Math.Pow(256, extraBytes - 1);
             while (divisor != 0)
             {
                 decoded[byteNbr++] = (byte)(value / divisor % 256);
@@ -81,14 +95,14 @@ namespace CoenM.Encoding
         /// </summary>
         /// <param name="data">byte[] to encode. No restrictions on the length.</param>
         /// <returns>Encoded string or <c>null</c> when the <paramref name="data"/> was null.</returns>
-        public static string Encode([NotNull] byte[] data)
+        public static unsafe string Encode([NotNull] byte[] data)
         {
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             // ReSharper disable once HeuristicUnreachableCode
             if (data == null)
                 return null;
 
-            var size = (uint)data.Length;
+            var size = data.Length;
             var remainder = size % 4;
 
             if (remainder == 0)
@@ -99,41 +113,59 @@ namespace CoenM.Encoding
             // three byte -> four chars
             var extraChars = remainder + 1;
 
-            var encodedSize = (int)(size - remainder) * 5 / 4 + extraChars;
-
-            var encoded = new char[encodedSize];
+            var encodedSize = (size - remainder) * 5 / 4 + extraChars;
+            var destination = new string('0', encodedSize);
             uint charNbr = 0;
             uint byteNbr = 0;
-            uint value = 0;
-            uint divisor;
 
-            while (byteNbr < size)
+            var size2 = size - remainder;
+
+            const uint divisor4 = 85 * 85 * 85 * 85;
+            const uint divisor3 = 85 * 85 * 85;
+            const uint divisor2 = 85 * 85;
+            const uint divisor1 = 85;
+            const int byte3 = 256 * 256 * 256;
+            const int byte2 = 256 * 256;
+            const int byte1 = 256;
+
+            // Get pointers to avoid unnecessary range checking
+            fixed (char* z85Encoder = Map.Encoder)
+            fixed (char* z85Dest = destination)
             {
-                //  Accumulate value in base 256 (binary)
-                value = value * 256 + data[byteNbr++];
+                uint value;
+                while (byteNbr < size2)
+                {
+                    // Accumulate value in base 256 (binary)
+                    value = (uint)(data[byteNbr + 0] * byte3 +
+                                   data[byteNbr + 1] * byte2 +
+                                   data[byteNbr + 2] * byte1 +
+                                   data[byteNbr + 3]);
+                    byteNbr += 4;
 
-                if (byteNbr % 4 != 0)
-                    continue;
+                    //  Output value in base 85
+                    z85Dest[charNbr + 0] = z85Encoder[value / divisor4 % 85];
+                    z85Dest[charNbr + 1] = z85Encoder[value / divisor3 % 85];
+                    z85Dest[charNbr + 2] = z85Encoder[value / divisor2 % 85];
+                    z85Dest[charNbr + 3] = z85Encoder[value / divisor1 % 85];
+                    z85Dest[charNbr + 4] = z85Encoder[value % 85];
+                    charNbr += 5;
+                }
 
-                //  Output value in base 85
-                divisor = 85 * 85 * 85 * 85;
+
+                // Take care of the remainder.
+                value = 0;
+                while (byteNbr < size)
+                    value = value * 256 + data[byteNbr++];
+
+                var divisor = (uint) Math.Pow(85, remainder);
                 while (divisor != 0)
                 {
-                    encoded[charNbr++] = Map.Encoder[value / divisor % 85];
+                    z85Dest[charNbr++] = z85Encoder[value / divisor % 85];
                     divisor /= 85;
                 }
-                value = 0;
             }
 
-            // Take care of the remainder.
-            divisor = (uint) Math.Pow(85, remainder);
-            while (divisor != 0)
-            {
-                encoded[charNbr++] = Map.Encoder[value / divisor % 85];
-                divisor /= 85;
-            }
-
-            return new string(encoded);
+            return destination;
         }
     }
 }

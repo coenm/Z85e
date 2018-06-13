@@ -15,7 +15,10 @@ Frequency=2338344 Hz, Resolution=427.6531 ns, Timer=TSC
   Job-QVCBYA : .NET Framework 4.7.1 (CLR 4.0.30319.42000), 64bit RyuJIT-v4.7.3101.0
 
 ```
-## Encoding
+
+## Z85 vs. Base64
+
+### Encoding
 
 |           Method |         Toolchain | Categories |     Size |            Mean |      Gen 0 |   Allocated |
 |----------------- |------------------ |----------- |--------- |----------------:|-----------:|------------:|
@@ -34,7 +37,7 @@ Frequency=2338344 Hz, Resolution=427.6531 ns, Timer=TSC
 |     Base64Encode |      CsProjnet471 |     Base64 |     6000 |      8,622.3 ns |     5.0964 |     16056 B |
 
 
-## Decoding
+### Decoding
 
 |           Method |         Toolchain | Categories |     Size |            Mean |      Gen 0 |  Allocated |
 |----------------- |------------------ |----------- |--------- |----------------:|-----------:|-----------:|
@@ -51,3 +54,67 @@ Frequency=2338344 Hz, Resolution=427.6531 ns, Timer=TSC
 | **Base64Decode** | **.NET Core 2.0** | **Base64** | **6000** | **51,380.2 ns** | **1.8921** | **6024 B** |
 |     Base64Decode |     .NET Core 2.1 |     Base64 |     6000 |     14,718.2 ns |     1.9073 |     6024 B |
 |     Base64Decode |      CsProjnet471 |     Base64 |     6000 |     38,429.6 ns |     1.8921 |     6026 B |
+
+
+## Z85 Extended vs. Base64
+
+### Encoding
+
+|            Method |     Toolchain | Categories | Size |       Mean |  Gen 0 | Allocated |
+|------------------ |-------------- |----------- |----- |-----------:|-------:|----------:|
+| **Z85ExtendedEncode** | **.NET Core 2.0** |        **Z85** |  **122** | **1,852.4 ns** | **0.2117** |     **672 B** |
+| Z85ExtendedEncode | .NET Core 2.1 |        Z85 |  122 | 1,312.1 ns | 0.2117 |     672 B |
+| Z85ExtendedEncode |  CsProjnet471 |        Z85 |  122 | 1,298.9 ns | 0.2117 |     672 B |
+| **Z85ExtendedEncode** | **.NET Core 2.0** |        **Z85** |  **123** | **1,839.6 ns** | **0.2117** |     **672 B** |
+| Z85ExtendedEncode | .NET Core 2.1 |        Z85 |  123 | 1,319.4 ns | 0.2117 |     672 B |
+| Z85ExtendedEncode |  CsProjnet471 |        Z85 |  123 | 1,304.0 ns | 0.2117 |     672 B |
+| **Z85ExtendedEncode** | **.NET Core 2.0** |        **Z85** |  **124** | **1,110.9 ns** | **0.1049** |     **336 B** |
+| Z85ExtendedEncode | .NET Core 2.1 |        Z85 |  124 |   384.7 ns | 0.1063 |     336 B |
+| Z85ExtendedEncode |  CsProjnet471 |        Z85 |  124 |   448.8 ns | 0.1063 |     336 B |
+| **Z85ExtendedEncode** | **.NET Core 2.0** |        **Z85** |  **125** | **1,825.3 ns** | **0.2174** |     **688 B** |
+| Z85ExtendedEncode | .NET Core 2.1 |        Z85 |  125 | 1,301.9 ns | 0.2174 |     688 B |
+| Z85ExtendedEncode |  CsProjnet471 |        Z85 |  125 | 1,281.1 ns | 0.2174 |     688 B |
+|                   |               |            |      |            |        |           |
+|      **Base64Encode** | **.NET Core 2.0** |     **Base64** |  **122** |   **206.8 ns** | **0.1142** |     **360 B** |
+|      Base64Encode | .NET Core 2.1 |     Base64 |  122 |   270.7 ns | 0.1142 |     360 B |
+|      Base64Encode |  CsProjnet471 |     Base64 |  122 |   234.6 ns | 0.1140 |     360 B |
+|      **Base64Encode** | **.NET Core 2.0** |     **Base64** |  **123** |   **208.0 ns** | **0.1142** |     **360 B** |
+|      Base64Encode | .NET Core 2.1 |     Base64 |  123 |   209.2 ns | 0.1142 |     360 B |
+|      Base64Encode |  CsProjnet471 |     Base64 |  123 |   235.3 ns | 0.1140 |     360 B |
+|      **Base64Encode** | **.NET Core 2.0** |     **Base64** |  **124** |   **209.1 ns** | **0.1168** |     **368 B** |
+|      Base64Encode | .NET Core 2.1 |     Base64 |  124 |   211.1 ns | 0.1168 |     368 B |
+|      Base64Encode |  CsProjnet471 |     Base64 |  124 |   239.7 ns | 0.1168 |     368 B |
+|      **Base64Encode** | **.NET Core 2.0** |     **Base64** |  **125** |   **211.3 ns** | **0.1168** |     **368 B** |
+|      Base64Encode | .NET Core 2.1 |     Base64 |  125 |   211.5 ns | 0.1168 |     368 B |
+|      Base64Encode |  CsProjnet471 |     Base64 |  125 |   239.9 ns | 0.1168 |     368 B |
+
+
+### Decoding
+
+|            Method |     Toolchain | Categories | Size |       Mean |  Gen 0 | Allocated |
+|------------------ |-------------- |----------- |----- |-----------:|-------:|----------:|
+| **Z85ExtendedDecode** | **.NET Core 2.0** |        **Z85** |  **122** | **1,259.2 ns** | **0.0477** |     **152 B** |
+| Z85ExtendedDecode | .NET Core 2.1 |        Z85 |  122 |   912.0 ns | 0.0477 |     152 B |
+| Z85ExtendedDecode |  CsProjnet471 |        Z85 |  122 |   916.9 ns | 0.0477 |     152 B |
+| **Z85ExtendedDecode** | **.NET Core 2.0** |        **Z85** |  **123** | **1,314.9 ns** | **0.0477** |     **152 B** |
+| Z85ExtendedDecode | .NET Core 2.1 |        Z85 |  123 |   982.1 ns | 0.0477 |     152 B |
+| Z85ExtendedDecode |  CsProjnet471 |        Z85 |  123 |   963.5 ns | 0.0477 |     152 B |
+| **Z85ExtendedDecode** | **.NET Core 2.0** |        **Z85** |  **124** |   **214.9 ns** | **0.0482** |     **152 B** |
+| Z85ExtendedDecode | .NET Core 2.1 |        Z85 |  124 |   214.2 ns | 0.0482 |     152 B |
+| Z85ExtendedDecode |  CsProjnet471 |        Z85 |  124 |   214.0 ns | 0.0482 |     152 B |
+| **Z85ExtendedDecode** | **.NET Core 2.0** |        **Z85** |  **125** | **1,312.5 ns** | **0.0477** |     **152 B** |
+| Z85ExtendedDecode | .NET Core 2.1 |        Z85 |  125 |   932.0 ns | 0.0477 |     152 B |
+| Z85ExtendedDecode |  CsProjnet471 |        Z85 |  125 |   942.4 ns | 0.0477 |     152 B |
+|                   |               |            |      |            |        |           |
+|      **Base64Decode** | **.NET Core 2.0** |     **Base64** |  **122** |   **565.6 ns** | **0.0477** |     **152 B** |
+|      Base64Decode | .NET Core 2.1 |     Base64 |  122 |   376.1 ns | 0.0482 |     152 B |
+|      Base64Decode |  CsProjnet471 |     Base64 |  122 |   427.7 ns | 0.0482 |     152 B |
+|      **Base64Decode** | **.NET Core 2.0** |     **Base64** |  **123** |   **563.6 ns** | **0.0477** |     **152 B** |
+|      Base64Decode | .NET Core 2.1 |     Base64 |  123 |   380.7 ns | 0.0482 |     152 B |
+|      Base64Decode |  CsProjnet471 |     Base64 |  123 |   427.1 ns | 0.0482 |     152 B |
+|      **Base64Decode** | **.NET Core 2.0** |     **Base64** |  **124** |   **584.2 ns** | **0.0477** |     **152 B** |
+|      Base64Decode | .NET Core 2.1 |     Base64 |  124 |   388.1 ns | 0.0482 |     152 B |
+|      Base64Decode |  CsProjnet471 |     Base64 |  124 |   428.8 ns | 0.0482 |     152 B |
+|      **Base64Decode** | **.NET Core 2.0** |     **Base64** |  **125** |   **584.5 ns** | **0.0477** |     **152 B** |
+|      Base64Decode | .NET Core 2.1 |     Base64 |  125 |   385.8 ns | 0.0482 |     152 B |
+|      Base64Decode |  CsProjnet471 |     Base64 |  125 |   430.9 ns | 0.0482 |     152 B |

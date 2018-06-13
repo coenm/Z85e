@@ -13,6 +13,8 @@ namespace Z85e.Benchmarks
             var switcher = new BenchmarkSwitcher(new[] {
                 typeof(EncodeZ85VsBase64),
                 typeof(DecodeZ85VsBase64),
+                typeof(EncodeZ85ExtVsBase64),
+                typeof(DecodeZ85ExtVsBase64),
             });
             switcher.Run(args, new MainConfig());
         }
