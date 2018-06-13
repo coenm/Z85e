@@ -1,5 +1,5 @@
 # About this project
-Z85 encoding extended targetig dotnet standard 1.0
+Z85 encoding extended targeting dotnet standard 1.0
 
 This project implements the Z85 encoding standard as described in this [rfc](https://rfc.zeromq.org/spec:32/Z85/) together with an extended version where you can encode bytes with no restriction on the length of the bytes (ie. it is not required to have a length of a multiple of 4).
 
