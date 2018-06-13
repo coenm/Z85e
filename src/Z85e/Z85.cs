@@ -76,8 +76,13 @@ namespace CoenM.Encoding
         /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="data"/> is not a multiple of 4.</exception>
         // [System.Security.SecuritySafeCritical]
         [PublicAPI]
-        public static unsafe string Encode(Span<byte> data)
+        public static unsafe string Encode([NotNull] byte[] data)
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            // ReSharper disable once HeuristicUnreachableCode
+            if (data == null)
+                return null;
+
             var size = data.Length;
 
             //  Accepts only byte arrays bounded to 4 bytes

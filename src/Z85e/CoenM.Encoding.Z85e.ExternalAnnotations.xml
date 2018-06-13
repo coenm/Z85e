@@ -6,8 +6,11 @@
       <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
     </parameter>
   </member>
-  <member name="M:CoenM.Encoding.Z85.Encode(System.Span{System.Byte})">
+  <member name="M:CoenM.Encoding.Z85.Encode(System.Byte[])">
     <attribute ctor="M:JetBrains.Annotations.PublicAPIAttribute.#ctor" />
+    <parameter name="data">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
   </member>
   <member name="M:CoenM.Encoding.Z85Extended.Decode(System.String)">
     <attribute ctor="M:JetBrains.Annotations.PublicAPIAttribute.#ctor" />
