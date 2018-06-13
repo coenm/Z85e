@@ -57,12 +57,14 @@ namespace CoenM.Encoding.Test
         [Fact]
         public void DecodeNullReturnsNullTest()
         {
+            // ReSharper disable once AssignNullToNotNullAttribute
             Assert.Null(Z85Extended.Decode(null));
         }
 
         [Fact]
         public void EncodeNullReturnsNullTest()
         {
+            // ReSharper disable once AssignNullToNotNullAttribute
             Assert.Null(Z85Extended.Encode(null));
         }
 
