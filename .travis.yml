@@ -11,12 +11,8 @@ env:
   - DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
 
 before_install:
-- # sudo pip install python-coveralls
 - npm install --save-dev coveralls
-- git fetch --unshallow # Travis always does a shallow clone, but GitVersion needs the full history including branches and tags
-- sudo apt-get -y install perl
-- chmod +x .scripts/InstallExiftool.sh && sudo ./.scripts/InstallExiftool.sh 
-- 'echo "EXIFTOOL: $(exiftool -ver)"'
+- # git fetch --unshallow # Travis always does a shallow clone, but GitVersion needs the full history including branches and tags
 
 script:
 - dotnet restore
