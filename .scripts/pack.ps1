@@ -10,7 +10,7 @@ function NugetPack([bool] $pre)
         echo "Creating stable package..."
     }
     
-    dotnet pack -c Release --include-symbols
+    dotnet pack -c Release --include-symbols Z85e.sln
 }
 
 NugetPack ($env:APPVEYOR_REPO_TAG -eq "false")

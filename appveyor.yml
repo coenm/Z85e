@@ -1,26 +1,31 @@
-environment:
-  # see https://docs.microsoft.com/en-us/dotnet/core/tools/telemetry
-  DOTNET_CLI_TELEMETRY_OPTOUT: 1
-
-version: 1.0.{build}
 image: Visual Studio 2017
-configuration: Release
-platform: Any CPU
+configuration: Release	
+#platform: Any CPU
 
+environment:
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  github_oauth_token:
+    secure: H1vW5fnfAOt5/c5f1qnaatUjFVAPc2oZnxDBFutJZL58LxAyJNRLtfIBrcHnSg8y
+  
 dotnet_csproj:
   patch: true
   file: '**\*.csproj'
-  # version: '%GitVersion_FullSemVer%'
   version: '%GitVersion_NuGetVersion%'
-  # package_version: '%GitVersion_LegacySemVerPadded%'
   package_version: '%GitVersion_NuGetVersion%'
-
+  #version: '{version}'
+  #package_version: '{version}'
+  # assembly_version: '{version}'
+  # file_version: '{version}'
+  informational_version: '%GitVersion_InformationalVersion%'
 
 install:
-# install giversion.
-# gitversion will set some appveyor settings with version information
 - choco install gitversion.portable -pre -y
+- choco install opencover.portable -y
+  #
+  # install latest codecov (choco is behind of nuget)
+- nuget install Codecov -OutputDirectory C:\NuGetTools\
 - C:\ProgramData\chocolatey\lib/gitversion.portable/tools/gitversion.exe /l console /output buildserver
+- git submodule update --init --recursive
 
 before_build:
 - dotnet restore
@@ -28,20 +33,12 @@ before_build:
 build_script:
 - dotnet build
 
-after_build:
-#
-
-before_test:
-# install opencover and codecov for exporting the coverage results.
-- choco install opencover.portable
-- choco install codecov
-
 test_script:
-- C:\ProgramData\chocolatey\lib\opencover.portable\tools\OpenCover.Console.exe -register:user -target:dotnet.exe -targetargs:"test src/Z85e.Test/Z85e.Test.csproj --filter Category!=StressTest" -oldstyle -filter:"+[CoenM*]* -[CoenM*.Test]*" -hideskipped:Filter -returntargetcode -mergeoutput -output:".\coverage-dotnet.xml"
+- ps: .scripts\TestCoverage.ps1
 
 after_test:
-- codecov -f coverage-dotnet.xml
 - ps: .scripts\pack.ps1
+- ps: .scripts\Codecov.ps1
 
 artifacts:
   - path: '**\*.nupkg'
