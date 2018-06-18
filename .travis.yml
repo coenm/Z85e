@@ -15,7 +15,7 @@ before_install:
 - # git fetch --unshallow # Travis always does a shallow clone, but GitVersion needs the full history including branches and tags
 
 script:
-- dotnet sln Z85e.sln remove src\Z85e.Benchmarks\Z85e.Benchmarks.csproj
+- dotnet sln Z85e.sln remove src/Z85e.Benchmarks/Z85e.Benchmarks.csproj
 - dotnet restore
 - dotnet msbuild /p:configuration=Release 
 - chmod +x .scripts/TestCoverage.sh && ./.scripts/TestCoverage.sh 
