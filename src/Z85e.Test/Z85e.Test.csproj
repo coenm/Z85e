@@ -2,14 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-
     <IsPackable>false</IsPackable>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <RootNamespace>Z85e.Encoding.Z85e.Test</RootNamespace>
     <AssemblyName>CoenM.Encoding.Z85e.Test</AssemblyName>
     <LangVersion>7.3</LangVersion>
 
-    <RootNamespace>CoenM.Encoding.Test</RootNamespace>
+    <!-- required for coverage-->
+    <!-- see https://github.com/OpenCover/opencover/issues/636 -->
+    <DebugType>full</DebugType>
+    <DebugSymbols>True</DebugSymbols>    
   </PropertyGroup>
 
   <ItemGroup>
