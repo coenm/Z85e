@@ -23,8 +23,9 @@ dotnet_csproj:
 
 install:
 - cmd: choco install gitversion.portable -pre -y
-- cmd: C:\ProgramData\chocolatey\lib/gitversion.portable/tools/gitversion.exe /l console /output buildserver
 - sh: chmod +x .scripts/InstallGitVersion.sh && .scripts/InstallGitVersion.sh
+- echo I'm running on both Windows and Linux!
+- cmd: C:\ProgramData\chocolatey\lib/gitversion.portable/tools/gitversion.exe /l console /output buildserver
 - sh: mono .scripts/GitVersion/GitVersion.exe -l console -output buildserver
   #
 - cmd: choco install opencover.portable -y
