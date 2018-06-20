@@ -17,17 +17,17 @@ unzip GitVersion_4.0.0-beta0012.zip -d GitVersion
 
 mono GitVersion/GitVersion.exe
 
-GITVERSION=$(SCRIPTPATH)/gitversion
-touch ${FILE}
+GITVERSION=${SCRIPTPATH}/gitversion
+touch ${GITVERSION}
 echo '#!/bin/bash' >> ${GITVERSION}
 echo '\n' >> ${GITVERSION}
 echo 'mono ' >> ${GITVERSION}
 echo ${ROOT_PATH} >> ${GITVERSION}
 echo 'GitVersion/GitVersion.exe "$@"' >> ${GITVERSION}
 
-cat ${FILE}
+cat ${GITVERSION}
 
 chmod +x ${GITVERSION}
-ln -S $(SCRIPTPATH)/gitversion /usr/local/bin/gitversion
+ln -S ${SCRIPTPATH}/gitversion /usr/local/bin/gitversion
 
-gitversion -h
+gitversion
