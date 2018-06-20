@@ -11,9 +11,10 @@ env:
   - DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
 
 before_install:
+- git fetch --unshallow # Travis always does a shallow clone, but GitVersion needs the full history including branches and tags
 - npm install --save-dev coveralls
-- chmod +x .scripts/InstallGitVersion.sh && ./.scripts/InstallGitVersion.sh 
-- # git fetch --unshallow # Travis always does a shallow clone, but GitVersion needs the full history including branches and tags
+- chmod +x .scripts/InstallGitVersion.sh && ./.scripts/InstallGitVersion.sh
+- mono .scripts/GitVersion/GitVersion.exe /l console /output buildserver 
 
 script:
 - dotnet sln Z85e.sln remove src/Z85e.Benchmarks/Z85e.Benchmarks.csproj

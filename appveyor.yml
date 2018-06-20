@@ -50,7 +50,9 @@ test_script:
 
 after_test:
 - ps: .scripts\pack.ps1
-- ps: .scripts\Codecov.ps1
+- cmd: powershell .scripts\Codecov.ps1
+- sh: curl -s https://codecov.io/bash > .codecov && chmod +x .codecov 
+- sh: .codecov -f coverage-dotnet.xml
 
 artifacts:
   - path: '**\*.nupkg'
