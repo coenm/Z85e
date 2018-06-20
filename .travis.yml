@@ -16,6 +16,7 @@ before_install:
 
 script:
 - dotnet sln Z85e.sln remove src/Z85e.Benchmarks/Z85e.Benchmarks.csproj
+- dotnet add src/Z85e.Test/Z85e.Test.csproj package Mono.Cecil --version 0.10.0
 - dotnet restore
 - dotnet msbuild /p:configuration=Release 
 - chmod +x .scripts/TestCoverage.sh && ./.scripts/TestCoverage.sh 
