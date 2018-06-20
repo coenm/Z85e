@@ -23,6 +23,8 @@ dotnet_csproj:
 
 install:
 - cmd: choco install gitversion.portable -pre -y
+- sh: .scripts/InstallGitVersion.sh
+  #
 - cmd: choco install opencover.portable -y
   #
   # install latest codecov (choco is behind of nuget)
