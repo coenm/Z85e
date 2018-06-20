@@ -24,16 +24,16 @@ dotnet_csproj:
 install:
 - cmd: choco install gitversion.portable -pre -y
 - sh: chmod +x .scripts/InstallGitVersion.sh && .scripts/InstallGitVersion.sh
-- echo Run GitVersion
-- cmd: C:\ProgramData\chocolatey\lib/gitversion.portable/tools/gitversion.exe /l console /output buildserver
+#- echo Run GitVersion
+- cmd: C:\ProgramData\chocolatey\lib\gitversion.portable\tools\gitversion.exe /l console /output buildserver
 - sh: mono .scripts/GitVersion/GitVersion.exe 
-- echo Done running GitVersion
+#- echo Done running GitVersion
   #
 - cmd: choco install opencover.portable -y
   #
   # install latest codecov (choco is behind of nuget)
 - cmd: nuget install Codecov -OutputDirectory C:\NuGetTools\
-- cmd: C:\ProgramData\chocolatey\lib/gitversion.portable/tools/gitversion.exe /l console /output buildserver
+- cmd: C:\ProgramData\chocolatey\lib\gitversion.portable/tools/gitversion.exe /l console /output buildserver
 - git submodule update --init --recursive
 
 before_build:
