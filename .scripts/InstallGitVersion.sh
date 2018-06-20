@@ -13,6 +13,6 @@ sudo apt-get install mono-complete
 sudo apt-get install libcurl3
 
 wget https://github.com/GitTools/GitVersion/releases/download/v4.0.0-beta.12/GitVersion_4.0.0-beta0012.zip
-unzip GitVersion_4.0.0-beta0012.zip -d GitVersion
+unzip GitVersion_4.0.0-beta0012.zip -d ${SCRIPTPATH}/GitVersion
 
-mono GitVersion/GitVersion.exe
+mono ${SCRIPTPATH}/GitVersion/GitVersion.exe
