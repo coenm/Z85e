@@ -1,5 +1,5 @@
 image:
-  - Visual Studio 2017
+#  - Visual Studio 2017
   - Ubuntu
 
 configuration: Release	
@@ -23,7 +23,9 @@ dotnet_csproj:
 
 install:
 - cmd: choco install gitversion.portable -pre -y
+- cmd: C:\ProgramData\chocolatey\lib/gitversion.portable/tools/gitversion.exe /l console /output buildserver
 - sh: chmod +x .scripts/InstallGitVersion.sh && .scripts/InstallGitVersion.sh
+- sh: mono .scripts/GitVersion/GitVersion.exe -l console -output buildserver
   #
 - cmd: choco install opencover.portable -y
   #

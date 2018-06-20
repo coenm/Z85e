@@ -15,19 +15,4 @@ sudo apt-get install libcurl3
 wget https://github.com/GitTools/GitVersion/releases/download/v4.0.0-beta.12/GitVersion_4.0.0-beta0012.zip
 unzip GitVersion_4.0.0-beta0012.zip -d GitVersion
 
-mono GitVersion/GitVersion.exe
-
-GITVERSION=${SCRIPTPATH}/gitversion
-touch ${GITVERSION}
-echo '#!/bin/bash' >> ${GITVERSION}
-echo '\n' >> ${GITVERSION}
-echo 'mono ' >> ${GITVERSION}
-echo ${ROOT_PATH} >> ${GITVERSION}
-echo 'GitVersion/GitVersion.exe "$@"' >> ${GITVERSION}
-
-cat ${GITVERSION}
-
-chmod +x ${GITVERSION}
-ln -S ${SCRIPTPATH}/gitversion /usr/local/bin/gitversion
-
-gitversion
+mono GitVersion/GitVersion.exe --help
