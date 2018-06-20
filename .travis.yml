@@ -12,6 +12,7 @@ env:
 
 before_install:
 - npm install --save-dev coveralls
+- chmod +x .scripts/InstallGitVersion.sh && ./.scripts/InstallGitVersion.sh 
 - # git fetch --unshallow # Travis always does a shallow clone, but GitVersion needs the full history including branches and tags
 
 script:

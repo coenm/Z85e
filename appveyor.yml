@@ -26,7 +26,7 @@ install:
 - sh: chmod +x .scripts/InstallGitVersion.sh && .scripts/InstallGitVersion.sh
 #- echo Run GitVersion
 - cmd: C:\ProgramData\chocolatey\lib\gitversion.portable\tools\gitversion.exe /l console /output buildserver
-- sh: mono .scripts/GitVersion/GitVersion.exe 
+- sh: mono .scripts/GitVersion/GitVersion.exe /l console /output buildserver
 #- echo Done running GitVersion
   #
 - cmd: choco install opencover.portable -y
