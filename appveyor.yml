@@ -1,4 +1,7 @@
-image: Visual Studio 2017
+image:
+  - Visual Studio 2017
+  - Ubuntu
+
 configuration: Release	
 #platform: Any CPU
 
@@ -19,22 +22,25 @@ dotnet_csproj:
   informational_version: '%GitVersion_InformationalVersion%'
 
 install:
-- choco install gitversion.portable -pre -y
-- choco install opencover.portable -y
+- cmd: choco install gitversion.portable -pre -y
+- cmd: choco install opencover.portable -y
   #
   # install latest codecov (choco is behind of nuget)
-- nuget install Codecov -OutputDirectory C:\NuGetTools\
-- C:\ProgramData\chocolatey\lib/gitversion.portable/tools/gitversion.exe /l console /output buildserver
+- cmd: nuget install Codecov -OutputDirectory C:\NuGetTools\
+- cmd: C:\ProgramData\chocolatey\lib/gitversion.portable/tools/gitversion.exe /l console /output buildserver
 - git submodule update --init --recursive
 
 before_build:
+# Remove Benchmark project as it relies on .net framework 
+- sh: dotnet sln Z85e.sln remove src/Z85e.Benchmarks/Z85e.Benchmarks.csproj
 - dotnet restore
 
 build_script:
 - dotnet build
 
 test_script:
-- ps: .scripts\TestCoverage.ps1
+- cmd: powershell .scripts\TestCoverage.ps1
+- sh: chmod +x .scripts/TestCoverage.sh && ./.scripts/TestCoverage.sh
 
 after_test:
 - ps: .scripts\pack.ps1

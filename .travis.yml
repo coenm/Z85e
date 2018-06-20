@@ -20,6 +20,6 @@ script:
 - dotnet msbuild /p:configuration=Release 
 - chmod +x .scripts/TestCoverage.sh && ./.scripts/TestCoverage.sh 
 
-cache:
-  directories:
-    - $HOME/.nuget/packages
+#cache:
+#  directories:
+#    - $HOME/.nuget/packages
