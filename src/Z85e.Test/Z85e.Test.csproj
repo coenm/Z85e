@@ -1,13 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-	<RuntimeFrameworkVersion>2.0.5</RuntimeFrameworkVersion>
+<!--	<RuntimeFrameworkVersion>2.0.5</RuntimeFrameworkVersion> -->
     <IsPackable>false</IsPackable>
-    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <RootNamespace>Z85e.Encoding.Z85e.Test</RootNamespace>
-    <AssemblyName>CoenM.Encoding.Z85e.Test</AssemblyName>
-    <LangVersion>7.3</LangVersion>
+<!--    <AllowUnsafeBlocks>True</AllowUnsafeBlocks> -->
+<!--    <RootNamespace>Z85e.Encoding.Z85e.Test</RootNamespace>
+    <AssemblyName>CoenM.Encoding.Z85e.Test</AssemblyName> -->
+<!--    <LangVersion>7.3</LangVersion> -->
 
     <!-- required for coverage-->
     <!-- see https://github.com/OpenCover/opencover/issues/636 -->
@@ -16,12 +16,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="coverlet.msbuild" Version="2.0.1" />
+    <PackageReference Include="coverlet.msbuild" Version="1.2.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="11.1.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.analyzers" Version="0.9.0" />
     <PackageReference Include="xunit.categories" Version="2.0.3" />
-    <PackageReference Include="xunit.runner.console" Version="2.3.1" />
+<!--    <PackageReference Include="xunit.runner.console" Version="2.3.1" /> -->
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
