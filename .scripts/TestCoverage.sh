@@ -23,7 +23,7 @@ for TEST_PROJECT in $TEST_PROJECTS
 do
 	echo Testing project: ${TEST_PROJECT}
 	
-	dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=$TMP_LCOV /p:configuration=Release $TEST_PROJECT
+	dotnet test --filter Category!=StressTest /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=$TMP_LCOV /p:configuration=Release $TEST_PROJECT
 	
 	if [ -f "$TMP_LCOV_EXT" ]
 	then
