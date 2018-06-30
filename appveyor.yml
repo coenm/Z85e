@@ -1,14 +1,17 @@
 image:
-#  - Visual Studio 2017
-  - Ubuntu
+- Ubuntu
+- Visual Studio 2017
 
-configuration: Release	
+configuration: Debug	
 #platform: Any CPU
 
 environment:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
   github_oauth_token:
     secure: H1vW5fnfAOt5/c5f1qnaatUjFVAPc2oZnxDBFutJZL58LxAyJNRLtfIBrcHnSg8y
+  COVERALLS_REPO_TOKEN:
+    secure: rhtibrJj8xGqbiy5Fyx7T8Iopw3wpzgrS2yKTkffoF3Ps78M1rVNWl36ZIhOU0BM
   
 dotnet_csproj:
   patch: true
@@ -22,18 +25,19 @@ dotnet_csproj:
   informational_version: '%GitVersion_InformationalVersion%'
 
 install:
+# Install and run gitversion. (use param "/l console" to show debug info)
 - cmd: choco install gitversion.portable -pre -y
+- cmd: C:\ProgramData\chocolatey\lib\gitversion.portable\tools\gitversion.exe /output buildserver /c %APPVEYOR_REPO_COMMIT%
 - sh: chmod +x .scripts/InstallGitVersion.sh && .scripts/InstallGitVersion.sh
-#- echo Run GitVersion
-- cmd: C:\ProgramData\chocolatey\lib\gitversion.portable\tools\gitversion.exe /l console /output buildserver
-- sh: mono .scripts/GitVersion/GitVersion.exe /l console /output buildserver
-#- echo Done running GitVersion
-  #
+
+# Install OpenCover (windows)
 - cmd: choco install opencover.portable -y
-  #
-  # install latest codecov (choco is behind of nuget)
-- cmd: nuget install Codecov -OutputDirectory C:\NuGetTools\
-- cmd: C:\ProgramData\chocolatey\lib\gitversion.portable/tools/gitversion.exe /l console /output buildserver
+
+# Install (latest) codecov (choco is behind of nuget) and coveralls in linux.
+- cmd: nuget install Codecov -Version 1.0.3 -OutputDirectory C:\NuGetTools\
+- sh: npm install --save-dev coveralls
+
+# git update submodules.
 - git submodule update --init --recursive
 
 before_build:
@@ -45,14 +49,12 @@ build_script:
 - dotnet build
 
 test_script:
-- cmd: powershell .scripts\TestCoverage.ps1
-- sh: chmod +x .scripts/TestCoverage.sh && ./.scripts/TestCoverage.sh
+- cmd: powershell .\.scripts\TestCoverage.ps1
+- sh: chmod +x .scripts/TestCoverage.sh && .scripts/TestCoverage.sh
 
 after_test:
 - ps: .scripts\pack.ps1
 - cmd: powershell .scripts\Codecov.ps1
-- sh: curl -s https://codecov.io/bash > .codecov && chmod +x .codecov 
-- sh: .\.codecov -f coverage-dotnet.xml
 
 artifacts:
   - path: '**\*.nupkg'
