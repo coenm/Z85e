@@ -8,9 +8,11 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 ROOT_PATH=$(cd ${SCRIPTPATH}/../; pwd)
 
 cd ${SCRIPTPATH}
-CODECOVS_EXE=$(find . -type f -name codecov.exe)
+CODECOV_EXE=$(find . -type f -name codecov.exe)
+CODECOV_PATH=$(dirname "$CODECOV_EXE")
+echo ${CODECOV_PATH}
+echo ${CODECOV_EXE}
 
-echo count
-echo ${#CODECOVS_EXE[@]}
-echo first item
-echo ${CODECOVS_EXE}
+cd ${CODECOV_PATH}
+echo mono codecov.exe -h
+mono codecov.exe -h
