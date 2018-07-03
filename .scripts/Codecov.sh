@@ -13,11 +13,4 @@ CODECOVS_EXE=$(find . -type f -name codecov.exe)
 echo count
 echo ${#CODECOVS_EXE[@]}
 echo first item
-echo ${CODECOVS_EXE[0]}
-
-if [ "${#CODECOVS_EXE[@]}" -eq 1 ]; then
-    echo "Exactly one item found! Yeahj"
-fi
-
-#CODECOV_EXE=${CODECOVS_EXE[0]}
-#echo ${CODECOV_EXE}
+echo ${CODECOVS_EXE}
