@@ -35,6 +35,7 @@ install:
 
 # Install (latest) codecov (choco is behind of nuget) and coveralls in linux.
 - cmd: nuget install Codecov -Version 1.0.5 -OutputDirectory C:\NuGetTools\
+- sh: mono nuget.exe install Codecov -Version 1.0.5 -OutputDirectory .scripts/NuGetTools/
 - sh: npm install --save-dev coveralls
 
 # git update submodules.
@@ -51,6 +52,10 @@ build_script:
 test_script:
 - cmd: powershell .\.scripts\TestCoverage.ps1
 - sh: chmod +x .scripts/TestCoverage.sh && .scripts/TestCoverage.sh
+#
+- sh: curl -s https://codecov.io/bash > codecov
+- sh: chmod +x codecov
+- sh: ./codecov -f "MyProject_coverage.xml"
 
 after_test:
 - ps: .scripts\pack.ps1
