@@ -23,4 +23,4 @@ if (! ( Test-Path $codecovExe ))
 Write-Host "CodeCov.exe " $codecovExe
 
 $outputOpenCoverXmlFile = (join-path $RootDir "coverage-dotnet.xml")
-iex "$codecovExe -f $outputOpenCoverXmlFile"
+iex "$codecovExe -n Windows -f $outputOpenCoverXmlFile"
