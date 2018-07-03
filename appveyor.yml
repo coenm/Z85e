@@ -34,7 +34,7 @@ install:
 - cmd: choco install opencover.portable -y
 
 # Install (latest) codecov (choco is behind of nuget) and coveralls in linux.
-- cmd: nuget install Codecov -Version 1.0.3 -OutputDirectory C:\NuGetTools\
+- cmd: nuget install Codecov -Version 1.0.5 -OutputDirectory C:\NuGetTools\
 - sh: npm install --save-dev coveralls
 
 # git update submodules.
