@@ -7,8 +7,7 @@ SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 ROOT_PATH=$(cd ${SCRIPTPATH}/../; pwd)
 
-
-cd {SCRIPTPATH}
+cd ${SCRIPTPATH}
 CODECOVS_EXE=$(find . -type f -name codecov.exe)
 
 echo ${#CODECOVS_EXE[@]}
