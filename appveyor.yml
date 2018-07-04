@@ -12,6 +12,8 @@ environment:
     secure: H1vW5fnfAOt5/c5f1qnaatUjFVAPc2oZnxDBFutJZL58LxAyJNRLtfIBrcHnSg8y
   COVERALLS_REPO_TOKEN:
     secure: rhtibrJj8xGqbiy5Fyx7T8Iopw3wpzgrS2yKTkffoF3Ps78M1rVNWl36ZIhOU0BM
+  CODECOV_TOKEN:
+    secure: 0FB1AUFpE1M0VIuQhklC0UEOb0uwmlPlQ7AlJfLoGdZ+4hADvsrFnb4eunnZwsGu    
   
 dotnet_csproj:
   patch: true
