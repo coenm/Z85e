@@ -5,7 +5,9 @@ VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Z85e", "src\Z85e\Z85e.csproj", "{3B226522-EE55-4517-957A-A3E35DCE9CF4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Z85e.Test", "src\Z85e.Test\Z85e.Test.csproj", "{A2EABDC4-F392-4C21-8A5F-B08EFA7237E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Z85e.Test", "src\Z85e.Test\Z85e.Test.csproj", "{A2EABDC4-F392-4C21-8A5F-B08EFA7237E8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Z85e.Benchmarks", "src\Z85e.Benchmarks\Z85e.Benchmarks.csproj", "{D4C67591-14D8-46C4-9653-140B5D9EE34C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{A2EABDC4-F392-4C21-8A5F-B08EFA7237E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2EABDC4-F392-4C21-8A5F-B08EFA7237E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2EABDC4-F392-4C21-8A5F-B08EFA7237E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4C67591-14D8-46C4-9653-140B5D9EE34C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4C67591-14D8-46C4-9653-140B5D9EE34C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4C67591-14D8-46C4-9653-140B5D9EE34C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4C67591-14D8-46C4-9653-140B5D9EE34C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

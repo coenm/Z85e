@@ -9,7 +9,6 @@ namespace CoenM.Encoding.Test
         private readonly byte[] _helloWorldBytes = { 0x86, 0x4F, 0xD2, 0x6F, 0xB5, 0x59, 0xF7, 0x5B };
         private const string HelloWorldString = "HelloWorld";
 
-        
         [Fact]
         public void HelloWorldDecodeTest()
         {
@@ -58,12 +57,14 @@ namespace CoenM.Encoding.Test
         [Fact]
         public void DecodeNullReturnsNullTest()
         {
+            // ReSharper disable once AssignNullToNotNullAttribute
             Assert.Null(Z85Extended.Decode(null));
         }
 
         [Fact]
         public void EncodeNullReturnsNullTest()
         {
+            // ReSharper disable once AssignNullToNotNullAttribute
             Assert.Null(Z85Extended.Encode(null));
         }
 

@@ -1,24 +1,46 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <!-- do not manually update version, this will be done using appvayor -->
     <Version>1.1.1</Version>
     <Description>ZeroMQ's Z85 Encoding and the extended version. Formats for representing binary data as printable text.</Description>
     <Authors>Coen van den Munckhof</Authors>
-    <TargetFrameworks>netstandard1.0;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard1.0</TargetFrameworks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <RootNamespace>CoenM.Encoding</RootNamespace>
-    <AssemblyName>CoenM.Encoding.Z85e</AssemblyName>    
+    <AssemblyName>CoenM.Encoding.Z85e</AssemblyName>
     <PackageId>CoenM.Encoding.Z85e</PackageId>
     <PackageTags>Z85;Z85extended;encoding;zeromq</PackageTags>
     <PackageProjectUrl>https://github.com/coenm/Z85e</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/coenm/Z85e.git</RepositoryUrl>
+    <DefineConstants>JETBRAINS_ANNOTATIONS</DefineConstants>
   <!-- </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'"> -->
     <DebugType>full</DebugType>
     <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <LangVersion>7.3</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" Version="11.1.0">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="JetBrainsAnnotations.Fody" Version="2.2.0">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="CoenM.Encoding.Z85e.ExternalAnnotations.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

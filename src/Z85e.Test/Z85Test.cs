@@ -32,12 +32,14 @@ namespace CoenM.Encoding.Test
         [Fact]
         public void DecodeNullReturnsNullTest()
         {
+            // ReSharper disable once AssignNullToNotNullAttribute
             Assert.Null(Z85.Decode(null));
         }
 
         [Fact]
         public void EncodeNullReturnsNullTest()
         {
+            // ReSharper disable once AssignNullToNotNullAttribute
             Assert.Null(Z85.Encode(null));
         }
 
@@ -50,7 +52,6 @@ namespace CoenM.Encoding.Test
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => Z85.Decode(new string('a', size)));
         }
-
 
         [Fact]
         public void MultipleEncodedStringsDecodeToSameBytes()
