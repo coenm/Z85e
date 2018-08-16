@@ -32,6 +32,7 @@ See [DotNet APIs](http://dotnetapis.com/pkg/CoenM.Encoding.Z85e) for the API.
 ## Performance
 
 - [Performance version 1.0.0](docs/PerformanceV1.0.0.md)
+- [Performance version 1.1.0](docs/PerformanceV1.1.0.md)
 - [Performance current working version](docs/Performance-Latest.md)
 
 # Example encoding
