@@ -9,7 +9,7 @@ namespace CoenM.Encoding
     /// Z85 Encoding library
     /// </summary>
     /// <remarks>This implementation is heavily based on https://github.com/zeromq/rfc/blob/master/src/spec_32.c </remarks>
-    public static class Z85
+    public static partial class Z85
     {
         /// <summary>
         /// Decode an encoded string into a byte array. Output size will be length of <paramref name="input"/> * 4 / 5.

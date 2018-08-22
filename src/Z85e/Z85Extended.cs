@@ -8,7 +8,7 @@ namespace CoenM.Encoding
     /// <summary>
     /// Z85 Extended Encoding library. Z85 Extended doesn't require the length of the bytes to be a multiple of 4.
     /// </summary>
-    public static class Z85Extended
+    public static partial class Z85Extended
     {
         /// <summary>
         /// Decode an encoded string into a byte array. Output size will roughly be 'length of <paramref name="input"/>' * 4 / 5.
