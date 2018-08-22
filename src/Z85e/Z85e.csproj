@@ -15,7 +15,6 @@
     <PackageProjectUrl>https://github.com/coenm/Z85e</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/coenm/Z85e.git</RepositoryUrl>
-    <DefineConstants>JETBRAINS_ANNOTATIONS</DefineConstants>
   <!-- </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'"> -->
@@ -28,12 +27,15 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.0'">
+     <DefineConstants>JETBRAINS_ANNOTATIONS</DefineConstants>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' != 'netstandard1.0'">
-     <DefineConstants>FEATURE_SPAN</DefineConstants>
+     <DefineConstants>JETBRAINS_ANNOTATIONS;FEATURE_SPAN</DefineConstants>
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="11.1.0">
+    <PackageReference Include="JetBrains.Annotations" Version="2018.2.1">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="JetBrainsAnnotations.Fody" Version="2.2.0">
