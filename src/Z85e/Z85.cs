@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using CoenM.Encoding.Internals;
 using JetBrains.Annotations;
 
@@ -26,16 +25,10 @@ namespace CoenM.Encoding
                 return null;
 
             var len = input.Length;
-
-            //  Accepts only strings bounded to 5 bytes
-            if (len % 5 != 0)
-                throw new ArgumentOutOfRangeException(nameof(input), "Length of Input should be multiple of 5.");
-
-            var decodedSize = len * 4 / 5;
-            byte[] decoded = new byte[decodedSize];
-
-            int byteNbr = 0;
-            int charNbr = 0;
+            var decodedSize = Z85Size.CalculateDecodedSize(len);
+            var decoded = new byte[decodedSize];
+            var byteNbr = 0;
+            var charNbr = 0;
 
             const uint divisor3 = 256 * 256 * 256;
             const uint divisor2 = 256 * 256;
@@ -83,12 +76,7 @@ namespace CoenM.Encoding
                 return null;
 
             var size = data.Length;
-
-            //  Accepts only byte arrays bounded to 4 bytes
-            if (size % 4 != 0)
-                throw new ArgumentOutOfRangeException(nameof(data), "Data length should be multiple of 4.");
-
-            var encodedSize = size * 5 / 4;
+            var encodedSize = Z85Size.CalculateEncodedSize(size);
             var destination = new string('0', encodedSize);
             int charNbr = 0;
             int byteNbr = 0;

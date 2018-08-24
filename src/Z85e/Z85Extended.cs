@@ -78,7 +78,7 @@ namespace CoenM.Encoding
 
             value = 0;
             while (charNbr < size)
-                value = value * 85 + Map.Decoder[(byte) input[(int) charNbr++]];
+                value = value * 85 + Map.Decoder[(byte)input[(int)charNbr++]];
 
             // Take care of the remainder.
             var divisor = (uint)Math.Pow(256, extraBytes - 1);
