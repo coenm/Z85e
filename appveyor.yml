@@ -1,6 +1,6 @@
 environment:
-  # see https://docs.microsoft.com/en-us/dotnet/core/tools/telemetry
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
 
 version: 1.0.{build}
 image: Visual Studio 2017
@@ -14,13 +14,14 @@ dotnet_csproj:
   version: '%GitVersion_NuGetVersion%'
   # package_version: '%GitVersion_LegacySemVerPadded%'
   package_version: '%GitVersion_NuGetVersion%'
+  informational_version: '%GitVersion_InformationalVersion%'
 
 
 install:
 # install giversion.
 # gitversion will set some appveyor settings with version information
 - choco install gitversion.portable -pre -y
-- C:\ProgramData\chocolatey\lib/gitversion.portable/tools/gitversion.exe /l console /output buildserver
+- C:\ProgramData\chocolatey\lib/gitversion.portable/tools/gitversion.exe /l console /output buildserver /c %APPVEYOR_REPO_COMMIT%
 
 before_build:
 - dotnet restore
@@ -57,22 +58,4 @@ deploy:
     # symbol_server: https://www.myget.org/F/coenm/symbols/api/v2/package
     artifact: /.*\.nupkg/
     on:
-        branch: /(master|release.*|develop)/	
-  
-  # - provider: NuGet
-  #  name: production
-  #  # note, the NuGet api key expires on 2018-11-09
-  #  api_key:
-  #      secure: QNK9GUakj8Eu2o2ljO/BlKQcOk4abyfrv0WwwGgu1iFCB034Cs3mb09lTXT0qYNM
-  #  on:
-  #      branch: /(master|release.*)/
-       
-  # - provider: NuGet
-  #   name: production
-  #   # note, the NuGet api key expires on 2018-11-09
-  #   api_key:
-  #       secure: QNK9GUakj8Eu2o2ljO/BlKQcOk4abyfrv0WwwGgu1iFCB034Cs3mb09lTXT0qYNM
-  #   on:       
-  #       branch: /release.*/
-    # on:
-    #     appveyor_repo_tag: true
+        branch: /(master|release.*|develop)/
