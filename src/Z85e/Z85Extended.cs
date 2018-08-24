@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using CoenM.Encoding.Internals;
 using JetBrains.Annotations;
 
@@ -159,7 +158,7 @@ namespace CoenM.Encoding
                 while (byteNbr < size)
                     value = value * 256 + data[byteNbr++];
 
-                var divisor = (uint) Math.Pow(85, remainder);
+                var divisor = (uint)Math.Pow(85, remainder);
                 while (divisor != 0)
                 {
                     z85Dest[charNbr++] = z85Encoder[value / divisor % 85];

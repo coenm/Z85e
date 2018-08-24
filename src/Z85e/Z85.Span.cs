@@ -5,22 +5,42 @@
     using JetBrains.Annotations;
     using System;
     using System.Buffers;
+    using System.Runtime.InteropServices;
 
     using CoenM.Encoding.Internals;
 
     public static partial class Z85
     {
         /// <summary>
+        /// Decode the span of UTF-8 encoded text represented as Z85 into binary data.
+        /// If the input is not a multiple of 5, it will decode as much as it can, to the closest multiple of 5.
         ///
+        /// <param name="source">The input span which contains UTF-8 encoded text in Z85 that needs to be decoded.</param>
+        /// <param name="destination">The output span which contains the result of the operation, i.e. the decoded binary data.</param>
+        /// <param name="charsConsumed">The number of input characters consumed during the operation. This can be used to slice the input for subsequent calls, if necessary.</param>
+        /// <param name="bytesWritten">The number of bytes written into the output span. This can be used to slice the output for subsequent calls, if necessary.</param>
+        /// <returns>It returns the OperationStatus enum values:
+        /// - Done - on successful processing of the entire input span
+        /// - DestinationTooSmall - if there is not enough space in the output span to fit the decoded input
+        /// - NeedMoreData - only if isFinalBlock is false and the input is not a multiple of 4, otherwise the partial input would be considered as InvalidData
+        /// - InvalidData - if the input contains bytes outside of the expected base 64 range, or if it contains invalid/more than two padding characters,
+        ///   or if the input is incomplete (i.e. not a multiple of 4) and isFinalBlock is true.</returns>
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="destination"></param>
-        /// <param name="charsConsumed"></param>
-        /// <param name="bytesWritten"></param>
-        /// <returns></returns>
         [PublicAPI]
         public static OperationStatus Decode(ReadOnlySpan<char> source, Span<byte> destination, out int charsConsumed, out int bytesWritten)
         {
+            ref char srcBytes = ref MemoryMarshal.GetReference(source);
+            ref byte destBytes = ref MemoryMarshal.GetReference(destination);
+
+            int srcLength = source.Length; // & ~0x3;  // only decode input up to the closest multiple of 4.
+            int destLength = destination.Length;
+
+            int sourceIndex = 0;
+            int destIndex = 0;
+
+            if (source.Length == 0)
+                goto DoneExit;
+
             if (destination.Length < CalculateDecodedSize(source))
             {
                 charsConsumed = 0;
@@ -34,6 +54,14 @@
             charsConsumed = source.Length;
             bytesWritten = result.Length;
             return OperationStatus.Done;
+
+
+
+            DoneExit:
+                charsConsumed = sourceIndex;
+                bytesWritten = destIndex;
+                return OperationStatus.Done;
+
         }
 
         /// <summary>
@@ -93,4 +121,4 @@
     {
     }
 #endif
-    }
+}

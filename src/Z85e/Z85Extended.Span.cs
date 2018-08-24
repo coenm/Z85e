@@ -19,8 +19,19 @@
         [PublicAPI]
         public static OperationStatus Decode(ReadOnlySpan<char> source, Span<byte> destination, out int charsConsumed, out int bytesWritten, bool isFinalBlock)
         {
-            charsConsumed = 0;
-            bytesWritten = 0;
+            var result = Decode(source.ToString());
+
+            if (result.Length > destination.Length)
+            {
+                charsConsumed = 0;
+                bytesWritten = 0;
+                return OperationStatus.DestinationTooSmall;
+            }
+
+            result.AsSpan().CopyTo(destination);
+
+            charsConsumed = source.Length;
+            bytesWritten = result.Length;
             return OperationStatus.Done;
         }
 
@@ -35,8 +46,19 @@
         [PublicAPI]
         public static OperationStatus Encode(ReadOnlySpan<byte> source, Span<char> destination, out int bytesConsumed, out int charsWritten, bool isFinalBlock)
         {
-            bytesConsumed = 0;
-            charsWritten = 0;
+            var result = Encode(source.ToArray());
+
+            if (destination.Length < result.Length)
+            {
+                bytesConsumed = 0;
+                charsWritten = 0;
+                return OperationStatus.DestinationTooSmall;
+            }
+
+            result.AsSpan().CopyTo(destination);
+
+            bytesConsumed = source.Length;
+            charsWritten = result.Length;
             return OperationStatus.Done;
         }
 
