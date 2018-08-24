@@ -1,24 +1,26 @@
-using System;
-using System.Security.Cryptography;
-using Xunit;
-
-namespace CoenM.Encoding.Test
+namespace CoenM.Encoding.Test.Z85e
 {
+    using System;
+    using System.Security.Cryptography;
+
+    using CoenM.Encoding.Test.TestData;
+
+    using Xunit;
+
+    using Sut = Encoding.Z85Extended;
+
     public class Z85ExtendedTest
     {
-        private readonly byte[] _helloWorldBytes = { 0x86, 0x4F, 0xD2, 0x6F, 0xB5, 0x59, 0xF7, 0x5B };
-        private const string HelloWorldString = "HelloWorld";
-
         [Fact]
         public void HelloWorldDecodeTest()
         {
-            Assert.Equal(Z85Extended.Decode(HelloWorldString), _helloWorldBytes);
+            Assert.Equal(Sut.Decode(Z85Samples.HelloWorldEncoded), Z85Samples.HelloWorldData);
         }
 
         [Fact]
         public void HelloWorldEncodeTest()
         {
-            Assert.Equal(Z85Extended.Encode(_helloWorldBytes), HelloWorldString);
+            Assert.Equal(Sut.Encode(Z85Samples.HelloWorldData), Z85Samples.HelloWorldEncoded);
         }
 
         [Fact]
@@ -28,13 +30,13 @@ namespace CoenM.Encoding.Test
             byte[] bytes2 = { 0xB5, 0x59 };
             byte[] bytes3 = { 0xB5, 0x59, 0xF7 };
 
-            Assert.Equal("2b", Z85Extended.Encode(bytes1));
-            Assert.Equal("6Af", Z85Extended.Encode(bytes2));
-            Assert.Equal("jt#7", Z85Extended.Encode(bytes3));
+            Assert.Equal("2b", Sut.Encode(bytes1));
+            Assert.Equal("6Af", Sut.Encode(bytes2));
+            Assert.Equal("jt#7", Sut.Encode(bytes3));
 
-            Assert.Equal(bytes1, Z85Extended.Decode("2b"));
-            Assert.Equal(bytes2, Z85Extended.Decode("6Af"));
-            Assert.Equal(bytes3, Z85Extended.Decode("jt#7"));
+            Assert.Equal(bytes1, Sut.Decode("2b"));
+            Assert.Equal(bytes2, Sut.Decode("6Af"));
+            Assert.Equal(bytes3, Sut.Decode("jt#7"));
         }
 
 
@@ -45,27 +47,27 @@ namespace CoenM.Encoding.Test
             byte[] bytes2 = { 0x86, 0x4F, 0xD2, 0x6F, 0xB5, 0x59 };
             byte[] bytes3 = { 0x86, 0x4F, 0xD2, 0x6F, 0xB5, 0x59, 0xF7 };
 
-            Assert.Equal("Hello2b", Z85Extended.Encode(bytes1));
-            Assert.Equal("Hello6Af", Z85Extended.Encode(bytes2));
-            Assert.Equal("Hellojt#7", Z85Extended.Encode(bytes3));
+            Assert.Equal("Hello2b", Sut.Encode(bytes1));
+            Assert.Equal("Hello6Af", Sut.Encode(bytes2));
+            Assert.Equal("Hellojt#7", Sut.Encode(bytes3));
 
-            Assert.Equal(bytes1, Z85Extended.Decode("Hello2b"));
-            Assert.Equal(bytes2, Z85Extended.Decode("Hello6Af"));
-            Assert.Equal(bytes3, Z85Extended.Decode("Hellojt#7"));
+            Assert.Equal(bytes1, Sut.Decode("Hello2b"));
+            Assert.Equal(bytes2, Sut.Decode("Hello6Af"));
+            Assert.Equal(bytes3, Sut.Decode("Hellojt#7"));
         }
 
         [Fact]
         public void DecodeNullReturnsNullTest()
         {
             // ReSharper disable once AssignNullToNotNullAttribute
-            Assert.Null(Z85Extended.Decode(null));
+            Assert.Null(Sut.Decode(null));
         }
 
         [Fact]
         public void EncodeNullReturnsNullTest()
         {
             // ReSharper disable once AssignNullToNotNullAttribute
-            Assert.Null(Z85Extended.Encode(null));
+            Assert.Null(Sut.Encode(null));
         }
 
         [Fact]
@@ -83,7 +85,7 @@ namespace CoenM.Encoding.Test
             var bytes = CreatePseudoRandomByteArray(1024 * 1024 * 300, 2343429);
 
             // act
-            var result = Z85.Encode(bytes);
+            var result = Sut.Encode(bytes);
 
             // assert
             Assert.Equal("Q*}EDu2563cEvhD{]baI.r&ub^P[heR9UY=fIwkM", CreateSha256Z85Encoded(result));
@@ -93,7 +95,7 @@ namespace CoenM.Encoding.Test
         {
             var bytes = System.Text.Encoding.Unicode.GetBytes(input);
             var hashstring = new SHA256Managed();
-            return Z85.Encode(hashstring.ComputeHash(bytes));
+            return Sut.Encode(hashstring.ComputeHash(bytes));
         }
 
         private static byte[] CreatePseudoRandomByteArray(uint size, int seed)

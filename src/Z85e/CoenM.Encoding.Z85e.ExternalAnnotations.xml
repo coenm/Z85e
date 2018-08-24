@@ -1,12 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <assembly name="CoenM.Encoding.Z85e">
-  <member name="M:CoenM.Encoding.Z85.CalcuateDecodedSize(System.ReadOnlySpan{System.Char})">
+  <member name="M:CoenM.Encoding.Z85.CalculateDecodedSize(System.ReadOnlySpan{System.Char})">
     <attribute ctor="M:JetBrains.Annotations.PublicAPIAttribute.#ctor" />
+    <parameter name="source">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
   </member>
-  <member name="M:CoenM.Encoding.Z85.CalcuateEncodedSize(System.ReadOnlySpan{System.Byte})">
+  <member name="M:CoenM.Encoding.Z85.CalculateEncodedSize(System.ReadOnlySpan{System.Byte})">
     <attribute ctor="M:JetBrains.Annotations.PublicAPIAttribute.#ctor" />
+    <parameter name="source">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
   </member>
-  <member name="M:CoenM.Encoding.Z85.Decode(System.ReadOnlySpan{System.Byte},System.Span{System.Char},System.Int32@,System.Int32@)">
+  <member name="M:CoenM.Encoding.Z85.Decode(System.ReadOnlySpan{System.Char},System.Span{System.Byte},System.Int32@,System.Int32@)">
     <attribute ctor="M:JetBrains.Annotations.PublicAPIAttribute.#ctor" />
   </member>
   <member name="M:CoenM.Encoding.Z85.Decode(System.String)">
@@ -21,16 +27,16 @@
       <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
     </parameter>
   </member>
-  <member name="M:CoenM.Encoding.Z85.Encode(System.ReadOnlySpan{System.Char},System.Span{System.Byte},System.Int32@,System.Int32@)">
+  <member name="M:CoenM.Encoding.Z85.Encode(System.ReadOnlySpan{System.Byte},System.Span{System.Char},System.Int32@,System.Int32@)">
     <attribute ctor="M:JetBrains.Annotations.PublicAPIAttribute.#ctor" />
   </member>
-  <member name="M:CoenM.Encoding.Z85Extended.CalcuateDecodedSize(System.ReadOnlySpan{System.Char})">
+  <member name="M:CoenM.Encoding.Z85Extended.CalculateDecodedSize(System.ReadOnlySpan{System.Char})">
     <attribute ctor="M:JetBrains.Annotations.PublicAPIAttribute.#ctor" />
   </member>
-  <member name="M:CoenM.Encoding.Z85Extended.CalcuateEncodedSize(System.ReadOnlySpan{System.Byte})">
+  <member name="M:CoenM.Encoding.Z85Extended.CalculateEncodedSize(System.ReadOnlySpan{System.Byte})">
     <attribute ctor="M:JetBrains.Annotations.PublicAPIAttribute.#ctor" />
   </member>
-  <member name="M:CoenM.Encoding.Z85Extended.Decode(System.ReadOnlySpan{System.Byte},System.Span{System.Char},System.Int32@,System.Int32@,System.Boolean)">
+  <member name="M:CoenM.Encoding.Z85Extended.Decode(System.ReadOnlySpan{System.Char},System.Span{System.Byte},System.Int32@,System.Int32@,System.Boolean)">
     <attribute ctor="M:JetBrains.Annotations.PublicAPIAttribute.#ctor" />
   </member>
   <member name="M:CoenM.Encoding.Z85Extended.Decode(System.String)">
@@ -45,7 +51,7 @@
       <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
     </parameter>
   </member>
-  <member name="M:CoenM.Encoding.Z85Extended.Encode(System.ReadOnlySpan{System.Char},System.Span{System.Byte},System.Int32@,System.Int32@,System.Boolean)">
+  <member name="M:CoenM.Encoding.Z85Extended.Encode(System.ReadOnlySpan{System.Byte},System.Span{System.Char},System.Int32@,System.Int32@,System.Boolean)">
     <attribute ctor="M:JetBrains.Annotations.PublicAPIAttribute.#ctor" />
   </member>
 </assembly>
