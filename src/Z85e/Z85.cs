@@ -8,7 +8,6 @@ namespace CoenM.Encoding
     /// <summary>
     /// Z85 Encoding library
     /// </summary>
-    /// <remarks>This implementation is heavily based on https://github.com/zeromq/rfc/blob/master/src/spec_32.c </remarks>
     public static partial class Z85
     {
         /// <summary>
@@ -19,7 +18,7 @@ namespace CoenM.Encoding
         /// <returns><c>null</c> when input is null, otherwise bytes containing the decoded input string.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="input"/> is not a multiple of 5.</exception>
         [PublicAPI]
-        public static unsafe IEnumerable<byte> Decode([NotNull] string input)
+        public static unsafe byte[] Decode([NotNull] string input)
         {
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             // ReSharper disable once HeuristicUnreachableCode

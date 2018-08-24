@@ -18,7 +18,7 @@ namespace CoenM.Encoding
         /// <returns><c>null</c> when <paramref name="input"/> is null, otherwise bytes containing the decoded input string.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="input"/> is a multiple of 5 plus 1.</exception>
         [PublicAPI]
-        public static unsafe IEnumerable<byte> Decode([NotNull] string input)
+        public static unsafe byte[] Decode([NotNull] string input)
         {
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             // ReSharper disable once HeuristicUnreachableCode
@@ -34,7 +34,7 @@ namespace CoenM.Encoding
             // two chars are decoded to one byte
             // thee chars to two bytes
             // four chars to three bytes.
-            // threfore, remainder of one byte should not be possible.
+            // therefore, remainder of one byte should not be possible.
             if (remainder == 1)
                 throw new ArgumentException("Input length % 5 cannot be 1.");
 
