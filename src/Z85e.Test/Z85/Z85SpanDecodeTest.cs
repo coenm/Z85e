@@ -3,7 +3,7 @@ namespace CoenM.Encoding.Test.Z85
     using System;
     using System.Buffers;
 
-    using CoenM.Encoding.Test.TestData;
+    using TestData;
 
     using Xunit;
 
@@ -16,8 +16,8 @@ namespace CoenM.Encoding.Test.Z85
         public void DecodeTest(byte[] data, string encoded)
         {
             // arrange
-            var source = encoded.AsSpan();
-            var destination = new byte[data.Length + 10].AsSpan();
+            ReadOnlySpan<char> source = encoded.AsSpan();
+            Span<byte> destination = new byte[data.Length + 10];
 
             // act
             var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten);
@@ -29,29 +29,121 @@ namespace CoenM.Encoding.Test.Z85
             Assert.Equal(destination.Slice(0, bytesWritten).ToArray(), data);
         }
 
-
         [Fact]
-        public void DecodeNullReturnsNullTest()
+        public void DecodeEmptyTest()
         {
             // arrange
-            Span<char> source = null;
-            Span<byte> destination = new byte[0];
+            Span<char> source = Span<char>.Empty;
+            Span<byte> destination = new byte[100];
 
             // act
+            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten);
 
             // assert
-
-            // ReSharper disable once AssignNullToNotNullAttribute
-            var result = Sut.Decode(source, destination, out var _, out var __);
-
+            Assert.Equal(OperationStatus.Done, result);
+            Assert.Equal(0, charsConsumed);
+            Assert.Equal(0, bytesWritten);
         }
 
         [Theory]
-        [ClassData(typeof(Z85InvalidEncodedStrings))]
-        public void DecodeThrowsExceptionWhenInputHasWrongSizeTest(string encoded)
+        [ClassData(typeof(NeedMoreDataDecodeScenario))]
+        public void BasicDecodingWithFinalBlockFalseKnownInputNeedMoreDataTest(DecodeData scenario)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => Sut.Decode(encoded));
+            // arrange
+            ReadOnlySpan<char> source = scenario.EncodedString.Span;
+            Span<byte> destination = new byte[scenario.ExpectedBytesWritten + 20];
+
+            // act
+            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten, isFinalBlock: false);
+
+            // assert
+            Assert.Equal(OperationStatus.NeedMoreData, result);
+            Assert.Equal(scenario.ExpectedCharactersConsumed, charsConsumed);
+            Assert.Equal(scenario.ExpectedBytesWritten, bytesWritten);
+            Assert.Equal(destination.Slice(0, bytesWritten).ToArray(), scenario.ExpectedData);
         }
+
+
+        // [Theory]
+        // todo fix data
+//        public void BasicDecodingWithFinalBlockFalseKnownInputInvalidTest(DecodeData scenario)
+//        {
+//            // arrange
+//            ReadOnlySpan<char> source = scenario.EncodedString.Span;
+//            Span<byte> destination = new byte[scenario.ExpectedBytesWritten + 20];
+//
+//            // act
+//            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten, isFinalBlock: false);
+//
+//            // assert
+//            Assert.Equal(OperationStatus.InvalidData, result);
+//            Assert.Equal(scenario.ExpectedCharactersConsumed, charsConsumed);
+//            Assert.Equal(scenario.ExpectedBytesWritten, bytesWritten);
+//            Assert.Equal(destination.Slice(0, bytesWritten).ToArray(), scenario.ExpectedData);
+//        }
+
+        // [Theory]
+        // todo fix data
+//        public void BasicDecodingWithFinalBlockTrueKnownInputInvalidTest(DecodeData scenario)
+//        {
+//            // arrange
+//            ReadOnlySpan<char> source = scenario.EncodedString.Span;
+//            Span<byte> destination = new byte[scenario.ExpectedBytesWritten + 20];
+//
+//            // act
+//            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten, isFinalBlock: true);
+//
+//            // assert
+//            Assert.Equal(OperationStatus.InvalidData, result);
+//            Assert.Equal(scenario.ExpectedCharactersConsumed, charsConsumed);
+//            Assert.Equal(scenario.ExpectedBytesWritten, bytesWritten);
+//            Assert.Equal(destination.Slice(0, bytesWritten).ToArray(), scenario.ExpectedData);
+//        }
+
+        // [Theory]
+        // todo fix data
+//        public void BasicDecodingWithFinalBlockTrueKnownInputDoneTest(DecodeData scenario)
+//        {
+//            // arrange
+//            ReadOnlySpan<char> source = scenario.EncodedString.Span;
+//            Span<byte> destination = new byte[scenario.ExpectedBytesWritten + 20];
+//
+//            // act
+//            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten, isFinalBlock: true);
+//
+//            // assert
+//            Assert.Equal(OperationStatus.Done, result);
+//            Assert.Equal(scenario.ExpectedCharactersConsumed, charsConsumed);
+//            Assert.Equal(scenario.ExpectedBytesWritten, bytesWritten);
+//            Assert.Equal(destination.Slice(0, bytesWritten).ToArray(), scenario.ExpectedData);
+//        }
+
+
+
+
+
+
+        //        [Fact]
+        //        public void DecodeNullReturnsNullTest()
+        //        {
+        //            // arrange
+        //            Span<char> source = null;
+        //            Span<byte> destination = new byte[0];
+        //
+        //            // act
+        //
+        //            // assert
+        //
+        //            // ReSharper disable once AssignNullToNotNullAttribute
+        //            var result = Sut.Decode(source, destination, out var _, out var __);
+        //        }
+
+        //        [Theory]
+        //        [ClassData(typeof(Z85InvalidEncodedStrings))]
+        //        public void DecodeThrowsExceptionWhenInputHasWrongSizeTest(string encoded)
+        //        {
+        //            Assert.Throws<ArgumentOutOfRangeException>(() => Sut.Decode(encoded));
+        //        }
 
 
 
