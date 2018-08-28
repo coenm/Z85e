@@ -6,7 +6,7 @@
     using System;
     using System.Buffers;
 
-    using CoenM.Encoding.Internals;
+    using Internals;
 
     public static partial class Z85
     {

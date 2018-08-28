@@ -2,7 +2,7 @@ namespace CoenM.Encoding.Test.Z85
 {
     using System;
 
-    using CoenM.Encoding.Test.TestData;
+    using TestData;
 
     using Xunit;
 
