@@ -11,24 +11,6 @@ namespace CoenM.Encoding.Test.Z85
 
     public class Z85SpanDecodeTest
     {
-        [Theory]
-        [ClassData(typeof(Z85Samples))]
-        public void DecodeTest(byte[] data, string encoded)
-        {
-            // arrange
-            ReadOnlySpan<char> source = encoded.AsSpan();
-            Span<byte> destination = new byte[data.Length + 10];
-
-            // act
-            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten);
-
-            // assert
-            Assert.Equal(OperationStatus.Done, result);
-            Assert.Equal(encoded.Length, charsConsumed);
-            Assert.Equal(data.Length, bytesWritten);
-            Assert.Equal(data, destination.Slice(0, bytesWritten).ToArray());
-        }
-
         [Fact]
         public void DecodeEmptyTest()
         {
@@ -64,23 +46,22 @@ namespace CoenM.Encoding.Test.Z85
         }
 
 
-        // [Theory]
-        // todo fix data
-        //        public void BasicDecodingWithFinalBlockFalseKnownInputInvalidTest(DecodeData scenario)
-        //        {
-        //            // arrange
-        //            ReadOnlySpan<char> source = scenario.EncodedString.Span;
-        //            Span<byte> destination = new byte[scenario.ExpectedBytesWritten + 20];
-        //
-        //            // act
-        //            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten, isFinalBlock: false);
-        //
-        //            // assert
-        //            Assert.Equal(OperationStatus.InvalidData, result);
-        //            Assert.Equal(scenario.ExpectedCharactersConsumed, charsConsumed);
-        //            Assert.Equal(scenario.ExpectedBytesWritten, bytesWritten);
-        //           Assert.Equal(scenario.ExpectedData, destination.Slice(0, bytesWritten).ToArray());
-        //        }
+//        [Theory]
+//        public void BasicDecodingWithFinalBlockFalseKnownInputInvalidTest(DecodeData scenario)
+//        {
+//            // arrange
+//            ReadOnlySpan<char> source = scenario.EncodedString.Span;
+//            Span<byte> destination = new byte[scenario.ExpectedBytesWritten + 20];
+//
+//            // act
+//            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten, isFinalBlock: false);
+//
+//            // assert
+//            Assert.Equal(OperationStatus.InvalidData, result);
+//            Assert.Equal(scenario.ExpectedCharactersConsumed, charsConsumed);
+//            Assert.Equal(scenario.ExpectedBytesWritten, bytesWritten);
+//            Assert.Equal(scenario.ExpectedData, destination.Slice(0, bytesWritten).ToArray());
+//        }
 
         // [Theory]
         // todo fix data
@@ -100,43 +81,42 @@ namespace CoenM.Encoding.Test.Z85
         //            Assert.Equal(scenario.ExpectedData, destination.Slice(0, bytesWritten).ToArray());
         //        }
 
-        // [Theory]
-        // todo fix data
-        //        public void BasicDecodingWithFinalBlockTrueKnownInputDoneTest(DecodeData scenario)
-        //        {
-        //            // arrange
-        //            ReadOnlySpan<char> source = scenario.EncodedString.Span;
-        //            Span<byte> destination = new byte[scenario.ExpectedBytesWritten + 20];
-        //
-        //            // act
-        //            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten, isFinalBlock: true);
-        //
-        //            // assert
-        //            Assert.Equal(OperationStatus.Done, result);
-        //            Assert.Equal(scenario.ExpectedCharactersConsumed, charsConsumed);
-        //            Assert.Equal(scenario.ExpectedBytesWritten, bytesWritten);
-        //            Assert.Equal(scenario.ExpectedData, destination.Slice(0, bytesWritten).ToArray());
-        //        }
+        [Theory]
+        [ClassData(typeof(Z85Samples))]
+        public void BasicDecodingWithFinalBlockTrueKnownInputDoneTest(byte[] data, string encoded)
+        {
+            // arrange
+            ReadOnlySpan<char> source = encoded.AsSpan();
+            Span<byte> destination = new byte[data.Length + 20];
 
+            // act
+            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten, isFinalBlock: true);
 
+            // assert
+            Assert.Equal(OperationStatus.Done, result);
+            Assert.Equal(encoded.Length, charsConsumed);
+            Assert.Equal(data.Length, bytesWritten);
+            Assert.Equal(data, destination.Slice(0, bytesWritten).ToArray());
+        }
 
+        [Theory]
+        [ClassData(typeof(Z85Samples))]
+        public void BasicDecodingWithFinalBlockFalseKnownInputDoneTest(byte[] data, string encoded)
+        {
+            // arrange
+            ReadOnlySpan<char> source = encoded.AsSpan();
+            Span<byte> destination = new byte[data.Length + 20];
 
+            // act
+            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten, isFinalBlock: false);
 
+            // assert
+            Assert.Equal(OperationStatus.Done, result);
+            Assert.Equal(encoded.Length, charsConsumed);
+            Assert.Equal(data.Length, bytesWritten);
+            Assert.Equal(data, destination.Slice(0, bytesWritten).ToArray());
+        }
 
-        //        [Fact]
-        //        public void DecodeNullReturnsNullTest()
-        //        {
-        //            // arrange
-        //            Span<char> source = null;
-        //            Span<byte> destination = new byte[0];
-        //
-        //            // act
-        //
-        //            // assert
-        //
-        //            // ReSharper disable once AssignNullToNotNullAttribute
-        //            var result = Sut.Decode(source, destination, out var _, out var __);
-        //        }
 
         //        [Theory]
         //        [ClassData(typeof(Z85InvalidEncodedStrings))]
@@ -144,12 +124,6 @@ namespace CoenM.Encoding.Test.Z85
         //        {
         //            Assert.Throws<ArgumentOutOfRangeException>(() => Sut.Decode(encoded));
         //        }
-
-
-
-
-
-
 
         // [Fact]
         // public void CalculateDecodedSizeTest()
