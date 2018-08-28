@@ -38,6 +38,30 @@
             if (source.Length == 0)
                 goto DoneExit;
 
+            var remainder = source.Length % 5;
+
+            if (remainder > 0)
+            {
+                var usableSourceLength = source.Length - remainder;
+                var usableSource = source.Slice(0, usableSourceLength);
+                if (destination.Length < CalculateDecodedSize(usableSource))
+                {
+                    charsConsumed = 0;
+                    bytesWritten = 0;
+                    return OperationStatus.DestinationTooSmall;
+                }
+                else
+                {
+                    var result2 = Decode(usableSource.ToString());
+                    result2.AsSpan().CopyTo(destination);
+
+                    charsConsumed = usableSource.Length;
+                    bytesWritten = result2.Length;
+                    return OperationStatus.NeedMoreData;
+                }
+            }
+
+
             if (destination.Length < CalculateDecodedSize(source))
             {
                 charsConsumed = 0;
