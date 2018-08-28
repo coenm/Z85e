@@ -26,7 +26,7 @@ namespace CoenM.Encoding.Test.Z85
             Assert.Equal(OperationStatus.Done, result);
             Assert.Equal(encoded.Length, charsConsumed);
             Assert.Equal(data.Length, bytesWritten);
-            Assert.Equal(destination.Slice(0, bytesWritten).ToArray(), data);
+            Assert.Equal(data, destination.Slice(0, bytesWritten).ToArray());
         }
 
         [Fact]
@@ -60,63 +60,63 @@ namespace CoenM.Encoding.Test.Z85
             Assert.Equal(OperationStatus.NeedMoreData, result);
             Assert.Equal(scenario.ExpectedCharactersConsumed, charsConsumed);
             Assert.Equal(scenario.ExpectedBytesWritten, bytesWritten);
-            Assert.Equal(destination.Slice(0, bytesWritten).ToArray(), scenario.ExpectedData);
+            Assert.Equal(scenario.ExpectedData, destination.Slice(0, bytesWritten).ToArray());
         }
 
 
         // [Theory]
         // todo fix data
-//        public void BasicDecodingWithFinalBlockFalseKnownInputInvalidTest(DecodeData scenario)
-//        {
-//            // arrange
-//            ReadOnlySpan<char> source = scenario.EncodedString.Span;
-//            Span<byte> destination = new byte[scenario.ExpectedBytesWritten + 20];
-//
-//            // act
-//            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten, isFinalBlock: false);
-//
-//            // assert
-//            Assert.Equal(OperationStatus.InvalidData, result);
-//            Assert.Equal(scenario.ExpectedCharactersConsumed, charsConsumed);
-//            Assert.Equal(scenario.ExpectedBytesWritten, bytesWritten);
-//            Assert.Equal(destination.Slice(0, bytesWritten).ToArray(), scenario.ExpectedData);
-//        }
+        //        public void BasicDecodingWithFinalBlockFalseKnownInputInvalidTest(DecodeData scenario)
+        //        {
+        //            // arrange
+        //            ReadOnlySpan<char> source = scenario.EncodedString.Span;
+        //            Span<byte> destination = new byte[scenario.ExpectedBytesWritten + 20];
+        //
+        //            // act
+        //            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten, isFinalBlock: false);
+        //
+        //            // assert
+        //            Assert.Equal(OperationStatus.InvalidData, result);
+        //            Assert.Equal(scenario.ExpectedCharactersConsumed, charsConsumed);
+        //            Assert.Equal(scenario.ExpectedBytesWritten, bytesWritten);
+        //           Assert.Equal(scenario.ExpectedData, destination.Slice(0, bytesWritten).ToArray());
+        //        }
 
         // [Theory]
         // todo fix data
-//        public void BasicDecodingWithFinalBlockTrueKnownInputInvalidTest(DecodeData scenario)
-//        {
-//            // arrange
-//            ReadOnlySpan<char> source = scenario.EncodedString.Span;
-//            Span<byte> destination = new byte[scenario.ExpectedBytesWritten + 20];
-//
-//            // act
-//            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten, isFinalBlock: true);
-//
-//            // assert
-//            Assert.Equal(OperationStatus.InvalidData, result);
-//            Assert.Equal(scenario.ExpectedCharactersConsumed, charsConsumed);
-//            Assert.Equal(scenario.ExpectedBytesWritten, bytesWritten);
-//            Assert.Equal(destination.Slice(0, bytesWritten).ToArray(), scenario.ExpectedData);
-//        }
+        //        public void BasicDecodingWithFinalBlockTrueKnownInputInvalidTest(DecodeData scenario)
+        //        {
+        //            // arrange
+        //            ReadOnlySpan<char> source = scenario.EncodedString.Span;
+        //            Span<byte> destination = new byte[scenario.ExpectedBytesWritten + 20];
+        //
+        //            // act
+        //            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten, isFinalBlock: true);
+        //
+        //            // assert
+        //            Assert.Equal(OperationStatus.InvalidData, result);
+        //            Assert.Equal(scenario.ExpectedCharactersConsumed, charsConsumed);
+        //            Assert.Equal(scenario.ExpectedBytesWritten, bytesWritten);
+        //            Assert.Equal(scenario.ExpectedData, destination.Slice(0, bytesWritten).ToArray());
+        //        }
 
         // [Theory]
         // todo fix data
-//        public void BasicDecodingWithFinalBlockTrueKnownInputDoneTest(DecodeData scenario)
-//        {
-//            // arrange
-//            ReadOnlySpan<char> source = scenario.EncodedString.Span;
-//            Span<byte> destination = new byte[scenario.ExpectedBytesWritten + 20];
-//
-//            // act
-//            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten, isFinalBlock: true);
-//
-//            // assert
-//            Assert.Equal(OperationStatus.Done, result);
-//            Assert.Equal(scenario.ExpectedCharactersConsumed, charsConsumed);
-//            Assert.Equal(scenario.ExpectedBytesWritten, bytesWritten);
-//            Assert.Equal(destination.Slice(0, bytesWritten).ToArray(), scenario.ExpectedData);
-//        }
+        //        public void BasicDecodingWithFinalBlockTrueKnownInputDoneTest(DecodeData scenario)
+        //        {
+        //            // arrange
+        //            ReadOnlySpan<char> source = scenario.EncodedString.Span;
+        //            Span<byte> destination = new byte[scenario.ExpectedBytesWritten + 20];
+        //
+        //            // act
+        //            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten, isFinalBlock: true);
+        //
+        //            // assert
+        //            Assert.Equal(OperationStatus.Done, result);
+        //            Assert.Equal(scenario.ExpectedCharactersConsumed, charsConsumed);
+        //            Assert.Equal(scenario.ExpectedBytesWritten, bytesWritten);
+        //            Assert.Equal(scenario.ExpectedData, destination.Slice(0, bytesWritten).ToArray());
+        //        }
 
 
 
