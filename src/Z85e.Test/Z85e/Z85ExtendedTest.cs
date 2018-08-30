@@ -1,3 +1,5 @@
+using Xunit.Categories;
+
 namespace CoenM.Encoding.Test.Z85e
 {
     using System;
@@ -78,7 +80,7 @@ namespace CoenM.Encoding.Test.Z85e
         }
 
         [Fact]
-        [Trait(XUnitConst.Catagory, XUnitConst.Categories.StressTest)]
+        [SystemTest]
         public void StressTest()
         {
             // arrange
