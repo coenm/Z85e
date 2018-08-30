@@ -13,7 +13,7 @@ namespace CoenM.Encoding.Test.Z85
         [Fact]
         public void HelloWorldEncodeTest()
         {
-            Assert.Equal(Sut.Encode(Z85Samples.HelloWorldData), Z85Samples.HelloWorldEncoded);
+            Assert.Equal(Sut.Encode(StrictZ85Samples.HelloWorldData), StrictZ85Samples.HelloWorldEncoded);
         }
 
         [Theory]

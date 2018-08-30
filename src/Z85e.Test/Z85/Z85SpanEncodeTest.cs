@@ -38,7 +38,7 @@ namespace CoenM.Encoding.Test.Z85
         }
 
         [Theory]
-        [ClassData(typeof(Z85Samples))]
+        [ClassData(typeof(StrictZ85Samples))]
         public void EncodeTest(byte[] data, string encoded)
         {
             // arrange

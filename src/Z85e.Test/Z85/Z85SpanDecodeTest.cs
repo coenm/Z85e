@@ -1,3 +1,5 @@
+// ReSharper disable RedundantArgumentDefaultValue
+// ReSharper disable All
 namespace CoenM.Encoding.Test.Z85
 {
     using System;
@@ -11,15 +13,16 @@ namespace CoenM.Encoding.Test.Z85
 
     public class Z85SpanDecodeTest
     {
-        [Fact]
-        public void DecodeEmptyTest()
+        [Theory]
+        [ClassData(typeof(ModeAndFinalBlockOptions))]
+        public void DecodeEmptyTest(Z85Mode mode, bool isFinalBlock)
         {
             // arrange
             Span<char> source = Span<char>.Empty;
             Span<byte> destination = new byte[100];
 
             // act
-            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten);
+            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten, mode, isFinalBlock);
 
             // assert
             Assert.Equal(OperationStatus.Done, result);
@@ -29,14 +32,14 @@ namespace CoenM.Encoding.Test.Z85
 
         [Theory]
         [ClassData(typeof(NeedMoreDataDecodeScenario))]
-        public void BasicDecodingWithFinalBlockFalseKnownInputNeedMoreDataTest(DecodeData scenario)
+        public void BasicDecodingWithFinalBlockFalseAndPaddingModeWithKnownInputNeedMoreDataTest(DecodeData scenario)
         {
             // arrange
             ReadOnlySpan<char> source = scenario.EncodedString.Span;
             Span<byte> destination = new byte[scenario.ExpectedBytesWritten + 20];
 
             // act
-            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten, isFinalBlock: false);
+            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten, Z85Mode.Padding, isFinalBlock: false);
 
             // assert
             Assert.Equal(OperationStatus.NeedMoreData, result);
@@ -45,23 +48,97 @@ namespace CoenM.Encoding.Test.Z85
             Assert.Equal(scenario.ExpectedData, destination.Slice(0, bytesWritten).ToArray());
         }
 
+        [Theory]
+        [ClassData(typeof(NeedMoreDataDecodeScenario))]
+        public void BasicDecodingWithFinalBlockFalseAndModeStrictKnownInputNeedMoreDataTest(DecodeData scenario)
+        {
+            // arrange
+            ReadOnlySpan<char> source = scenario.EncodedString.Span;
+            Span<byte> destination = new byte[scenario.ExpectedBytesWritten + 20];
 
-//        [Theory]
-//        public void BasicDecodingWithFinalBlockFalseKnownInputInvalidTest(DecodeData scenario)
-//        {
-//            // arrange
-//            ReadOnlySpan<char> source = scenario.EncodedString.Span;
-//            Span<byte> destination = new byte[scenario.ExpectedBytesWritten + 20];
-//
-//            // act
-//            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten, isFinalBlock: false);
-//
-//            // assert
-//            Assert.Equal(OperationStatus.InvalidData, result);
-//            Assert.Equal(scenario.ExpectedCharactersConsumed, charsConsumed);
-//            Assert.Equal(scenario.ExpectedBytesWritten, bytesWritten);
-//            Assert.Equal(scenario.ExpectedData, destination.Slice(0, bytesWritten).ToArray());
-//        }
+            // act
+            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten, Z85Mode.Strict, isFinalBlock: false);
+
+            // assert
+            Assert.Equal(OperationStatus.NeedMoreData, result);
+            Assert.Equal(scenario.ExpectedCharactersConsumed, charsConsumed);
+            Assert.Equal(scenario.ExpectedBytesWritten, bytesWritten);
+            Assert.Equal(scenario.ExpectedData, destination.Slice(0, bytesWritten).ToArray());
+        }
+
+        [Theory]
+        [ClassData(typeof(NeedMoreDataDecodeScenario))]
+        public void BasicDecodingWithFinalBlockTrueAndPaddingModeStrictKnownInputReturnsInvalidDataTest(DecodeData scenario)
+        {
+            // arrange
+            ReadOnlySpan<char> source = scenario.EncodedString.Span;
+            Span<byte> destination = new byte[scenario.ExpectedBytesWritten + 20];
+
+            // act
+            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten, Z85Mode.Strict, isFinalBlock: true);
+
+            // assert
+            Assert.Equal(OperationStatus.InvalidData, result);
+            Assert.Equal(scenario.ExpectedCharactersConsumed, charsConsumed);
+            Assert.Equal(scenario.ExpectedBytesWritten, bytesWritten);
+            Assert.Equal(scenario.ExpectedData, destination.Slice(0, bytesWritten).ToArray());
+        }
+
+        [Theory]
+        [ClassData(typeof(PaddedZ85Scenario))]
+        public void BasicDecodingWithFinalBlockTrueAndPaddingModePaddingKnownInputReturnsPaddedOutputTest(DecodeData scenario)
+        {
+            // arrange
+            ReadOnlySpan<char> source = scenario.EncodedString.Span;
+            Span<byte> destination = new byte[scenario.ExpectedBytesWritten + 20];
+
+            // act
+            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten, Z85Mode.Padding, isFinalBlock: true);
+
+            // assert
+            Assert.Equal(OperationStatus.Done, result);
+            //todo
+            // Assert.Equal(scenario.ExpectedCharactersConsumed, charsConsumed);
+            // Assert.Equal(scenario.ExpectedBytesWritten, bytesWritten);
+            // Assert.Equal(scenario.ExpectedData, destination.Slice(0, bytesWritten).ToArray());
+        }
+
+
+        [Theory]
+        [ClassData(typeof(NeedMoreDataDecodeScenarioC))]
+        public void BasicDecodingWithFinalBlockTrueAndPaddingModePaddingKnownInputWithWrongSizeReturnsInvalidDataTest(DecodeData scenario)
+        {
+            // arrange
+            ReadOnlySpan<char> source = scenario.EncodedString.Span;
+            Span<byte> destination = new byte[scenario.ExpectedBytesWritten + 20];
+
+            // act
+            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten, Z85Mode.Padding, isFinalBlock: true);
+
+            // assert
+            Assert.Equal(OperationStatus.InvalidData, result);
+            Assert.Equal(scenario.ExpectedCharactersConsumed, charsConsumed);
+            Assert.Equal(scenario.ExpectedBytesWritten, bytesWritten);
+            Assert.Equal(scenario.ExpectedData, destination.Slice(0, bytesWritten).ToArray());
+        }
+
+
+        //        [Theory]
+        //        public void BasicDecodingWithFinalBlockFalseKnownInputInvalidTest(DecodeData scenario)
+        //        {
+        //            // arrange
+        //            ReadOnlySpan<char> source = scenario.EncodedString.Span;
+        //            Span<byte> destination = new byte[scenario.ExpectedBytesWritten + 20];
+        //
+        //            // act
+        //            var result = Sut.Decode(source, destination, out var charsConsumed, out var bytesWritten, isFinalBlock: false);
+        //
+        //            // assert
+        //            Assert.Equal(OperationStatus.InvalidData, result);
+        //            Assert.Equal(scenario.ExpectedCharactersConsumed, charsConsumed);
+        //            Assert.Equal(scenario.ExpectedBytesWritten, bytesWritten);
+        //            Assert.Equal(scenario.ExpectedData, destination.Slice(0, bytesWritten).ToArray());
+        //        }
 
         // [Theory]
         // todo fix data
@@ -82,7 +159,7 @@ namespace CoenM.Encoding.Test.Z85
         //        }
 
         [Theory]
-        [ClassData(typeof(Z85Samples))]
+        [ClassData(typeof(StrictZ85Samples))]
         public void BasicDecodingWithFinalBlockTrueKnownInputDoneTest(byte[] data, string encoded)
         {
             // arrange
@@ -100,7 +177,7 @@ namespace CoenM.Encoding.Test.Z85
         }
 
         [Theory]
-        [ClassData(typeof(Z85Samples))]
+        [ClassData(typeof(StrictZ85Samples))]
         public void BasicDecodingWithFinalBlockFalseKnownInputDoneTest(byte[] data, string encoded)
         {
             // arrange

@@ -1,7 +1,7 @@
-using Xunit.Categories;
-
 namespace CoenM.Encoding.Test.Z85e
 {
+    using Xunit.Categories;
+
     using System;
     using System.Security.Cryptography;
 
@@ -16,13 +16,13 @@ namespace CoenM.Encoding.Test.Z85e
         [Fact]
         public void HelloWorldDecodeTest()
         {
-            Assert.Equal(Sut.Decode(Z85Samples.HelloWorldEncoded), Z85Samples.HelloWorldData);
+            Assert.Equal(Sut.Decode(StrictZ85Samples.HelloWorldEncoded), StrictZ85Samples.HelloWorldData);
         }
 
         [Fact]
         public void HelloWorldEncodeTest()
         {
-            Assert.Equal(Sut.Encode(Z85Samples.HelloWorldData), Z85Samples.HelloWorldEncoded);
+            Assert.Equal(Sut.Encode(StrictZ85Samples.HelloWorldData), StrictZ85Samples.HelloWorldEncoded);
         }
 
         [Fact]

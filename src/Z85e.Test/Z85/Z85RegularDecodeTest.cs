@@ -11,7 +11,7 @@ namespace CoenM.Encoding.Test.Z85
     public class Z85RegularDecodeTest
     {
         [Theory]
-        [ClassData(typeof(Z85Samples))]
+        [ClassData(typeof(StrictZ85Samples))]
         public void DecodeTest(byte[] data, string encoded)
         {
             Assert.Equal(Sut.Decode(encoded), data);
