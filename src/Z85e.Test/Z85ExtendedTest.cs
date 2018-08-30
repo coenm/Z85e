@@ -4,6 +4,8 @@ using Xunit;
 
 namespace CoenM.Encoding.Test
 {
+    using Xunit.Categories;
+
     public class Z85ExtendedTest
     {
         private readonly byte[] _helloWorldBytes = { 0x86, 0x4F, 0xD2, 0x6F, 0xB5, 0x59, 0xF7, 0x5B };
@@ -76,7 +78,7 @@ namespace CoenM.Encoding.Test
         }
 
         [Fact]
-        [Trait(XUnitConst.Catagory, XUnitConst.Categories.StressTest)]
+        [SystemTest]
         public void StressTest()
         {
             // arrange
