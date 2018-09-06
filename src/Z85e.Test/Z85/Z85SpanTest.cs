@@ -10,7 +10,7 @@ namespace CoenM.Encoding.Test.Z85
 
     using Sut = Encoding.Z85;
 
-    public class Z85SpanDecodeTest
+    public class Z85SpanTest
     {
         [Theory]
         [ClassData(typeof(AllDecodeScenarios))]
@@ -30,6 +30,27 @@ namespace CoenM.Encoding.Test.Z85
 
             // assert
             expectedResult.AssertResult(result, charsConsumed, bytesWritten, destination);
+        }
+
+
+        [Theory]
+        [ClassData(typeof(AllEncodeScenarios))]
+        public void EncodeTest(EncodeInputData scenario, EncodeExpectedData expectedResult)
+        {
+            // arrange
+            Span<char> destination = scenario.CreateDestination().Span;
+
+            // act
+            var result = Sut.Encode(
+                scenario.Source.Span,
+                destination,
+                out var bytesConsumed,
+                out var charsWritten,
+                scenario.Mode,
+                scenario.IsFinalBlock);
+
+            // assert
+            expectedResult.AssertResult(result, bytesConsumed, charsWritten, destination);
         }
     }
 }

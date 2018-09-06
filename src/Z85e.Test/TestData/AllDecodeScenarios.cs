@@ -4,30 +4,9 @@ using Xunit;
 
 namespace CoenM.Encoding.Test.TestData
 {
-
-    internal class ModeOptions : TheoryData<Z85Mode>
+    internal class AllDecodeScenarios : TheoryData<DecodeInputData, DecodeExpectedData>
     {
-        public ModeOptions()
-        {
-            Add(Z85Mode.Padding);
-            Add(Z85Mode.Strict);
-        }
-    }
-
-    internal class ModeAndFinalBlockOptions : TheoryData<Z85Mode, bool>
-    {
-        public ModeAndFinalBlockOptions()
-        {
-            Add(Z85Mode.Padding, true);
-            Add(Z85Mode.Padding, false);
-            Add(Z85Mode.Strict, true);
-            Add(Z85Mode.Strict, false);
-        }
-    }
-
-    internal class AllDecodeWithOutputIsLargeEnoughScenarios : TheoryData<DecodeInputData, DecodeExpectedData>
-    {
-        public AllDecodeWithOutputIsLargeEnoughScenarios()
+        public AllDecodeScenarios()
         {
             // Decode 0 character.
             var doneResult = new DecodeExpectedData(OperationStatus.Done, 0, 0, new byte[0]);

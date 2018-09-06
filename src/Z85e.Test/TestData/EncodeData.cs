@@ -1,35 +1,63 @@
 ﻿using System;
 using System.Buffers;
+using Xunit;
 
 namespace CoenM.Encoding.Test.TestData
 {
-    public class EncodeData
+    public class EncodeInputData
     {
-        public EncodeData(byte[] data, string expectedEncodedString, int expectedBytesConsumed, int expectedCharsWritten, OperationStatus expectedResult = OperationStatus.Done)
+        private readonly int _destinationLength;
+
+        public EncodeInputData(byte[] source, Z85Mode mode, bool isFinalBlock, int destinationLength = -1)
         {
-            Data = data.AsMemory();
-            ExpectedEncodedString = expectedEncodedString;
-            ExpectedBytesConsumed = expectedBytesConsumed;
-            ExpectedCharsWritten = expectedCharsWritten;
-            ExpectedResult = expectedResult;
+            _destinationLength = destinationLength;
+            Mode = mode;
+            IsFinalBlock = isFinalBlock;
+            Source = source;
         }
 
-        public ReadOnlyMemory<byte> Data { get; }
+        public Z85Mode Mode { get; }
 
-        public string ExpectedEncodedString { get; }
+        public bool IsFinalBlock { get; }
+
+        public Memory<byte> Source { get; }
+
+        public Memory<char> CreateDestination()
+        {
+            if (_destinationLength == 0)
+                return Memory<char>.Empty;
+
+            if (_destinationLength > 0)
+                return new char[_destinationLength];
+
+            return new char[Source.Length * 2]; // should always be enough
+        }
+    }
+
+    public class EncodeExpectedData
+    {
+        public EncodeExpectedData(OperationStatus expectedResult, int expectedBytesConsumed, int expectedCharsWritten, string expectedOutput)
+        {
+            ExpectedResult = expectedResult;
+            ExpectedBytesConsumed = expectedBytesConsumed;
+            ExpectedCharsWritten = expectedCharsWritten;
+            ExpectedOutput = expectedOutput;
+        }
+
+        public OperationStatus ExpectedResult { get; }
 
         public int ExpectedBytesConsumed { get; }
 
         public int ExpectedCharsWritten { get; }
 
-        public OperationStatus ExpectedResult { get; }
+        public string ExpectedOutput { get; }
 
-        public void Assert(OperationStatus result, int bytesConsumed, int charsWritten, ReadOnlySpan<char> encodedResult)
+        public void AssertResult(OperationStatus result, int bytesConsumed, int charsWritten, ReadOnlySpan<char> destination)
         {
-            Xunit.Assert.Equal(ExpectedResult, result);
-            Xunit.Assert.Equal(ExpectedBytesConsumed, bytesConsumed);
-            Xunit.Assert.Equal(ExpectedCharsWritten, charsWritten);
-            Xunit.Assert.Equal(ExpectedEncodedString, encodedResult.Slice(0, charsWritten).ToString());
+            Assert.Equal(ExpectedResult, result);
+            Assert.Equal(ExpectedBytesConsumed, bytesConsumed);
+            Assert.Equal(ExpectedCharsWritten, charsWritten);
+            Assert.Equal(ExpectedOutput, destination.Slice(0, charsWritten).ToString());
         }
     }
 }
