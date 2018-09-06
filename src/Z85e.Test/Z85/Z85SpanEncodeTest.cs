@@ -1,3 +1,6 @@
+// ReSharper disable RedundantArgumentDefaultValue
+// ReSharper disable All
+
 namespace CoenM.Encoding.Test.Z85
 {
     using System;
@@ -36,6 +39,40 @@ namespace CoenM.Encoding.Test.Z85
 
             Assert.Throws<ArgumentOutOfRangeException>(() => Sut.CalculateEncodedSize(source.Span));
         }
+
+        [Theory]
+        [ClassData(typeof(ModeAndFinalBlockOptions))]
+        public void EncodeEmptyTest(Z85Mode mode, bool isFinalBlock)
+        {
+            // arrange
+            Span<byte> source = Span<byte>.Empty;
+            Span<char> destination = new char[100];
+
+            // act
+            var result = Sut.Encode(source, destination, out var bytesConsumed, out var charsWritten, mode, isFinalBlock);
+
+            // assert
+            Assert.Equal(OperationStatus.Done, result);
+            Assert.Equal(0, bytesConsumed);
+            Assert.Equal(0, charsWritten);
+        }
+
+
+        [Theory]
+        [ClassData(typeof(NeedMoreDataEncodeScenario))]
+        public void BasicEncodingWithFinalBlockFalseAndPaddingModeWithKnownInputNeedMoreDataTest(EncodeData scenario)
+        {
+            // arrange
+            ReadOnlySpan<byte> source = scenario.Data.Span;
+            Span<char> destination = new char[scenario.ExpectedCharsWritten + 20];
+
+            // act
+            var result = Sut.Encode(source, destination, out var bytesConsumed, out var charsWritten, Z85Mode.Padding, isFinalBlock: false);
+
+            // assert
+            scenario.Assert(result, bytesConsumed, charsWritten, destination);
+        }
+
 
         [Theory]
         [ClassData(typeof(StrictZ85Samples))]

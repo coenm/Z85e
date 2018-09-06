@@ -147,19 +147,110 @@
             Z85Mode mode = Z85Mode.Padding,
             bool isFinalBlock = true)
         {
-            if (destination.Length < CalculateEncodedSize(source))
+
+            int srcLength = source.Length;
+            int destLength = destination.Length;
+
+            int sourceIndex = 0;
+            int destIndex = 0;
+
+            if (srcLength == 0)
+            {
+                bytesConsumed = sourceIndex;
+                charsWritten = destIndex;
+                return OperationStatus.Done;
+            }
+
+            int srcLengthToUse = 0;
+            int destLengthToUse = 0;
+
+            var srcRemainder = srcLength % 4;
+            if (mode == Z85Mode.Padding && isFinalBlock)
+            {
+                if (srcRemainder == 1)
+                {
+                    // two chars are decoded to one byte
+                    // thee chars to two bytes
+                    // four chars to three bytes.
+                    // therefore, remainder of one byte should not be possible.
+                    bytesConsumed = 0;
+                    charsWritten = 0;
+                    return OperationStatus.InvalidData;
+                }
+
+                srcLengthToUse = srcLength;
+                destLengthToUse = srcLength / 4 * 5;
+            }
+            else
+            {
+                srcLengthToUse = srcLength - srcRemainder;
+
+            }
+
+
+
+
+
+            var inputByteSize = srcLength;
+            var usableInputByteSize = srcLength;
+
+            var encodedSize = inputByteSize / 5 * 4;
+            var remainder = inputByteSize % 5;
+
+
+            if (isFinalBlock)
+            {
+                if (mode == Z85Mode.Padding)
+                {
+                    if (remainder == 1)
+                    {
+                        bytesConsumed = 0;
+                        charsWritten = 0;
+                        return OperationStatus.InvalidData;
+                    }
+
+                    {
+                        var extraBytes = remainder - 1;
+                        encodedSize = (inputByteSize - extraBytes) * 4 / 5 + extraBytes;
+                    }
+                }
+                else
+                {
+                    // strict
+                    if (remainder != 0)
+                    {
+                        bytesConsumed = 0;
+                        charsWritten = 0;
+                        return OperationStatus.InvalidData;
+                    }
+                }
+            }
+            else
+            {
+                // not final part
+                if (encodedSize == 0 && inputByteSize > 0)
+                {
+                    bytesConsumed = 0;
+                    charsWritten = 0;
+                    return OperationStatus.NeedMoreData;
+                }
+            }
+
+            if (destination.Length < encodedSize)
             {
                 bytesConsumed = 0;
                 charsWritten = 0;
                 return OperationStatus.DestinationTooSmall;
             }
 
-            var result = Encode(source.ToArray());
+            var result = Z85Extended.Encode(source.Slice(0, usableInputByteSize).ToArray());
             result.AsSpan().CopyTo(destination);
 
             bytesConsumed = source.Length;
             charsWritten = result.Length;
-            return OperationStatus.Done;
+            if (remainder == 0)
+                return OperationStatus.Done;
+            return OperationStatus.NeedMoreData;
         }
 
         /// <summary>
@@ -171,6 +262,23 @@
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
+
+            var size = (uint)source.Length;
+            var remainder = size % 5;
+
+            if (remainder == 0)
+                return 0;
+
+            // two chars are decoded to one byte
+            // thee chars to two bytes
+            // four chars to three bytes.
+            // therefore, remainder of one byte should not be possible.
+            if (remainder == 1)
+                throw new ArgumentException("Input length % 5 cannot be 1.");
+
+            var extraBytes = remainder - 1;
+            var decodedSize = (int)((size - extraBytes) * 4 / 5 + extraBytes);
+
 
             return Z85Size.CalculateEncodedSize(source.Length);
         }
