@@ -161,36 +161,6 @@
                 return OperationStatus.Done;
             }
 
-            int srcLengthToUse = 0;
-            int destLengthToUse = 0;
-
-            var srcRemainder = srcLength % 4;
-            if (mode == Z85Mode.Padding && isFinalBlock)
-            {
-                if (srcRemainder == 1)
-                {
-                    // two chars are decoded to one byte
-                    // thee chars to two bytes
-                    // four chars to three bytes.
-                    // therefore, remainder of one byte should not be possible.
-                    bytesConsumed = 0;
-                    charsWritten = 0;
-                    return OperationStatus.InvalidData;
-                }
-
-                srcLengthToUse = srcLength;
-                destLengthToUse = srcLength / 4 * 5;
-            }
-            else
-            {
-                srcLengthToUse = srcLength - srcRemainder;
-
-            }
-
-
-
-
-
             var inputByteSize = srcLength;
             var usableInputByteSize = srcLength;
 
@@ -202,17 +172,8 @@
             {
                 if (mode == Z85Mode.Padding)
                 {
-                    if (remainder == 1)
-                    {
-                        bytesConsumed = 0;
-                        charsWritten = 0;
-                        return OperationStatus.InvalidData;
-                    }
-
-                    {
-                        var extraBytes = remainder - 1;
-                        encodedSize = (inputByteSize - extraBytes) * 4 / 5 + extraBytes;
-                    }
+                    var extraBytes = remainder - 1;
+                    encodedSize = (inputByteSize - extraBytes) * 4 / 5 + extraBytes;
                 }
                 else
                 {
@@ -248,7 +209,7 @@
 
             bytesConsumed = source.Length;
             charsWritten = result.Length;
-            if (remainder == 0)
+            if (remainder == 0 || isFinalBlock)
                 return OperationStatus.Done;
             return OperationStatus.NeedMoreData;
         }
