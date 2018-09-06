@@ -58,20 +58,20 @@ namespace CoenM.Encoding.Test.Z85
         }
 
 
-        [Theory]
-        [ClassData(typeof(NeedMoreDataEncodeScenario))]
-        public void BasicEncodingWithFinalBlockFalseAndPaddingModeWithKnownInputNeedMoreDataTest(EncodeData scenario)
-        {
-            // arrange
-            ReadOnlySpan<byte> source = scenario.Data.Span;
-            Span<char> destination = new char[scenario.ExpectedCharsWritten + 20];
-
-            // act
-            var result = Sut.Encode(source, destination, out var bytesConsumed, out var charsWritten, Z85Mode.Padding, isFinalBlock: false);
-
-            // assert
-            scenario.Assert(result, bytesConsumed, charsWritten, destination);
-        }
+//        [Theory]
+//        [ClassData(typeof(NeedMoreDataEncodeScenario))]
+//        public void BasicEncodingWithFinalBlockFalseAndPaddingModeWithKnownInputNeedMoreDataTest(EncodeData scenario)
+//        {
+//            // arrange
+//            ReadOnlySpan<byte> source = scenario.Data.Span;
+//            Span<char> destination = new char[scenario.ExpectedCharsWritten + 20];
+//
+//            // act
+//            var result = Sut.Encode(source, destination, out var bytesConsumed, out var charsWritten, Z85Mode.Padding, isFinalBlock: false);
+//
+//            // assert
+//            scenario.Assert(result, bytesConsumed, charsWritten, destination);
+//        }
 
 
         [Theory]
