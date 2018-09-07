@@ -31,16 +31,18 @@ namespace CoenM.Encoding.Test.Z85e
             byte[] bytes1 = { 0xB5 };
             byte[] bytes2 = { 0xB5, 0x59 };
             byte[] bytes3 = { 0xB5, 0x59, 0xF7 };
+            byte[] bytes4 = { 0xB5, 0x59, 0xF7, 0x5B };
+
 
             Assert.Equal("2b", Sut.Encode(bytes1));
             Assert.Equal("6Af", Sut.Encode(bytes2));
             Assert.Equal("jt#7", Sut.Encode(bytes3));
+            Assert.Equal("World", Sut.Encode(bytes4));
 
             Assert.Equal(bytes1, Sut.Decode("2b"));
             Assert.Equal(bytes2, Sut.Decode("6Af"));
             Assert.Equal(bytes3, Sut.Decode("jt#7"));
         }
-
 
         [Fact]
         public void SomeEncodingAndDecodingOfPartialsPrefixedWithFourBytesTest()
