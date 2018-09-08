@@ -23,11 +23,10 @@ namespace CoenM.Encoding.Test.TestData
             bytesToEncode = 1;
             inputBytes = Z85eSampleData.HelloWorldBytes(bytesToEncode);
             var needMoreDataResult = new EncodeExpectedData(OperationStatus.NeedMoreData, 0, 0, string.Empty);
-            var invalidDataResult = new EncodeExpectedData(OperationStatus.InvalidData, 0, 0, string.Empty);
             var paddedTwoCharsFinalResult = new EncodeExpectedData(OperationStatus.Done, bytesToEncode, bytesToEncode + 1, Z85eSampleData.GetHelloString(bytesToEncode + 1));
 
             Add(Input(inputBytes, false), needMoreDataResult);
-            Add(Input(inputBytes, true), paddedTwoCharsFinalResult); // different //todo fix, test is probably ok
+            Add(Input(inputBytes, true), paddedTwoCharsFinalResult); // different
 
             //
             // Encode 2 bytes.
@@ -68,7 +67,6 @@ namespace CoenM.Encoding.Test.TestData
             bytesToEncode = 5;
             inputBytes = Z85eSampleData.HelloWorldBytes(bytesToEncode);
             needMoreDataResult = new EncodeExpectedData(OperationStatus.NeedMoreData, 4, 5, Z85eSampleData.GetHelloString(5));
-            invalidDataResult = new EncodeExpectedData(OperationStatus.InvalidData, 4, 5, Z85eSampleData.GetHelloString(5));
             var paddedSevenCharsFinalResult = new EncodeExpectedData(OperationStatus.Done, 5, 7, Z85eSampleData.GetHelloString(7));
 
             Add(Input(inputBytes, false), needMoreDataResult); //todo fix, test is probably ok
