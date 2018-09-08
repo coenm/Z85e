@@ -145,51 +145,54 @@
             int sourceIndex = 0;
             int destIndex = 0;
 
-            if (srcLength == 0)
+            while (sourceIndex + 4 <= srcLength && destIndex + 5 <= destLength)
             {
+                var partEncoded = Z85.Encode(source.Slice(sourceIndex, 4).ToArray());
+                partEncoded.AsSpan().CopyTo(destination.Slice(destIndex, 5));
+                sourceIndex += 4;
+                destIndex += 5;
+            }
+
+            if (destLength - destIndex < 5 && srcLength - sourceIndex >= 4)
+            {
+                bytesConsumed = sourceIndex;
+                charsWritten = destIndex;
+                return OperationStatus.DestinationTooSmall;
+            }
+
+            if (!isFinalBlock)
+            {
+                bytesConsumed = sourceIndex;
+                charsWritten = destIndex;
+                return OperationStatus.NeedMoreData;
+            }
+
+
+            if (srcLength == sourceIndex)
+            {
+                bytesConsumed = sourceIndex;
+                charsWritten = destIndex;
+
+                return OperationStatus.Done;
+            }
+
+
+            var endEncoded = Z85Extended.Encode(source.Slice(sourceIndex).ToArray());
+            if (endEncoded.Length <= (destLength - destIndex))
+            {
+                endEncoded.AsSpan().CopyTo(destination.Slice(destIndex));
+                destIndex += srcLength - sourceIndex + 1;
+                sourceIndex = srcLength;
                 bytesConsumed = sourceIndex;
                 charsWritten = destIndex;
                 return OperationStatus.Done;
             }
-
-            var inputByteSize = srcLength;
-            var usableInputByteSize = srcLength;
-
-            var encodedSize = inputByteSize / 5 * 4;
-            var remainder = inputByteSize % 5;
-
-
-            if (isFinalBlock)
-            {
-                var extraBytes = remainder - 1;
-                encodedSize = (inputByteSize - extraBytes) * 4 / 5 + extraBytes;
-            }
             else
             {
-                // not final part
-                if (encodedSize == 0 && inputByteSize > 0)
-                {
-                    bytesConsumed = 0;
-                    charsWritten = 0;
-                    return OperationStatus.NeedMoreData;
-                }
-            }
-
-            if (destination.Length < encodedSize)
-            {
-                bytesConsumed = 0;
-                charsWritten = 0;
+                bytesConsumed = sourceIndex;
+                charsWritten = destIndex;
                 return OperationStatus.DestinationTooSmall;
             }
-
-            var result = Z85Extended.Encode(source.Slice(0, usableInputByteSize).ToArray());
-            result.AsSpan().CopyTo(destination);
-
-            bytesConsumed = source.Length;
-            charsWritten = result.Length;
-            if (remainder == 0 || isFinalBlock)
-                return OperationStatus.Done;
-            return OperationStatus.NeedMoreData;
         }
 
         /// <summary>

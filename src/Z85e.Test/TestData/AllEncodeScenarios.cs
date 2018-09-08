@@ -12,9 +12,10 @@ namespace CoenM.Encoding.Test.TestData
             //
             int bytesToEncode = 0;
             var inputBytes = Z85eSampleData.HelloWorldBytes(bytesToEncode);
+            var needMoreDataResult = new EncodeExpectedData(OperationStatus.NeedMoreData, 0, 0, string.Empty);
             var doneResult = new EncodeExpectedData(OperationStatus.Done, 0, 0, string.Empty);
 
-            Add(Input(inputBytes, false), doneResult);
+            Add(Input(inputBytes, false), needMoreDataResult);
             Add(Input(inputBytes, true), doneResult);
 
             //
@@ -22,7 +23,6 @@ namespace CoenM.Encoding.Test.TestData
             //
             bytesToEncode = 1;
             inputBytes = Z85eSampleData.HelloWorldBytes(bytesToEncode);
-            var needMoreDataResult = new EncodeExpectedData(OperationStatus.NeedMoreData, 0, 0, string.Empty);
             var paddedTwoCharsFinalResult = new EncodeExpectedData(OperationStatus.Done, bytesToEncode, bytesToEncode + 1, Z85eSampleData.GetHelloString(bytesToEncode + 1));
 
             Add(Input(inputBytes, false), needMoreDataResult);
@@ -57,7 +57,7 @@ namespace CoenM.Encoding.Test.TestData
             var helloDecodedDoneResult = new EncodeExpectedData(OperationStatus.Done, bytesToEncode, bytesToEncode + 1, Z85eSampleData.GetHelloString(bytesToEncode + 1));
             var helloDecodedNeedMoreDataResult = new EncodeExpectedData(OperationStatus.NeedMoreData, bytesToEncode, bytesToEncode + 1, Z85eSampleData.GetHelloString(bytesToEncode + 1));
 
-            Add(Input(inputBytes, false), helloDecodedNeedMoreDataResult);  //todo fix, test is probably ok
+            Add(Input(inputBytes, false), helloDecodedNeedMoreDataResult);
             Add(Input(inputBytes, true), helloDecodedDoneResult);
 
             //
@@ -69,7 +69,7 @@ namespace CoenM.Encoding.Test.TestData
             needMoreDataResult = new EncodeExpectedData(OperationStatus.NeedMoreData, 4, 5, Z85eSampleData.GetHelloString(5));
             var paddedSevenCharsFinalResult = new EncodeExpectedData(OperationStatus.Done, 5, 7, Z85eSampleData.GetHelloString(7));
 
-            Add(Input(inputBytes, false), needMoreDataResult); //todo fix, test is probably ok
+            Add(Input(inputBytes, false), needMoreDataResult);
             Add(Input(inputBytes, true), paddedSevenCharsFinalResult); // different
 
             //
