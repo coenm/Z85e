@@ -18,7 +18,6 @@
         /// <param name="destination">The output span which contains the result of the operation, i.e. the decoded binary data.</param>
         /// <param name="charsConsumed">The number of input characters consumed during the operation. This can be used to slice the input for subsequent calls, if necessary.</param>
         /// <param name="bytesWritten">The number of bytes written into the output span. This can be used to slice the output for subsequent calls, if necessary.</param>
-        /// <param name="mode"></param>
         /// <param name="isFinalBlock">True (default) when the input span contains the entire data to decode.
         /// Set to false only if it is known that the input span contains partial data with more data to follow.</param>
         /// <returns>It returns the OperationStatus enum values:
@@ -33,7 +32,6 @@
             Span<byte> destination,
             out int charsConsumed,
             out int bytesWritten,
-            Z85Mode mode = Z85Mode.Padding,
             bool isFinalBlock = true)
         {
             int srcLength = source.Length;
@@ -71,36 +69,26 @@
 
                     if (isFinalBlock)
                     {
-                        if (mode == Z85Mode.Padding)
-                        {
-                            // two chars are decoded to one byte
-                            // thee chars to two bytes
-                            // four chars to three bytes.
-                            // therefore, remainder of one byte should not be possible.
-                            if (remainder == 1)
-                                return OperationStatus.InvalidData;
-                            else
-                            {
-                                var padding = Z85Extended.Decode(source.Slice(usableSourceLength, remainder).ToString());
-                                if (padding.Length + bytesWritten > destLength)
-                                {
-                                    return OperationStatus.DestinationTooSmall;
-                                }
-                                else
-                                {
-                                    padding.AsSpan().CopyTo(destination.Slice(bytesWritten, padding.Length));
-                                    charsConsumed += remainder;
-                                    bytesWritten += padding.Length;
-                                    return OperationStatus.Done;
-                                }
-                            }
-                        }
+                        // two chars are decoded to one byte
+                        // thee chars to two bytes
+                        // four chars to three bytes.
+                        // therefore, remainder of one byte should not be possible.
+                        if (remainder == 1)
+                            return OperationStatus.InvalidData;
                         else
                         {
-                            // strict mode doesn't allow final block to be a non multiple of 5.
-                            charsConsumed = usableSource.Length;
-                            bytesWritten = result2.Length;
-                            return OperationStatus.InvalidData;
+                            var padding = Z85Extended.Decode(source.Slice(usableSourceLength, remainder).ToString());
+                            if (padding.Length + bytesWritten > destLength)
+                            {
+                                return OperationStatus.DestinationTooSmall;
+                            }
+                            else
+                            {
+                                padding.AsSpan().CopyTo(destination.Slice(bytesWritten, padding.Length));
+                                charsConsumed += remainder;
+                                bytesWritten += padding.Length;
+                                return OperationStatus.Done;
+                            }
                         }
                     }
                     else
@@ -128,14 +116,14 @@
             return OperationStatus.Done;
         }
 
-        ///  <summary>
+
+        /// <summary>
         ///
-        ///  </summary>
-        ///  <param name="source"></param>
-        ///  <param name="destination"></param>
-        ///  <param name="bytesConsumed"></param>
-        ///  <param name="charsWritten"></param>
-        /// <param name="mode"></param>
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="destination"></param>
+        /// <param name="bytesConsumed"></param>
+        /// <param name="charsWritten"></param>
         /// <param name="isFinalBlock"></param>
         /// <returns></returns>
         [PublicAPI]
@@ -144,7 +132,6 @@
             Span<char> destination,
             out int bytesConsumed,
             out int charsWritten,
-            Z85Mode mode = Z85Mode.Padding,
             bool isFinalBlock = true)
         {
 
@@ -170,21 +157,8 @@
 
             if (isFinalBlock)
             {
-                if (mode == Z85Mode.Padding)
-                {
-                    var extraBytes = remainder - 1;
-                    encodedSize = (inputByteSize - extraBytes) * 4 / 5 + extraBytes;
-                }
-                else
-                {
-                    // strict
-                    if (remainder != 0)
-                    {
-                        bytesConsumed = 0;
-                        charsWritten = 0;
-                        return OperationStatus.InvalidData;
-                    }
-                }
+                var extraBytes = remainder - 1;
+                encodedSize = (inputByteSize - extraBytes) * 4 / 5 + extraBytes;
             }
             else
             {

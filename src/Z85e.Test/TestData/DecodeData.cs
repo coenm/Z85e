@@ -8,15 +8,12 @@ namespace CoenM.Encoding.Test.TestData
     {
         private readonly int _destinationLength;
 
-        public DecodeInputData(string source, Z85Mode mode, bool isFinalBlock, int destinationLength = -1)
+        public DecodeInputData(string source, bool isFinalBlock, int destinationLength = -1)
         {
             _destinationLength = destinationLength;
-            Mode = mode;
             IsFinalBlock = isFinalBlock;
             Source = source.ToCharArray();
         }
-
-        public Z85Mode Mode { get; }
 
         public bool IsFinalBlock { get; }
 

@@ -1,5 +1,3 @@
-// ReSharper disable RedundantArgumentDefaultValue
-// ReSharper disable All
 namespace CoenM.Encoding.Test.Z85
 {
     using System;
@@ -25,7 +23,6 @@ namespace CoenM.Encoding.Test.Z85
                 destination,
                 out var charsConsumed,
                 out var bytesWritten,
-                scenario.Mode,
                 scenario.IsFinalBlock);
 
             // assert
@@ -46,7 +43,6 @@ namespace CoenM.Encoding.Test.Z85
                 destination,
                 out var bytesConsumed,
                 out var charsWritten,
-                scenario.Mode,
                 scenario.IsFinalBlock);
 
             // assert
