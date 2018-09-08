@@ -118,14 +118,19 @@
 
 
         /// <summary>
-        ///
+        /// Encode the span of binary data into text represented as Z85.
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="destination"></param>
-        /// <param name="bytesConsumed"></param>
-        /// <param name="charsWritten"></param>
-        /// <param name="isFinalBlock"></param>
-        /// <returns></returns>
+        /// <param name="source">The input span which contains binary data that needs to be encoded.</param>
+        /// <param name="destination">The output span which contains the result of the operation, i.e. the UTF-8 encoded text in Z85.</param>
+        /// <param name="bytesConsumed">The number of input bytes consumed during the operation. This can be used to slice the input for subsequent calls, if necessary.</param>
+        /// <param name="charsWritten">The number of characters written into the output span. This can be used to slice the output for subsequent calls, if necessary.</param>
+        /// <param name="isFinalBlock"><c>True</c> (default) when the input span contains the entire data to encode.
+        /// Set to false only if it is known that the input span contains partial data with more data to follow.</param>
+        /// <returns>It returns the OperationStatus enum values:
+        /// - Done - on successful processing of the entire input span
+        /// - DestinationTooSmall - if there is not enough space in the output span to fit the encoded input
+        /// - NeedMoreData - only if isFinalBlock is false, otherwise the output is padded if the input is not a multiple of 4
+        /// It does not return InvalidData since that is not possible for Z85 encoding.</returns>
         [PublicAPI]
         public static OperationStatus Encode(
             ReadOnlySpan<byte> source,
@@ -134,7 +139,6 @@
             out int charsWritten,
             bool isFinalBlock = true)
         {
-
             int srcLength = source.Length;
             int destLength = destination.Length;
 
