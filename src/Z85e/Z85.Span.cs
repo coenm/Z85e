@@ -200,36 +200,6 @@
         /// <param name="source"></param>
         /// <returns></returns>
         [PublicAPI]
-        public static int CalculateEncodedSize(ReadOnlySpan<byte> source)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-
-            var size = (uint)source.Length;
-            var remainder = size % 5;
-
-            if (remainder == 0)
-                return 0;
-
-            // two chars are decoded to one byte
-            // thee chars to two bytes
-            // four chars to three bytes.
-            // therefore, remainder of one byte should not be possible.
-            if (remainder == 1)
-                throw new ArgumentException("Input length % 5 cannot be 1.");
-
-            var extraBytes = remainder - 1;
-            var decodedSize = (int)((size - extraBytes) * 4 / 5 + extraBytes);
-
-
-            return Z85Size.CalculateEncodedSize(source.Length);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        [PublicAPI]
         public static int CalculateDecodedSize(ReadOnlySpan<char> source)
         {
             if (source == null)
