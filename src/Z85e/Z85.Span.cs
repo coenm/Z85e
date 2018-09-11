@@ -172,7 +172,6 @@
             {
                 bytesConsumed = sourceIndex;
                 charsWritten = destIndex;
-
                 return OperationStatus.Done;
             }
 

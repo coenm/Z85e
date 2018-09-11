@@ -6,14 +6,14 @@ namespace CoenM.Encoding.Test.TestData
 {
     public class EncodeInputData
     {
-        private readonly int _destinationLength;
-
         public EncodeInputData(byte[] source, bool isFinalBlock, int destinationLength = -1)
         {
-            _destinationLength = destinationLength;
+            DestinationLength = destinationLength;
             IsFinalBlock = isFinalBlock;
             Source = source;
         }
+
+        public int DestinationLength { get; }
 
         public bool IsFinalBlock { get; }
 
@@ -21,11 +21,11 @@ namespace CoenM.Encoding.Test.TestData
 
         public Memory<char> CreateDestination()
         {
-            if (_destinationLength == 0)
+            if (DestinationLength == 0)
                 return Memory<char>.Empty;
 
-            if (_destinationLength > 0)
-                return new char[_destinationLength];
+            if (DestinationLength > 0)
+                return new char[DestinationLength];
 
             return new char[Source.Length * 2]; // should always be enough
         }
