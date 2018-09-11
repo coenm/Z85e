@@ -1,5 +1,5 @@
 # About this project
-Z85 encoding extended in dotnet standard 1.1, 1.6, 2.0, and coreapp 2.1
+Z85 encoding extended targeting dotnet standard 1.0
 
 This project implements the Z85 encoding standard as described in this [rfc](https://rfc.zeromq.org/spec:32/Z85/) together with an extended version where you can encode bytes with no restriction on the length of the bytes (ie. it is not required to have a length of a multiple of 4).
 
@@ -23,81 +23,17 @@ Originally, Z85 only encodes blocks of 4 bytes. To allow blocks of all lengths t
 - Z85e uses the same output characters as Z85;
 - Z85e encodes an input byte array (with a length multiple of 4) exactly the same as Z85;
 - Z85e decodes an input string (with a length multiple of 5) exactly the same as Z85;
-- Z85e should be as fast and cheap as possible. Yes, this is rather vague. Lets compare it with a base64 encoding decoding (todo).
-
-## Definition
-todo
+- Z85e should be as fast and cheap as possible. Yes, this is rather vague. Lets compare it with a base64 encoding decoding.
 
 ## API
 
-This is Z85.
-### Encode bytes to z85 encoded string
-```csharp
-using CoenM.Encoding;
-
-//
-// option 1, best performance using Span<T> only
-//
-ReadOnlySpan<byte> source = new byte[8] { /* data */ };
-Span<char> encodedResult = new char[10]; // make sure the spans size is large enough.
-int charsWritten = Z85.Encode(source, encodedResult);
-
-// optionally slice the resulting span
-Span<char> slicedEncodedResut = encodedResult.slice(0, charsWritten);
-
-
-//
-// option 2, less performance as a string is constructed from the Span<char> content.
-//
-ReadOnlySpan<byte> source = new byte[8] { /* data */ };
-string encodedResult Z85.Encode(source);
-```
-
-
-### Decode z85 encoded string to bytes
-```csharp
-using CoenM.Encoding;
-
-//
-// option 1, best performance as resulting Span<byte> is constructed at caller
-//
-ReadOnlySpan<char> source = "textTEXT!?".AsSpan();
-Span<byte> decodedResult = new byte[8]; // make sure the spans size is large enough.
-int bytesWritten = Z85.Decode(source, decodedResult);
-
-// optionally slice the resulting span
-Span<byte> slicedDecodedResult = decodedResult.slice(0, bytesWritten);
-
-//
-// option 2, less performance as resulting ReadOnlySpan<byte> is constructed at implementation of Decode. Needs a copy.
-//
-ReadOnlySpan<char> source = "textTEXT!?".AsSpan();
-ReadOnlySpan<char> encodedResult = Z85.Decode(source);
-```
-
-
-### Misc
-```csharp
-using CoenM.Encoding;
-
-ReadOnlySpan<byte> source = new byte[8] { /* data */ };
-int size = Z85.CalcuateEncodedSize(source);
-
-
-ReadOnlySpan<char> source = "TextText!!".AsSpan();
-int size = Z85.CalcuateDecodedSize(source);
-```
-
-or just go to [dotnetapis](http://dotnetapis.com/pkg/CoenM.Encoding.Z85e).
-
-## Performance
-todo
-
+See [DotNet APIs](http://dotnetapis.com/pkg/CoenM.Encoding.Z85e) for the API.
 
 ## Performance
 
-[Performance version 1.0.0](docs/PerformanceV1.0.0.md)
-
+- [Performance version 1.0.0](docs/PerformanceV1.0.0.md)
+- [Performance version 1.1.0](docs/PerformanceV1.1.0.md)
+- [Performance current working version](docs/Performance-Latest.md)
 
 # Example encoding
 

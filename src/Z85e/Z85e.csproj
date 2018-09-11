@@ -5,9 +5,7 @@
     <Version>1.1.1</Version>
     <Description>ZeroMQ's Z85 Encoding and the extended version. Formats for representing binary data as printable text.</Description>
     <Authors>Coen van den Munckhof</Authors>
-    <!--disable netcoreapp2.1 until AppVeyor supports this.-->
-    <!-- <TargetFrameworks>netstandard1.1;netstandard1.6;netstandard2.0;netcoreapp2.1</TargetFrameworks> -->
-    <TargetFrameworks>netstandard1.1</TargetFrameworks>
+    <TargetFrameworks>netstandard1.0;netstandard1.1;netcoreapp2.1</TargetFrameworks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <RootNamespace>CoenM.Encoding</RootNamespace>
@@ -29,14 +27,33 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.0'">
+     <DefineConstants>JETBRAINS_ANNOTATIONS</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' != 'netstandard1.0'">
+     <DefineConstants>JETBRAINS_ANNOTATIONS;FEATURE_SPAN</DefineConstants>
+  </PropertyGroup>
+  
   <ItemGroup>
-    <PackageReference Include="System.Memory">
-      <Version>4.5.0</Version>
+    <PackageReference Include="JetBrains.Annotations" Version="2018.2.1">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="JetBrainsAnnotations.Fody" Version="2.2.0">
+      <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Internals\Guards\" />
+    <None Update="CoenM.Encoding.Z85e.ExternalAnnotations.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.1'">
+    <PackageReference Include="System.Memory" Version="4.5.1" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
+  </ItemGroup>  
 
 </Project>

@@ -1,58 +1,113 @@
 ﻿using System;
-using System.Diagnostics;
-using CoenM.Encoding.Internals.Guards;
+using CoenM.Encoding.Internals;
+using JetBrains.Annotations;
 
 namespace CoenM.Encoding
 {
-    using Internals;
-
     /// <summary>
-    /// Z85 Encoding library
+    /// Z85 Extended Encoding library. Z85 Extended doesn't require the length of the bytes to be a multiple of 4.
     /// </summary>
-    /// <remarks>This implementation is heavily based on https://github.com/zeromq/rfc/blob/master/src/spec_32.c </remarks>
     public static partial class Z85Extended
     {
-        /// <summary>Calculate output size after decoding the z85 characters.</summary>
-        /// <param name="source">encoded string</param>
-        /// <returns>size of output after decoding</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="source"/> is not a multiple of 5.</exception>
-        public static int CalcuateDecodedSize(ReadOnlySpan<char> source)
+        /// <summary>
+        /// Decode an encoded string into a byte array. Output size will roughly be 'length of <paramref name="input"/>' * 4 / 5.
+        /// </summary>
+        /// <remarks>This method will not check if <paramref name="input"/> only exists of Z85 characters.</remarks>
+        /// <param name="input">encoded string.</param>
+        /// <returns><c>null</c> when <paramref name="input"/> is null, otherwise bytes containing the decoded input string.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="input"/> is a multiple of 5 plus 1.</exception>
+        [PublicAPI]
+        public static unsafe byte[] Decode([NotNull] string input)
         {
-            Guard.MustBeGreaterThanOrEqualTo(source.Length, 1, nameof(source));
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            // ReSharper disable once HeuristicUnreachableCode
+            if (input == null)
+                return null;
 
-            var size = (uint)source.Length;
+            var size = (uint)input.Length;
             var remainder = size % 5;
 
             if (remainder == 0)
-                return Z85.CalcuateDecodedSize(source);
+                return Z85.Decode(input);
 
             // two chars are decoded to one byte
             // thee chars to two bytes
             // four chars to three bytes.
-            // threfore, remainder of one byte should not be possible.
+            // therefore, remainder of one byte should not be possible.
             if (remainder == 1)
                 throw new ArgumentException("Input length % 5 cannot be 1.");
 
             var extraBytes = remainder - 1;
             var decodedSize = (int)((size - extraBytes) * 4 / 5 + extraBytes);
 
-            return decodedSize;
+            var decoded = new byte[decodedSize];
 
+            uint byteNbr = 0;
+            uint charNbr = 0;
+            uint value;
+
+            const uint divisor3 = 256 * 256 * 256;
+            const uint divisor2 = 256 * 256;
+            const uint divisor1 = 256;
+
+            var size2 = size - remainder;
+
+            // Get a pointers to avoid unnecessary range checking
+            fixed (byte* z85Decoder = Map.Decoder)
+            fixed (char* src = input)
+            {
+                while (charNbr < size2)
+                {
+                    //  Accumulate value in base 85
+                    value = z85Decoder[(byte)src[charNbr]];
+                    value = value * 85 + z85Decoder[(byte)src[charNbr + 1]];
+                    value = value * 85 + z85Decoder[(byte)src[charNbr + 2]];
+                    value = value * 85 + z85Decoder[(byte)src[charNbr + 3]];
+                    value = value * 85 + z85Decoder[(byte)src[charNbr + 4]];
+                    charNbr += 5;
+
+                    //  Output value in base 256
+                    decoded[byteNbr + 0] = (byte)(value / divisor3 % 256);
+                    decoded[byteNbr + 1] = (byte)(value / divisor2 % 256);
+                    decoded[byteNbr + 2] = (byte)(value / divisor1 % 256);
+                    decoded[byteNbr + 3] = (byte)(value % 256);
+                    byteNbr += 4;
+                }
+            }
+
+            value = 0;
+            while (charNbr < size)
+                value = value * 85 + Map.Decoder[(byte)input[(int)charNbr++]];
+
+            // Take care of the remainder.
+            var divisor = (uint)Math.Pow(256, extraBytes - 1);
+            while (divisor != 0)
+            {
+                decoded[byteNbr++] = (byte)(value / divisor % 256);
+                divisor /= 256;
+            }
+
+            return decoded;
         }
 
-        /// <summary>Calculate string size after encoding bytes using the Z85 encoder.</summary>
-        /// <param name="source">bytes to encode</param>
-        /// <returns>size of the encoded string</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="source"/> is not a multiple of 4.</exception>
-        public static int CalcuateEncodedSize(ReadOnlySpan<byte> source)
+        /// <summary>
+        /// Encode a byte array as a string. Output size will roughly be 'length of <paramref name="data"/>' / 4 * 5.
+        /// </summary>
+        /// <param name="data">byte[] to encode. No restrictions on the length.</param>
+        /// <returns>Encoded string or <c>null</c> when the <paramref name="data"/> was null.</returns>
+        [PublicAPI]
+        public static unsafe string Encode([NotNull] byte[] data)
         {
-            Guard.MustBeGreaterThanOrEqualTo(source.Length, 1, nameof(source));
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            // ReSharper disable once HeuristicUnreachableCode
+            if (data == null)
+                return null;
 
-            var size = source.Length;
+            var size = data.Length;
             var remainder = size % 4;
 
             if (remainder == 0)
-                return Z85.CalcuateEncodedSize(source);
+                return Z85.Encode(data);
 
             // one byte -> two chars
             // two bytes -> three chars
@@ -60,111 +115,58 @@ namespace CoenM.Encoding
             var extraChars = remainder + 1;
 
             var encodedSize = (size - remainder) * 5 / 4 + extraChars;
-
-            return encodedSize;
-        }
-
-
-
-        /// <summary>Decode an encoded string (<paramref name="source"/>) to bytes (<paramref name="destination"/>).</summary>
-        /// <remarks>This method will not check if <paramref name="source"/> only exists of Z85 characters.</remarks>
-        /// <param name="source">encoded string. Should have length multiple of 5.</param>
-        /// <param name="destination">placeholder for the decoded result. Should have sufficient length.</param>
-        /// <returns>number of bytes written to <paramref name="destination"/></returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="source"/> is not a multiple of 5, or when destination doesn't have sufficient space.</exception>
-        public static int Decode(ReadOnlySpan<char> source, Span<byte> destination)
-        {
-            var decodedSize = CalcuateDecodedSize(source);
-            Guard.MustBeSizedAtLeast(destination, decodedSize, nameof(destination));
-
-            var len = source.Length;
-
-            var remainder = len % 5;
-
-            if (remainder == 0)
-                return Z85.Decode(source, destination);
-
-            var extraBytes = remainder - 1;
-
-
-
-            var byteNbr = 0;
-            var charNbr = 0;
-            uint value = 0;
-            uint divisor;
-
-
-            var firstPartLenChar = source.Length - remainder;
-            var firstPartLenByte = Z85.CalcuateDecodedSize(source.Slice(0, firstPartLenChar));
-
-            byteNbr = Z85.Decode(source.Slice(0, firstPartLenChar), destination);
-            Debug.Assert(byteNbr == firstPartLenChar / 5 * 4, "byteNbr == firstPartLenChar");
-            Debug.Assert(value == 0, "Value should be 0");
-            Debug.Assert(charNbr == firstPartLenChar, "charNbr should be firstPartLenChar");
-
-            charNbr = firstPartLenChar;
-
-
-
-            // remaining.
-            // then last part
-            while (charNbr < len)
-            {
-                //  Accumulate value in base 85
-                value = value * 85 + Map.Decoder[(byte)source[charNbr++] - 32];
-
-                if (charNbr % 5 != 0)
-                    continue;
-
-                throw new Exception();
-            }
-
-            // Take care of the remainder.
-            divisor = (uint)Math.Pow(256, extraBytes - 1);
-            while (divisor != 0)
-            {
-                destination[byteNbr++] = (byte)(value / divisor % 256);
-                divisor /= 256;
-            }
-
-            return decodedSize;
-        }
-
-
-        /// <summary>Encode bytes (<paramref name="source"/>) to characters (<paramref name="destination"/>).</summary>
-        /// <param name="source">bytes to encode. Length should be multiple of 4.</param>
-        /// <param name="destination">placeholder for the ecoded result. Should have sufficient length.</param>
-        /// <returns>number of characters written to <paramref name="destination"/></returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="source"/> is not a multiple of 4, or when destination doesn't have sufficient space.</exception>
-        public static int Encode(ReadOnlySpan<byte> source, Span<char> destination)
-        {
-            Guard.MustHaveSizeMultipleOf(source, 4, nameof(source));
-
-            var encodedSize = CalcuateEncodedSize(source);
-            Guard.MustBeSizedAtLeast(destination, encodedSize, nameof(destination));
-
+            var destination = new string('0', encodedSize);
             uint charNbr = 0;
             uint byteNbr = 0;
-            uint value = 0;
 
-            while (byteNbr < source.Length)
+            var size2 = size - remainder;
+
+            const uint divisor4 = 85 * 85 * 85 * 85;
+            const uint divisor3 = 85 * 85 * 85;
+            const uint divisor2 = 85 * 85;
+            const uint divisor1 = 85;
+            const int byte3 = 256 * 256 * 256;
+            const int byte2 = 256 * 256;
+            const int byte1 = 256;
+
+            // Get pointers to avoid unnecessary range checking
+            fixed (char* z85Encoder = Map.Encoder)
+            fixed (char* z85Dest = destination)
             {
-                //  Accumulate value in base 256 (binary)
-                value = value * 256 + source[(int)byteNbr++];
-                if (byteNbr % 4 != 0)
-                    continue;
+                uint value;
+                while (byteNbr < size2)
+                {
+                    // Accumulate value in base 256 (binary)
+                    value = (uint)(data[byteNbr + 0] * byte3 +
+                                   data[byteNbr + 1] * byte2 +
+                                   data[byteNbr + 2] * byte1 +
+                                   data[byteNbr + 3]);
+                    byteNbr += 4;
 
-                //  Output value in base 85
-                uint divisor = 85 * 85 * 85 * 85;
+                    //  Output value in base 85
+                    z85Dest[charNbr + 0] = z85Encoder[value / divisor4 % 85];
+                    z85Dest[charNbr + 1] = z85Encoder[value / divisor3 % 85];
+                    z85Dest[charNbr + 2] = z85Encoder[value / divisor2 % 85];
+                    z85Dest[charNbr + 3] = z85Encoder[value / divisor1 % 85];
+                    z85Dest[charNbr + 4] = z85Encoder[value % 85];
+                    charNbr += 5;
+                }
+
+
+                // Take care of the remainder.
+                value = 0;
+                while (byteNbr < size)
+                    value = value * 256 + data[byteNbr++];
+
+                var divisor = (uint)Math.Pow(85, remainder);
                 while (divisor != 0)
                 {
-                    destination[(int)charNbr++] = Map.Encoder[value / divisor % 85];
+                    z85Dest[charNbr++] = z85Encoder[value / divisor % 85];
                     divisor /= 85;
                 }
-                value = 0;
             }
 
-            return encodedSize;
+            return destination;
         }
     }
 }
