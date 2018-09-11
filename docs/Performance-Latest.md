@@ -114,3 +114,45 @@ Frequency=2338344 Hz, Resolution=427.6531 ns, Timer=TSC
 |      **Base64Decode** | **.NET Core 2.0** |     **Base64** |  **125** | **580.4 ns** | **0.0477** |     **152 B** |
 |      Base64Decode | .NET Core 2.1 |     Base64 |  125 | 390.3 ns | 0.0482 |     152 B |
 |      Base64Decode |  CsProjnet471 |     Base64 |  125 | 429.7 ns | 0.0482 |     152 B |
+
+
+
+
+## Span API
+### Encoding
+
+|       Method |    Job |     Toolchain | Size |         Mean |        Error |       StdDev |   Gen 0 | Allocated |
+|------------- |------- |-------------- |----- |-------------:|-------------:|-------------:|--------:|----------:|
+|    **Z85Encode** | **Core20** | **.NET Core 2.0** |  **120** |   **2,916.1 ns** |    **688.01 ns** |    **38.874 ns** |  **0.6828** |    **2160 B** |
+|    Z85Encode | Core21 | .NET Core 2.1 |  120 |   1,455.7 ns |    191.48 ns |    10.819 ns |  0.6847 |    2160 B |
+|    Z85Encode | Net471 |  CsProjnet471 |  120 |   2,247.2 ns |    501.08 ns |    28.312 ns |  0.6828 |    2160 B |
+|    **Z85Encode** | **Core20** | **.NET Core 2.0** | **6000** | **141,654.4 ns** | **25,465.10 ns** | **1,438.825 ns** | **34.1797** |  **108000 B** |
+|    Z85Encode | Core21 | .NET Core 2.1 | 6000 |  83,969.2 ns |  5,060.57 ns |   285.932 ns | 34.3018 |  108000 B |
+|    Z85Encode | Net471 |  CsProjnet471 | 6000 | 120,485.9 ns | 29,212.47 ns | 1,650.559 ns | 34.1797 |  108002 B |
+|              |        |               |      |              |              |              |         |           |
+| **Base64Encode** | **Core20** | **.NET Core 2.0** |  **120** |     **216.5 ns** |     **33.84 ns** |     **1.912 ns** |       **-** |       **0 B** |
+| Base64Encode | Core21 | .NET Core 2.1 |  120 |     184.1 ns |     46.09 ns |     2.604 ns |       - |       0 B |
+| Base64Encode | Net471 |  CsProjnet471 |  120 |     207.9 ns |     20.91 ns |     1.181 ns |       - |       0 B |
+| **Base64Encode** | **Core20** | **.NET Core 2.0** | **6000** |   **8,028.6 ns** | **11,833.50 ns** |   **668.615 ns** |       **-** |       **0 B** |
+| Base64Encode | Core21 | .NET Core 2.1 | 6000 |   7,591.9 ns |  3,217.43 ns |   181.791 ns |       - |       0 B |
+| Base64Encode | Net471 |  CsProjnet471 | 6000 |   7,766.8 ns |  2,140.96 ns |   120.968 ns |       - |       0 B |
+
+
+
+### Decoding
+
+|       Method |    Job |     Toolchain | Size |        Mean |        Error |       StdDev |  Gen 0 | Allocated |
+|------------- |------- |-------------- |----- |------------:|-------------:|-------------:|-------:|----------:|
+|    **Z85Decode** | **Core20** | **.NET Core 2.0** |  **120** |    **355.2 ns** |    **171.09 ns** |     **9.667 ns** | **0.0453** |     **144 B** |
+|    Z85Decode | Core21 | .NET Core 2.1 |  120 |    364.7 ns |    119.07 ns |     6.728 ns | 0.1497 |     472 B |
+|    Z85Decode | Net471 |  CsProjnet471 |  120 |    343.6 ns |    178.28 ns |    10.073 ns | 0.0453 |     144 B |
+|    **Z85Decode** | **Core20** | **.NET Core 2.0** | **6000** | **10,618.3 ns** |  **3,660.38 ns** |   **206.818 ns** | **1.9073** |    **6024 B** |
+|    Z85Decode | Core21 | .NET Core 2.1 | 6000 | 13,473.8 ns | 13,583.76 ns |   767.508 ns | 6.6528 |   21056 B |
+|    Z85Decode | Net471 |  CsProjnet471 | 6000 | 14,315.7 ns | 44,333.82 ns | 2,504.943 ns | 1.9073 |    6026 B |
+|              |        |               |      |             |              |              |        |           |
+| **Base64Decode** | **Core20** | **.NET Core 2.0** |  **120** |    **211.7 ns** |     **48.83 ns** |     **2.759 ns** |      **-** |       **0 B** |
+| Base64Decode | Core21 | .NET Core 2.1 |  120 |    188.4 ns |    144.93 ns |     8.189 ns |      - |       0 B |
+| Base64Decode | Net471 |  CsProjnet471 |  120 |    203.3 ns |    115.01 ns |     6.498 ns |      - |       0 B |
+| **Base64Decode** | **Core20** | **.NET Core 2.0** | **6000** |  **7,321.0 ns** |  **2,114.20 ns** |   **119.456 ns** |      **-** |       **0 B** |
+| Base64Decode | Core21 | .NET Core 2.1 | 6000 |  7,233.0 ns |  3,017.77 ns |   170.509 ns |      - |       0 B |
+| Base64Decode | Net471 |  CsProjnet471 | 6000 |  6,588.9 ns |  2,724.76 ns |   153.954 ns |      - |       0 B |
