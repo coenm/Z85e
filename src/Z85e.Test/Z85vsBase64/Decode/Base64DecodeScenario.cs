@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CoenM.Encoding.Test.Z85vsBase64
+namespace CoenM.Encoding.Test.Z85vsBase64.Decode
 {
     public class Base64DecodeScenario
     {

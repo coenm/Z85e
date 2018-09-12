@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using Xunit;
 
-namespace CoenM.Encoding.Test.Z85vsBase64
+namespace CoenM.Encoding.Test.Z85vsBase64.Decode
 {
-    internal class Z85Base64EncodeScenarios : TheoryData<Z85DecodeScenario, Base64DecodeScenario>
+    internal class Z85Base64DecodeScenarios : TheoryData<Z85DecodeScenario, Base64DecodeScenario>
     {
-        public Z85Base64EncodeScenarios()
+        public Z85Base64DecodeScenarios()
         {
             var encodedCharsCollection = new List<EncodedChars>
             {

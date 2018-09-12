@@ -1,13 +1,13 @@
 ﻿using System.Buffers;
 using JetBrains.Annotations;
 
-namespace CoenM.Encoding.Test.Z85vsBase64
+namespace CoenM.Encoding.Test.Z85vsBase64.Encode
 {
-    public class Z85Base64DecodeResult
+    public class Z85Base64EncodeResult
     {
         private readonly OperationStatus _status;
 
-        public Z85Base64DecodeResult(OperationStatus status, int charactersBlocksConsumed, bool allCharsConsumed, int byteBlocksWritten)
+        public Z85Base64EncodeResult(OperationStatus status, int charactersBlocksConsumed, bool allCharsConsumed, int byteBlocksWritten)
         {
             _status = status;
             CharactersBlocksConsumed = charactersBlocksConsumed;
