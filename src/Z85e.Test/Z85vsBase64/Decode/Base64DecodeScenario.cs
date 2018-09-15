@@ -63,5 +63,10 @@ namespace CoenM.Encoding.Test.Z85vsBase64.Decode
         private int CalculateFullOutputBlocks(int bytesWritten) => bytesWritten / BLOCK_SIZE;
 
         private bool AllCharsConsumed(int charsConsumed) => charsConsumed == Source.Length;
+
+        public override string ToString()
+        {
+            return $"{nameof(Source)}: {Source.ToString()}{Environment.NewLine}{nameof(Destination)} length: {Destination.Length}{Environment.NewLine}{nameof(IsFinalBlock)}: {IsFinalBlock}";
+        }
     }
 }
