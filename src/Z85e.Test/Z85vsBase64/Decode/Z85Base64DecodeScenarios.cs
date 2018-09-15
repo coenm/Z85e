@@ -15,8 +15,8 @@ namespace CoenM.Encoding.Test.Z85vsBase64.Decode
                 // invalid (length) chars
                 new EncodedChars("a", "a"),
 
-                // less then one block chars
-                new EncodedChars("aa", "aa=="),
+//                // less then one block chars
+//                new EncodedChars("aa", "aa=="),
 
                 // exactly one block
                 new EncodedChars("aaaaa", "aaaa"),

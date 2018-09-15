@@ -55,9 +55,10 @@
             // Decode 5 chars.
             //
             encodedString = Z85eSampleData.GetHelloString(5);
+            needMoreDataResult = new DecodeExpectedData(OperationStatus.NeedMoreData, 5, 4, Z85eSampleData.HelloWorldBytes(4));
             var helloDecodedDoneResult = new DecodeExpectedData(OperationStatus.Done, 5, 4, Z85eSampleData.HelloWorldBytes(4));
 
-            Add(Input(encodedString, false), helloDecodedDoneResult);
+            Add(Input(encodedString, false), needMoreDataResult);
             Add(Input(encodedString, true), helloDecodedDoneResult);
 
 
@@ -65,7 +66,6 @@
             // Decode 6 chars.
             //
             encodedString = Z85eSampleData.GetHelloString(6);
-            needMoreDataResult = new DecodeExpectedData(OperationStatus.NeedMoreData, 5, 4, Z85eSampleData.HelloWorldBytes(4));
             invalidDataResult = new DecodeExpectedData(OperationStatus.InvalidData, 5, 4, Z85eSampleData.HelloWorldBytes(4));
 
             Add(Input(encodedString, false), needMoreDataResult);
@@ -108,9 +108,10 @@
             // Decode 10 chars.
             //
             encodedString = Z85eSampleData.GetHelloString(10);
+            needMoreDataResult = new DecodeExpectedData(OperationStatus.NeedMoreData, 10, 8, Z85eSampleData.HelloWorldBytes(8));
             var helloWorldDecodedDoneResult = new DecodeExpectedData(OperationStatus.Done, 10, 8, Z85eSampleData.HelloWorldBytes(8));
 
-            Add(Input(encodedString, false), helloWorldDecodedDoneResult);
+            Add(Input(encodedString, false), needMoreDataResult);
             Add(Input(encodedString, true), helloWorldDecodedDoneResult);
         }
 

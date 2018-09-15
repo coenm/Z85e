@@ -1,4 +1,5 @@
-﻿using System.Buffers;
+﻿using System;
+using System.Buffers;
 using JetBrains.Annotations;
 
 namespace CoenM.Encoding.Test.Z85vsBase64.Decode
@@ -22,5 +23,10 @@ namespace CoenM.Encoding.Test.Z85vsBase64.Decode
         [PublicAPI] public bool AllCharsConsumed { get; }
 
         [PublicAPI] public int ByteBlocksWritten { get; }
+
+        public override string ToString()
+        {
+            return $"{nameof(Status)}: {Status}{Environment.NewLine}{nameof(CharactersBlocksConsumed)}: {CharactersBlocksConsumed}{Environment.NewLine}{nameof(AllCharsConsumed)}: {AllCharsConsumed}{Environment.NewLine}{nameof(ByteBlocksWritten)}: {ByteBlocksWritten}";
+        }
     }
 }
