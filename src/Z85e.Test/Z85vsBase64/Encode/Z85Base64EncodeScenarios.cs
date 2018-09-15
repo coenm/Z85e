@@ -12,14 +12,11 @@ namespace CoenM.Encoding.Test.Z85vsBase64.Encode
                 // zero chars
                 new BytesToEncode(new byte[0], new byte[0]),
 
-//                // invalid (length) chars
-//                new EncodedChars("a", "a"),
-//
 //                // less then one block chars
-//                new EncodedChars("aa", "aa=="),
-//
-//                // exactly one block
-//                new EncodedChars("aaaaa", "aaaa"),
+//                new BytesToEncode(new byte[]{ 0x86, 0x4F, 0xD2 }, new byte[]{ 0x86, 0x4F }),
+
+                // exactly one block
+                new BytesToEncode(new byte[]{ 0x86, 0x4F, 0xD2, 0x6F}, new byte[]{ 0x86, 0x4F, 0xD2 }),
             };
 
 
