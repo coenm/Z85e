@@ -27,7 +27,6 @@ namespace CoenM.Encoding.Test.Z85vsBase64.Encode
 
         public Memory<byte> Destination { get; }
 
-
         public Z85Base64EncodeResult Encode()
         {
             var status = System.Buffers.Text.Base64.EncodeToUtf8(
@@ -42,6 +41,11 @@ namespace CoenM.Encoding.Test.Z85vsBase64.Encode
                 CalculateFullInputBlocks(bytesConsumed),
                 AllBytesConsumed(bytesConsumed),
                 CalculateFullOutputBlocks(bytesWritten));
+        }
+
+        public override string ToString()
+        {
+            return $"{nameof(Source)} length: {Source.Length}{Environment.NewLine}{nameof(Destination)} length: {Destination.Length}{Environment.NewLine}{nameof(IsFinalBlock)}: {IsFinalBlock}";
         }
 
         private int CalculateFullInputBlocks(int bytesConsumed) => bytesConsumed / BLOCK_SIZE;
