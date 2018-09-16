@@ -12,9 +12,6 @@ namespace CoenM.Encoding.Test.Z85vsBase64.Encode
                 // zero chars
                 new BytesToEncode(new byte[0], new byte[0]),
 
-//                // less then one block chars
-//                new BytesToEncode(new byte[]{ 0x86, 0x4F, 0xD2 }, new byte[]{ 0x86, 0x4F }),
-
                 // exactly one block
                 new BytesToEncode(new byte[]{ 0x86, 0x4F, 0xD2, 0x6F}, new byte[]{ 0x86, 0x4F, 0xD2 }),
             };
@@ -39,6 +36,27 @@ namespace CoenM.Encoding.Test.Z85vsBase64.Encode
                     new Z85EncodeScenario(encodedChars.Z85, isFinalBlock, Z85EncodeScenario.BLOCK_SIZE * 2),
                     new Base64EncodeScenario(encodedChars.Base64, isFinalBlock, Base64EncodeScenario.BLOCK_SIZE * 2));
             }
+
+//            // less then one block chars
+//            foreach (var encodedChars in new[] { new BytesToEncode(new byte[] { 0x86, 0x4F, 0xD2 }, new byte[] { 0x86, 0x4F }) })
+//            foreach (var isFinalBlock in new[] { true, false })
+//            {
+//                Add(
+//                    new Z85EncodeScenario(encodedChars.Z85, isFinalBlock, 0),
+//                    new Base64EncodeScenario(encodedChars.Base64, isFinalBlock, 0));
+//
+////                Add(
+////                    new Z85EncodeScenario(encodedChars.Z85, isFinalBlock, Z85EncodeScenario.BLOCK_SIZE - 1),
+////                    new Base64EncodeScenario(encodedChars.Base64, isFinalBlock, Base64EncodeScenario.BLOCK_SIZE - 1));
+////
+////                Add(
+////                    new Z85EncodeScenario(encodedChars.Z85, isFinalBlock, Z85EncodeScenario.BLOCK_SIZE), // 5 chars decode to 4 bytes (exactly one block)
+////                    new Base64EncodeScenario(encodedChars.Base64, isFinalBlock, Base64EncodeScenario.BLOCK_SIZE)); // 4 chars decode to 3 bytes (exactly one block)
+//
+//                Add(
+//                    new Z85EncodeScenario(encodedChars.Z85, isFinalBlock, Z85EncodeScenario.BLOCK_SIZE * 2),
+//                    new Base64EncodeScenario(encodedChars.Base64, isFinalBlock, Base64EncodeScenario.BLOCK_SIZE * 2));
+//            }
         }
 
         private struct BytesToEncode
