@@ -40,7 +40,9 @@ namespace CoenM.Encoding.Test.Z85vsBase64.Encode
                 status,
                 CalculateFullInputBlocks(bytesConsumed),
                 AllBytesConsumed(bytesConsumed),
-                CalculateFullOutputBlocks(bytesWritten));
+                bytesConsumed,
+                CalculateFullOutputBlocks(bytesWritten),
+                bytesWritten);
         }
 
         public override string ToString()
