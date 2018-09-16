@@ -113,7 +113,7 @@
 
             charsConsumed = source.Length;
             bytesWritten = result.Length;
-            return OperationStatus.Done;
+            return isFinalBlock ? OperationStatus.Done : OperationStatus.NeedMoreData;
         }
 
 
