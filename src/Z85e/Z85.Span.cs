@@ -159,7 +159,7 @@
 
             while (sourceIndex + 4 <= srcLength && destIndex + 5 <= destLength)
             {
-                EncodeBlockSpan(source.Slice(sourceIndex, 4), destination.Slice(destIndex, 5));
+                EncodeBlockSpan(source.Slice(sourceIndex, 4), destination.Slice(destIndex, 5), ref encoded);
                 sourceIndex += 4;
                 destIndex += 5;
             }
@@ -220,24 +220,21 @@
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void EncodeBlockSpan(ReadOnlySpan<byte> sourceFourBytes, Span<char> destinationFiveChars)
+        private static void EncodeBlockSpan(ReadOnlySpan<byte> sourceFourBytes, Span<char> destinationFiveChars, ref char encodingMap)
         {
             const uint divisor4 = 85 * 85 * 85 * 85;
             const uint divisor3 = 85 * 85 * 85;
             const uint divisor2 = 85 * 85;
             const uint divisor1 = 85;
 
-            var value = (uint)((sourceFourBytes[0] << 24) +
-                               (sourceFourBytes[1] << 16) +
-                               (sourceFourBytes[2] << 8 )+
-                               (sourceFourBytes[3] << 0 ));
+            var value = (uint)((sourceFourBytes[0] << 24) + (sourceFourBytes[1] << 16) + (sourceFourBytes[2] << 8) + (sourceFourBytes[3] << 0));
 
             //  Output value in base 85
-            destinationFiveChars[0] = Map.Encoder[value / divisor4 % 85];
-            destinationFiveChars[1] = Map.Encoder[value / divisor3 % 85];
-            destinationFiveChars[2] = Map.Encoder[value / divisor2 % 85];
-            destinationFiveChars[3] = Map.Encoder[value / divisor1 % 85];
-            destinationFiveChars[4] = Map.Encoder[value % 85];
+            destinationFiveChars[0] = Unsafe.Add(ref encodingMap, (int)(value / divisor4 % 85));
+            destinationFiveChars[1] = Unsafe.Add(ref encodingMap, (int)(value / divisor3 % 85));
+            destinationFiveChars[2] = Unsafe.Add(ref encodingMap, (int)(value / divisor2 % 85));
+            destinationFiveChars[3] = Unsafe.Add(ref encodingMap, (int)(value / divisor1 % 85));
+            destinationFiveChars[4] = Unsafe.Add(ref encodingMap, (int)(value % 85));
         }
 
 //        [MethodImpl(MethodImplOptions.AggressiveInlining)]

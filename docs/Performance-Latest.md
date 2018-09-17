@@ -123,19 +123,20 @@ Frequency=2338344 Hz, Resolution=427.6531 ns, Timer=TSC
 
 |       Method |    Job |     Toolchain | Size |        Mean |        Error |      StdDev | Allocated |
 |------------- |------- |-------------- |----- |------------:|-------------:|------------:|----------:|
-|    **Z85Encode** | **Core20** | **.NET Core 2.0** |  **120** |  **1,474.2 ns** |    **85.296 ns** |   **4.8194 ns** |       **0 B** |
-|    Z85Encode | Core21 | .NET Core 2.1 |  120 |    419.5 ns |    37.987 ns |   2.1464 ns |       0 B |
-|    Z85Encode | Net471 |  CsProjnet471 |  120 |    571.7 ns |    32.829 ns |   1.8549 ns |       0 B |
-|    **Z85Encode** | **Core20** | **.NET Core 2.0** | **6000** | **61,894.7 ns** | **5,489.943 ns** | **310.1919 ns** |       **0 B** |
-|    Z85Encode | Core21 | .NET Core 2.1 | 6000 | 18,600.3 ns |   702.885 ns |  39.7143 ns |       0 B |
-|    Z85Encode | Net471 |  CsProjnet471 | 6000 | 25,320.8 ns |   683.667 ns |  38.6285 ns |       0 B |
+|    **Z85Encode** | **Core20** | **.NET Core 2.0** |  **120** |  **1,379.2 ns** |    **32.612 ns** |   **1.8426 ns** |       **0 B** |
+|    Z85Encode | Core21 | .NET Core 2.1 |  120 |    386.3 ns |    42.481 ns |   2.4003 ns |       0 B |
+|    Z85Encode | Net471 |  CsProjnet471 |  120 |    515.8 ns |    57.923 ns |   3.2727 ns |       0 B |
+|    **Z85Encode** | **Core20** | **.NET Core 2.0** | **6000** | **56,746.0 ns** | **1,957.656 ns** | **110.6112 ns** |       **0 B** |
+|    Z85Encode | Core21 | .NET Core 2.1 | 6000 | 16,926.7 ns | 4,248.150 ns | 240.0284 ns |       0 B |
+|    Z85Encode | Net471 |  CsProjnet471 | 6000 | 21,609.1 ns | 1,738.382 ns |  98.2218 ns |       0 B |
 |              |        |               |      |             |              |             |           |
-| **Base64Encode** | **Core20** | **.NET Core 2.0** |  **120** |    **218.0 ns** |     **5.614 ns** |   **0.3172 ns** |       **0 B** |
-| Base64Encode | Core21 | .NET Core 2.1 |  120 |    179.2 ns |     9.650 ns |   0.5452 ns |       0 B |
-| Base64Encode | Net471 |  CsProjnet471 |  120 |    203.8 ns |     7.084 ns |   0.4003 ns |       0 B |
-| **Base64Encode** | **Core20** | **.NET Core 2.0** | **6000** |  **7,258.9 ns** |   **525.567 ns** |  **29.6955 ns** |       **0 B** |
-| Base64Encode | Core21 | .NET Core 2.1 | 6000 |  7,071.0 ns |   183.653 ns |  10.3767 ns |       0 B |
-| Base64Encode | Net471 |  CsProjnet471 | 6000 |  7,221.1 ns |   237.247 ns |  13.4049 ns |       0 B |
+| **Base64Encode** | **Core20** | **.NET Core 2.0** |  **120** |    **217.7 ns** |    **18.065 ns** |   **1.0207 ns** |       **0 B** |
+| Base64Encode | Core21 | .NET Core 2.1 |  120 |    180.5 ns |     1.765 ns |   0.0997 ns |       0 B |
+| Base64Encode | Net471 |  CsProjnet471 |  120 |    207.0 ns |    11.499 ns |   0.6497 ns |       0 B |
+| **Base64Encode** | **Core20** | **.NET Core 2.0** | **6000** |  **7,315.3 ns** |   **366.050 ns** |  **20.6825 ns** |       **0 B** |
+| Base64Encode | Core21 | .NET Core 2.1 | 6000 |  7,152.5 ns |   370.958 ns |  20.9598 ns |       0 B |
+| Base64Encode | Net471 |  CsProjnet471 | 6000 |  7,521.9 ns | 2,766.885 ns | 156.3341 ns |       0 B |
+
 
 
 ### Decoding
