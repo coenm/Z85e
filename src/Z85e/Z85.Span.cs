@@ -2,6 +2,8 @@
 {
 #if FEATURE_SPAN
 
+    using System.Runtime.CompilerServices;
+    using System.Runtime.InteropServices;
     using JetBrains.Annotations;
     using System;
     using System.Buffers;
@@ -34,11 +36,17 @@
             out int bytesWritten,
             bool isFinalBlock = true)
         {
+            ref char src = ref MemoryMarshal.GetReference(source);
+            ref byte dst = ref MemoryMarshal.GetReference(destination);
+            ref byte decoder = ref Map.Decoder[0];
+
             int srcLength = source.Length;
             int destLength = destination.Length;
 
             int sourceIndex = 0;
             int destIndex = 0;
+
+//            var y = Unsafe.Add(ref dst, sourceIndex);
 
             if (source.Length == 0)
             {
@@ -139,6 +147,10 @@
             out int charsWritten,
             bool isFinalBlock = true)
         {
+            ref byte src = ref MemoryMarshal.GetReference(source);
+            ref char dst = ref MemoryMarshal.GetReference(destination);
+            ref char encoded = ref Map.Encoder[0];
+
             int srcLength = source.Length;
             int destLength = destination.Length;
 
@@ -147,8 +159,7 @@
 
             while (sourceIndex + 4 <= srcLength && destIndex + 5 <= destLength)
             {
-                var partEncoded = Z85.Encode(source.Slice(sourceIndex, 4).ToArray());
-                partEncoded.AsSpan().CopyTo(destination.Slice(destIndex, 5));
+                EncodeBlockSpan(source.Slice(sourceIndex, 4), destination.Slice(destIndex, 5));
                 sourceIndex += 4;
                 destIndex += 5;
             }
@@ -206,6 +217,106 @@
 
             return Z85Size.CalculateDecodedSize(source.Length);
         }
+
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void EncodeBlockSpan(ReadOnlySpan<byte> sourceFourBytes, Span<char> destinationFiveChars)
+        {
+            const uint divisor4 = 85 * 85 * 85 * 85;
+            const uint divisor3 = 85 * 85 * 85;
+            const uint divisor2 = 85 * 85;
+            const uint divisor1 = 85;
+
+            var value = (uint)((sourceFourBytes[0] << 24) +
+                               (sourceFourBytes[1] << 16) +
+                               (sourceFourBytes[2] << 8 )+
+                               (sourceFourBytes[3] << 0 ));
+
+            //  Output value in base 85
+            destinationFiveChars[0] = Map.Encoder[value / divisor4 % 85];
+            destinationFiveChars[1] = Map.Encoder[value / divisor3 % 85];
+            destinationFiveChars[2] = Map.Encoder[value / divisor2 % 85];
+            destinationFiveChars[3] = Map.Encoder[value / divisor1 % 85];
+            destinationFiveChars[4] = Map.Encoder[value % 85];
+        }
+
+//        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+//        private static int EncodeBlock(ref byte sourceFourBytes, ref char destination, ref char encodingMap)
+//        {
+//            // Accumulate value in base 256 (binary)
+//            var value = (sourceFourBytes << 24) | (Unsafe.Add(ref sourceFourBytes, 1) << 16) | (Unsafe.Add(ref sourceFourBytes, 2) << 8) | Unsafe.Add(ref sourceFourBytes, 3);
+//            const uint divisor4 = 85 * 85 * 85 * 85;
+////            const uint divisor3 = 85 * 85 * 85;
+////            const uint divisor2 = 85 * 85;
+////            const uint divisor1 = 85;
+//
+//            ref char add = ref Unsafe.Add(ref encodingMap, (int) (value / divisor4 % 85));
+//            Unsafe.Write(ref Unsafe.Add(ref destination, 1), add);
+////            Unsafe.WriteUnaligned(ref Unsafe.Add(ref destination, 0), result);
+////
+////            destination[charNbr + 0] = z85Encoder[value / divisor4 % 85];
+////            destination[charNbr + 1] = z85Encoder[value / divisor3 % 85];
+////            destination[charNbr + 2] = z85Encoder[value / divisor2 % 85];
+////            destination[charNbr + 3] = z85Encoder[value / divisor1 % 85];
+////            destination[charNbr + 4] = z85Encoder[value % 85];
+//
+//
+//            int i0 = Unsafe.Add(ref encodingMap, value >> 18);
+//            int i1 = Unsafe.Add(ref encodingMap, (value >> 12) & 0x3F);
+//            int i2 = Unsafe.Add(ref encodingMap, (value >> 6) & 0x3F);
+//            int i3 = Unsafe.Add(ref encodingMap, value & 0x3F);
+//
+//            return i0 | (i1 << 8) | (i2 << 16) | (i3 << 24);
+//        }
+//
+//        private static unsafe string EncodeInner([NotNull] byte[] data)
+//        {
+//            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+//            // ReSharper disable once HeuristicUnreachableCode
+//            if (data == null)
+//                return null;
+//
+//            var size = data.Length;
+//            var encodedSize = Z85Size.CalculateEncodedSize(size);
+//            var destination = new string('0', encodedSize);
+//            int charNbr = 0;
+//            int byteNbr = 0;
+//
+//            const uint divisor4 = 85 * 85 * 85 * 85;
+//            const uint divisor3 = 85 * 85 * 85;
+//            const uint divisor2 = 85 * 85;
+//            const uint divisor1 = 85;
+//            const int byte3 = 256 * 256 * 256;
+//            const int byte2 = 256 * 256;
+//            const int byte1 = 256;
+//
+//            // Get pointers to avoid unnecessary range checking
+//            fixed (char* z85Encoder = Map.Encoder)
+//            fixed (char* z85Dest = destination)
+//            {
+//                while (byteNbr < size)
+//                {
+//                    // Accumulate value in base 256 (binary)
+//                    var value = (uint)(data[byteNbr + 0] * byte3 +
+//                                       data[byteNbr + 1] * byte2 +
+//                                       data[byteNbr + 2] * byte1 +
+//                                       data[byteNbr + 3]);
+//                    byteNbr += 4;
+//
+//                    //  Output value in base 85
+//                    z85Dest[charNbr + 0] = z85Encoder[value / divisor4 % 85];
+//                    z85Dest[charNbr + 1] = z85Encoder[value / divisor3 % 85];
+//                    z85Dest[charNbr + 2] = z85Encoder[value / divisor2 % 85];
+//                    z85Dest[charNbr + 3] = z85Encoder[value / divisor1 % 85];
+//                    z85Dest[charNbr + 4] = z85Encoder[value % 85];
+//                    charNbr += 5;
+//                }
+//            }
+//
+//            return destination;
+//        }
+
+
     }
 #else
     public static partial class Z85
