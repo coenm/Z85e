@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using CoenM.Encoding.Internals;
 using JetBrains.Annotations;
 
@@ -8,7 +7,7 @@ namespace CoenM.Encoding
     /// <summary>
     /// Z85 Extended Encoding library. Z85 Extended doesn't require the length of the bytes to be a multiple of 4.
     /// </summary>
-    public static class Z85Extended
+    public static partial class Z85Extended
     {
         /// <summary>
         /// Decode an encoded string into a byte array. Output size will roughly be 'length of <paramref name="input"/>' * 4 / 5.
@@ -18,7 +17,7 @@ namespace CoenM.Encoding
         /// <returns><c>null</c> when <paramref name="input"/> is null, otherwise bytes containing the decoded input string.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="input"/> is a multiple of 5 plus 1.</exception>
         [PublicAPI]
-        public static unsafe IEnumerable<byte> Decode([NotNull] string input)
+        public static unsafe byte[] Decode([NotNull] string input)
         {
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             // ReSharper disable once HeuristicUnreachableCode
@@ -34,7 +33,7 @@ namespace CoenM.Encoding
             // two chars are decoded to one byte
             // thee chars to two bytes
             // four chars to three bytes.
-            // threfore, remainder of one byte should not be possible.
+            // therefore, remainder of one byte should not be possible.
             if (remainder == 1)
                 throw new ArgumentException("Input length % 5 cannot be 1.");
 
@@ -78,7 +77,7 @@ namespace CoenM.Encoding
 
             value = 0;
             while (charNbr < size)
-                value = value * 85 + Map.Decoder[(byte) input[(int) charNbr++]];
+                value = value * 85 + Map.Decoder[(byte)input[(int)charNbr++]];
 
             // Take care of the remainder.
             var divisor = (uint)Math.Pow(256, extraBytes - 1);
@@ -159,7 +158,7 @@ namespace CoenM.Encoding
                 while (byteNbr < size)
                     value = value * 256 + data[byteNbr++];
 
-                var divisor = (uint) Math.Pow(85, remainder);
+                var divisor = (uint)Math.Pow(85, remainder);
                 while (divisor != 0)
                 {
                     z85Dest[charNbr++] = z85Encoder[value / divisor % 85];
