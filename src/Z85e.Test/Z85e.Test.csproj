@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFrameworks>net471;netcoreapp2.0;netcoreapp2.1</TargetFrameworks>
 <!--	<RuntimeFrameworkVersion>2.0.5</RuntimeFrameworkVersion> -->
     <IsPackable>false</IsPackable>
 <!--    <AllowUnsafeBlocks>True</AllowUnsafeBlocks> -->
@@ -12,7 +12,7 @@
     <!-- required for coverage-->
     <!-- see https://github.com/OpenCover/opencover/issues/636 -->
     <DebugType>full</DebugType>
-    <DebugSymbols>True</DebugSymbols>    
+    <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>
