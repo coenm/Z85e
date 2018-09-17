@@ -12,6 +12,8 @@
 
     public static partial class Z85
     {
+        private const int MaximumEncodeLength = (int.MaxValue / 5) * 4;
+
         /// <summary>
         /// Decode the span of UTF-8 encoded text represented as Z85 into binary data.
         /// If the input is not a multiple of 5, it will decode as much as it can, to the closest multiple of 5.
@@ -140,7 +142,7 @@
         /// - NeedMoreData - only if isFinalBlock is false, otherwise the output is padded if the input is not a multiple of 4
         /// It does not return InvalidData since that is not possible for Z85 encoding.</returns>
         [PublicAPI]
-        public static OperationStatus Encode(
+        public static unsafe OperationStatus Encode(
             ReadOnlySpan<byte> source,
             Span<char> destination,
             out int bytesConsumed,
@@ -150,6 +152,8 @@
             ref byte src = ref MemoryMarshal.GetReference(source);
             ref char dst = ref MemoryMarshal.GetReference(destination);
             ref char encoded = ref Map.Encoder[0];
+            char* destAddress = (char*)Unsafe.AsPointer(ref dst);
+
 
             int srcLength = source.Length;
             int destLength = destination.Length;
@@ -157,9 +161,15 @@
             int sourceIndex = 0;
             int destIndex = 0;
 
-            while (sourceIndex + 4 <= srcLength && destIndex + 5 <= destLength)
+            var maxSrcLength = srcLength;
+            var requiredDestLength = srcLength / 4 * 5;
+            if (requiredDestLength > destLength)
+                maxSrcLength = destLength / 5 * 4; // trim down maxSrcLength
+            maxSrcLength -= 4;
+
+            while (sourceIndex <= maxSrcLength)
             {
-                EncodeBlockSpan(source.Slice(sourceIndex, 4), destination.Slice(destIndex, 5), ref encoded);
+                EncodeBlockSpan(ref Unsafe.Add(ref src, sourceIndex), destAddress + destIndex, ref encoded);
                 sourceIndex += 4;
                 destIndex += 5;
             }
@@ -220,21 +230,24 @@
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void EncodeBlockSpan(ReadOnlySpan<byte> sourceFourBytes, Span<char> destinationFiveChars, ref char encodingMap)
+        private static unsafe void EncodeBlockSpan(ref byte sourceFourBytes, char* destination, ref char encodingMap)
         {
             const uint divisor4 = 85 * 85 * 85 * 85;
             const uint divisor3 = 85 * 85 * 85;
             const uint divisor2 = 85 * 85;
             const uint divisor1 = 85;
 
-            var value = (uint)((sourceFourBytes[0] << 24) + (sourceFourBytes[1] << 16) + (sourceFourBytes[2] << 8) + (sourceFourBytes[3] << 0));
+            var value = (uint)((sourceFourBytes << 24) +
+                               (Unsafe.Add(ref sourceFourBytes, 1) << 16) +
+                               (Unsafe.Add(ref sourceFourBytes, 2) << 8) +
+                               (Unsafe.Add(ref sourceFourBytes, 3) << 0));
 
             //  Output value in base 85
-            destinationFiveChars[0] = Unsafe.Add(ref encodingMap, (int)(value / divisor4 % 85));
-            destinationFiveChars[1] = Unsafe.Add(ref encodingMap, (int)(value / divisor3 % 85));
-            destinationFiveChars[2] = Unsafe.Add(ref encodingMap, (int)(value / divisor2 % 85));
-            destinationFiveChars[3] = Unsafe.Add(ref encodingMap, (int)(value / divisor1 % 85));
-            destinationFiveChars[4] = Unsafe.Add(ref encodingMap, (int)(value % 85));
+            Unsafe.Write(destination + 0, Unsafe.Add(ref encodingMap, (int)(value / divisor4 % 85)));
+            Unsafe.Write(destination + 1, Unsafe.Add(ref encodingMap, (int)(value / divisor3 % 85)));
+            Unsafe.Write(destination + 2, Unsafe.Add(ref encodingMap, (int)(value / divisor2 % 85)));
+            Unsafe.Write(destination + 3, Unsafe.Add(ref encodingMap, (int)(value / divisor1 % 85)));
+            Unsafe.Write(destination + 4, Unsafe.Add(ref encodingMap, (int)(value % 85)));
         }
 
 //        [MethodImpl(MethodImplOptions.AggressiveInlining)]
