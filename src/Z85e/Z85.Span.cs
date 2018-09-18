@@ -154,7 +154,6 @@
             ref char encoded = ref Map.Encoder[0];
             char* destAddress = (char*)Unsafe.AsPointer(ref dst);
 
-
             int srcLength = source.Length;
             int destLength = destination.Length;
 
@@ -207,12 +206,10 @@
                 charsWritten = destIndex;
                 return OperationStatus.Done;
             }
-            else
-            {
-                bytesConsumed = sourceIndex;
-                charsWritten = destIndex;
-                return OperationStatus.DestinationTooSmall;
-            }
+
+            bytesConsumed = sourceIndex;
+            charsWritten = destIndex;
+            return OperationStatus.DestinationTooSmall;
         }
 
         /// <summary>
