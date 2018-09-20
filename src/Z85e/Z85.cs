@@ -7,6 +7,7 @@ namespace CoenM.Encoding
     /// <summary>
     /// Z85 Encoding library
     /// </summary>
+    // ReSharper disable once PartialTypeWithSinglePart
     public static partial class Z85
     {
         /// <summary>
