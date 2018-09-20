@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace CoenM.Encoding
+﻿namespace CoenM.Encoding
 {
 #if FEATURE_SPAN
 
@@ -14,8 +12,6 @@ namespace CoenM.Encoding
 
     public static partial class Z85
     {
-        private const int MaximumEncodeLength = (int.MaxValue / 5) * 4;
-
         /// <summary>
         /// Decode the span of UTF-8 encoded text represented as Z85 into binary data.
         /// If the input is not a multiple of 5, it will decode as much as it can, to the closest multiple of 5.
@@ -33,7 +29,7 @@ namespace CoenM.Encoding
         /// - InvalidData - if the input contains bytes outside of the expected Z85 range, or if it contains invalid/more than two padding characters,
         ///   or if the input is incomplete (i.e. not a multiple of 4) and isFinalBlock is true.</returns>
         [PublicAPI]
-        public static unsafe OperationStatus Decode(
+        public static OperationStatus Decode(
             ReadOnlySpan<char> source,
             Span<byte> destination,
             out int charsConsumed,
@@ -43,7 +39,6 @@ namespace CoenM.Encoding
             ref char src = ref MemoryMarshal.GetReference(source);
             ref byte dst = ref MemoryMarshal.GetReference(destination);
             ref byte decoder = ref Map.Decoder[0];
-            byte* destAddress = (byte*) Unsafe.AsPointer(ref dst);
 
             int srcLength = source.Length;
             int destLength = destination.Length;
@@ -51,14 +46,12 @@ namespace CoenM.Encoding
             int sourceIndex = 0;
             int destIndex = 0;
 
-            //?
-            if (source.Length == 0)
+            if (srcLength == 0)
             {
                 charsConsumed = sourceIndex;
                 bytesWritten = destIndex;
                 return OperationStatus.Done;
             }
-            //?
 
             var maxSrcLength = srcLength;
             var requiredDestLength = srcLength / 5 * 4;
@@ -69,7 +62,7 @@ namespace CoenM.Encoding
 
             while (sourceIndex <= maxSrcLength)
             {
-                DecodeBlockSpan(ref Unsafe.Add(ref src, sourceIndex), destAddress + destIndex, ref decoder);
+                DecodeBlockSpan(ref Unsafe.Add(ref src, sourceIndex), ref Unsafe.Add(ref dst, destIndex), ref decoder);
                 sourceIndex += 5;
                 destIndex += 4;
             }
@@ -95,15 +88,7 @@ namespace CoenM.Encoding
                 return OperationStatus.Done;
             }
 
-            var srcCharsLeft = srcLength - sourceIndex;
-            if (srcCharsLeft <= 0 || srcCharsLeft >= 5)
-                throw new Exception();
-
-            var remainder = source.Length % 5;
-            if (srcCharsLeft != remainder)
-                throw new Exception();
-
-
+            var remainder = srcLength - sourceIndex; // should be 1 <= remainder < 5
             if (remainder == 1)
             {
                 // two chars are decoded to one byte
@@ -115,9 +100,8 @@ namespace CoenM.Encoding
                 return OperationStatus.InvalidData;
             }
 
-
             var endDecoded = Z85Extended.Decode(source.Slice(sourceIndex).ToString());
-            if (endDecoded.Length <= (destLength - destIndex))
+            if (endDecoded.Length <= destLength - destIndex)
             {
                 endDecoded.AsSpan().CopyTo(destination.Slice(destIndex));
                 destIndex += srcLength - sourceIndex - 1;
@@ -148,7 +132,7 @@ namespace CoenM.Encoding
         /// - NeedMoreData - only if isFinalBlock is false, otherwise the output is padded if the input is not a multiple of 4
         /// It does not return InvalidData since that is not possible for Z85 encoding.</returns>
         [PublicAPI]
-        public static unsafe OperationStatus Encode(
+        public static OperationStatus Encode(
             ReadOnlySpan<byte> source,
             Span<char> destination,
             out int bytesConsumed,
@@ -158,7 +142,6 @@ namespace CoenM.Encoding
             ref byte src = ref MemoryMarshal.GetReference(source);
             ref char dst = ref MemoryMarshal.GetReference(destination);
             ref char encoded = ref Map.Encoder[0];
-            char* destAddress = (char*)Unsafe.AsPointer(ref dst);
 
             var srcLength = source.Length;
             var destLength = destination.Length;
@@ -175,11 +158,10 @@ namespace CoenM.Encoding
 
             while (sourceIndex <= maxSrcLength)
             {
-                EncodeBlockSpan(ref Unsafe.Add(ref src, sourceIndex), destAddress + destIndex, ref encoded);
+                EncodeBlockSpan(ref Unsafe.Add(ref src, sourceIndex), ref Unsafe.Add(ref dst, destIndex), ref encoded);
                 sourceIndex += 4;
                 destIndex += 5;
             }
-
 
             if (destLength - destIndex < 5 && srcLength - sourceIndex >= 4)
             {
@@ -195,7 +177,6 @@ namespace CoenM.Encoding
                 return OperationStatus.NeedMoreData;
             }
 
-
             if (srcLength == sourceIndex)
             {
                 bytesConsumed = sourceIndex;
@@ -203,9 +184,8 @@ namespace CoenM.Encoding
                 return OperationStatus.Done;
             }
 
-
             var endEncoded = Z85Extended.Encode(source.Slice(sourceIndex).ToArray());
-            if (endEncoded.Length <= (destLength - destIndex))
+            if (endEncoded.Length <= destLength - destIndex)
             {
                 endEncoded.AsSpan().CopyTo(destination.Slice(destIndex));
                 destIndex += srcLength - sourceIndex + 1;
@@ -220,22 +200,8 @@ namespace CoenM.Encoding
             return OperationStatus.DestinationTooSmall;
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        [PublicAPI]
-        public static int CalculateDecodedSize(ReadOnlySpan<char> source)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-
-            return Z85Size.CalculateDecodedSize(source.Length);
-        }
-
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static unsafe void EncodeBlockSpan(ref byte sourceFourBytes, char* destination, ref char encodingMap)
+        private static unsafe void EncodeBlockSpan(ref byte sourceFourBytes, ref char destination, ref char z85Encoder)
         {
             const uint divisor4 = 85 * 85 * 85 * 85;
             const uint divisor3 = 85 * 85 * 85;
@@ -248,48 +214,29 @@ namespace CoenM.Encoding
                                (Unsafe.Add(ref sourceFourBytes, 3) << 0));
 
             //  Output value in base 85
-            Unsafe.Write(destination + 0, Unsafe.Add(ref encodingMap, (int)(value / divisor4 % 85)));
-            Unsafe.Write(destination + 1, Unsafe.Add(ref encodingMap, (int)(value / divisor3 % 85)));
-            Unsafe.Write(destination + 2, Unsafe.Add(ref encodingMap, (int)(value / divisor2 % 85)));
-            Unsafe.Write(destination + 3, Unsafe.Add(ref encodingMap, (int)(value / divisor1 % 85)));
-            Unsafe.Write(destination + 4, Unsafe.Add(ref encodingMap, (int)(value % 85)));
+            Unsafe.Add(ref destination, 0) = Unsafe.Add(ref z85Encoder, (int)(value / divisor4 % 85));
+            Unsafe.Add(ref destination, 1) = Unsafe.Add(ref z85Encoder, (int)(value / divisor3 % 85));
+            Unsafe.Add(ref destination, 2) = Unsafe.Add(ref z85Encoder, (int)(value / divisor2 % 85));
+            Unsafe.Add(ref destination, 3) = Unsafe.Add(ref z85Encoder, (int)(value / divisor1 % 85));
+            Unsafe.Add(ref destination, 4) = Unsafe.Add(ref z85Encoder, (int)(value % 85));
         }
 
-
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static unsafe void DecodeBlockSpan(ref char sourceFiveChars, byte* destination, ref byte z85Decoder)
+        private static void DecodeBlockSpan(ref char sourceFiveChars, ref byte destination, ref byte z85Decoder)
         {
-//            const uint divisor3 = 256 * 256 * 256;
-//            const uint divisor2 = 256 * 256;
-//            const uint divisor1 = 256;
-
-            uint value = 0;
-
             //  Accumulate value in base 85
-            value = value * 85 + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceFiveChars, 0));
+            uint value = Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceFiveChars, 0));
             value = value * 85 + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceFiveChars, 1));
             value = value * 85 + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceFiveChars, 2));
             value = value * 85 + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceFiveChars, 3));
             value = value * 85 + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceFiveChars, 4));
 
             //  Output value in base 256
-            Unsafe.Write(destination + 0, value >> 24);
-            Unsafe.Write(destination + 1, value >> 16);
-            Unsafe.Write(destination + 2, value >> 08);
-            Unsafe.Write(destination + 3, value >> 00);
-
-//            Unsafe.Write(destination + 0, (byte)(value / divisor3 % 256));
-//            Unsafe.Write(destination + 1, (byte)(value / divisor2 % 256));
-//            Unsafe.Write(destination + 2, (byte)(value / divisor1 % 256));
-//            Unsafe.Write(destination + 3, (byte)(value % 256));
+            Unsafe.Add(ref destination, 0) = (byte)(value >> 24);
+            Unsafe.Add(ref destination, 1) = (byte)(value >> 16);
+            Unsafe.Add(ref destination, 2) = (byte)(value >> 08);
+            Unsafe.Add(ref destination, 3) = (byte)(value >> 00);
         }
-
-
-    }
-#else
-    public static partial class Z85
-    {
     }
 #endif
 }
