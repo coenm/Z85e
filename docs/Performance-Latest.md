@@ -141,18 +141,19 @@ Frequency=2338344 Hz, Resolution=427.6531 ns, Timer=TSC
 
 ### Decoding
 
-|       Method |    Job |     Toolchain | Size |        Mean |        Error |       StdDev |  Gen 0 | Allocated |
-|------------- |------- |-------------- |----- |------------:|-------------:|-------------:|-------:|----------:|
-|    **Z85Decode** | **Core20** | **.NET Core 2.0** |  **120** |    **355.2 ns** |    **171.09 ns** |     **9.667 ns** | **0.0453** |     **144 B** |
-|    Z85Decode | Core21 | .NET Core 2.1 |  120 |    364.7 ns |    119.07 ns |     6.728 ns | 0.1497 |     472 B |
-|    Z85Decode | Net471 |  CsProjnet471 |  120 |    343.6 ns |    178.28 ns |    10.073 ns | 0.0453 |     144 B |
-|    **Z85Decode** | **Core20** | **.NET Core 2.0** | **6000** | **10,618.3 ns** |  **3,660.38 ns** |   **206.818 ns** | **1.9073** |    **6024 B** |
-|    Z85Decode | Core21 | .NET Core 2.1 | 6000 | 13,473.8 ns | 13,583.76 ns |   767.508 ns | 6.6528 |   21056 B |
-|    Z85Decode | Net471 |  CsProjnet471 | 6000 | 14,315.7 ns | 44,333.82 ns | 2,504.943 ns | 1.9073 |    6026 B |
-|              |        |               |      |             |              |              |        |           |
-| **Base64Decode** | **Core20** | **.NET Core 2.0** |  **120** |    **211.7 ns** |     **48.83 ns** |     **2.759 ns** |      **-** |       **0 B** |
-| Base64Decode | Core21 | .NET Core 2.1 |  120 |    188.4 ns |    144.93 ns |     8.189 ns |      - |       0 B |
-| Base64Decode | Net471 |  CsProjnet471 |  120 |    203.3 ns |    115.01 ns |     6.498 ns |      - |       0 B |
-| **Base64Decode** | **Core20** | **.NET Core 2.0** | **6000** |  **7,321.0 ns** |  **2,114.20 ns** |   **119.456 ns** |      **-** |       **0 B** |
-| Base64Decode | Core21 | .NET Core 2.1 | 6000 |  7,233.0 ns |  3,017.77 ns |   170.509 ns |      - |       0 B |
-| Base64Decode | Net471 |  CsProjnet471 | 6000 |  6,588.9 ns |  2,724.76 ns |   153.954 ns |      - |       0 B |
+|       Method |    Job |     Toolchain | Size |       Mean |       Error |     StdDev | Allocated |
+|------------- |------- |-------------- |----- |-----------:|------------:|-----------:|----------:|
+|    **Z85Decode** | **Core20** | **.NET Core 2.0** |  **120** |   **198.8 ns** |    **48.17 ns** |  **2.7218 ns** |       **0 B** |
+|    Z85Decode | Core21 | .NET Core 2.1 |  120 |   156.6 ns |    14.54 ns |  0.8217 ns |       0 B |
+|    Z85Decode | Net471 |  CsProjnet471 |  120 |   224.5 ns |    65.76 ns |  3.7154 ns |       0 B |
+|    **Z85Decode** | **Core20** | **.NET Core 2.0** | **6000** | **6,252.8 ns** |   **969.46 ns** | **54.7765 ns** |       **0 B** |
+|    Z85Decode | Core21 | .NET Core 2.1 | 6000 | 6,250.3 ns | 1,169.83 ns | 66.0978 ns |       0 B |
+|    Z85Decode | Net471 |  CsProjnet471 | 6000 | 7,473.6 ns |   997.31 ns | 56.3496 ns |       0 B |
+|              |        |               |      |            |             |            |           |
+| **Base64Decode** | **Core20** | **.NET Core 2.0** |  **120** |   **229.5 ns** |   **632.09 ns** | **35.7140 ns** |       **0 B** |
+| Base64Decode | Core21 | .NET Core 2.1 |  120 |   181.6 ns |   100.04 ns |  5.6523 ns |       0 B |
+| Base64Decode | Net471 |  CsProjnet471 |  120 |   186.7 ns |    16.94 ns |  0.9574 ns |       0 B |
+| **Base64Decode** | **Core20** | **.NET Core 2.0** | **6000** | **6,809.4 ns** |   **892.38 ns** | **50.4212 ns** |       **0 B** |
+| Base64Decode | Core21 | .NET Core 2.1 | 6000 | 6,766.0 ns |   691.63 ns | 39.0785 ns |       0 B |
+| Base64Decode | Net471 |  CsProjnet471 | 6000 | 6,291.7 ns |    66.56 ns |  3.7607 ns |       0 B |
+
