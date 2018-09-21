@@ -158,7 +158,7 @@
         {
             ref byte src = ref MemoryMarshal.GetReference(source);
             ref char dst = ref MemoryMarshal.GetReference(destination);
-            ref char encoded = ref Map.Encoder[0];
+            ref char encoder = ref Map.Encoder[0];
 
             var srcLength = source.Length;
             var destLength = destination.Length;
@@ -175,7 +175,7 @@
 
             while (sourceIndex <= maxSrcLength)
             {
-                EncodeBlockSpan(ref Unsafe.Add(ref src, sourceIndex), ref Unsafe.Add(ref dst, destIndex), ref encoded);
+                EncodeBlockSpan(ref Unsafe.Add(ref src, sourceIndex), ref Unsafe.Add(ref dst, destIndex), ref encoder);
                 sourceIndex += 4;
                 destIndex += 5;
             }
@@ -206,7 +206,7 @@
             {
                 if (nrBytesRemaining == 1)
                 {
-                    EncodePartialOneByteSpan(ref Unsafe.Add(ref src, sourceIndex), ref Unsafe.Add(ref dst, destIndex), ref encoded);
+                    EncodePartialOneByteSpan(ref Unsafe.Add(ref src, sourceIndex), ref Unsafe.Add(ref dst, destIndex), ref encoder);
                     bytesConsumed = sourceIndex + 1;
                     charsWritten = destIndex + 2;
                     return OperationStatus.Done;
@@ -214,7 +214,7 @@
 
                 if (nrBytesRemaining == 2)
                 {
-                    EncodePartialTwoBytesSpan(ref Unsafe.Add(ref src, sourceIndex), ref Unsafe.Add(ref dst, destIndex), ref encoded);
+                    EncodePartialTwoBytesSpan(ref Unsafe.Add(ref src, sourceIndex), ref Unsafe.Add(ref dst, destIndex), ref encoder);
                     bytesConsumed = sourceIndex + 2;
                     charsWritten = destIndex + 3;
                     return OperationStatus.Done;
@@ -222,7 +222,7 @@
 
                 if (nrBytesRemaining == 3)
                 {
-                    EncodePartialThreeBytesSpan(ref Unsafe.Add(ref src, sourceIndex), ref Unsafe.Add(ref dst, destIndex), ref encoded);
+                    EncodePartialThreeBytesSpan(ref Unsafe.Add(ref src, sourceIndex), ref Unsafe.Add(ref dst, destIndex), ref encoder);
                     bytesConsumed = sourceIndex + 3;
                     charsWritten = destIndex + 4;
                     return OperationStatus.Done;
