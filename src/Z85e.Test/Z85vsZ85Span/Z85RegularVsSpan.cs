@@ -5,7 +5,7 @@
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
 
-    using CoenM.Encoding.Test.TestInternals;
+    using TestInternals;
 
     using FluentAssertions;
 
@@ -25,7 +25,13 @@
             {
                 foreach (var seed in new[] { 42, 54, 550 })
                 {
+                    yield return new object[] { seed, 233 };
                     yield return new object[] { seed, 234 };
+                    yield return new object[] { seed, 235 };
+                    yield return new object[] { seed, 236 };
+                    yield return new object[] { seed, 237 };
+                    yield return new object[] { seed, 238 };
+                    yield return new object[] { seed, 239 };
                     yield return new object[] { seed, 229 };
                     yield return new object[] { seed, 801 };
                     yield return new object[] { seed, 8101 };
