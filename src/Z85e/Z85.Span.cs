@@ -27,7 +27,8 @@
         /// - DestinationTooSmall - if there is not enough space in the output span to fit the decoded input
         /// - NeedMoreData - only if isFinalBlock is false and the input is not a multiple of 5, otherwise the partial input would be considered as InvalidData
         /// - InvalidData - if the input contains bytes outside of the expected Z85 range, or if it contains invalid/more than two padding characters,
-        ///   or if the input is incomplete (i.e. not a multiple of 4) and isFinalBlock is true.</returns>
+        ///   or if the input is incomplete (i.e. not a multiple of 4) and isFinalBlock is true.
+        /// </returns>
         [PublicAPI]
         public static OperationStatus Decode(
             ReadOnlySpan<char> source,
@@ -88,8 +89,8 @@
                 return OperationStatus.Done;
             }
 
-            var remainder = srcLength - sourceIndex; // should be 1 <= remainder < 5
-            if (remainder == 1)
+            var nrCharactersRemaining = srcLength - sourceIndex; // should be: 1 <= charactersRemainingCount < 5
+            if (nrCharactersRemaining == 1)
             {
                 // two chars are decoded to one byte
                 // thee chars to two bytes
@@ -100,15 +101,31 @@
                 return OperationStatus.InvalidData;
             }
 
-            var endDecoded = Z85Extended.Decode(source.Slice(sourceIndex).ToString());
-            if (endDecoded.Length <= destLength - destIndex)
+            if (destLength - destIndex >= nrCharactersRemaining - 1)
             {
-                endDecoded.AsSpan().CopyTo(destination.Slice(destIndex));
-                destIndex += srcLength - sourceIndex - 1;
-                sourceIndex = srcLength;
-                charsConsumed = sourceIndex;
-                bytesWritten = destIndex;
-                return OperationStatus.Done;
+                if (nrCharactersRemaining == 2)
+                {
+                    DecodePartialTwoCharsSpan(ref Unsafe.Add(ref src, sourceIndex), ref Unsafe.Add(ref dst, destIndex), ref decoder);
+                    charsConsumed = sourceIndex + 2;
+                    bytesWritten = destIndex + 1;
+                    return OperationStatus.Done;
+                }
+
+                if (nrCharactersRemaining == 3)
+                {
+                    DecodePartialThreeCharsSpan(ref Unsafe.Add(ref src, sourceIndex), ref Unsafe.Add(ref dst, destIndex), ref decoder);
+                    charsConsumed = sourceIndex + 3;
+                    bytesWritten = destIndex + 2;
+                    return OperationStatus.Done;
+                }
+
+                if (nrCharactersRemaining == 4)
+                {
+                    DecodePartialFourCharsSpan(ref Unsafe.Add(ref src, sourceIndex), ref Unsafe.Add(ref dst, destIndex), ref decoder);
+                    charsConsumed = sourceIndex + 4;
+                    bytesWritten = destIndex + 3;
+                    return OperationStatus.Done;
+                }
             }
 
             charsConsumed = sourceIndex;
@@ -201,7 +218,7 @@
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static unsafe void EncodeBlockSpan(ref byte sourceFourBytes, ref char destination, ref char z85Encoder)
+        private static void EncodeBlockSpan(ref byte sourceFourBytes, ref char destination, ref char z85Encoder)
         {
             const uint divisor4 = 85 * 85 * 85 * 85;
             const uint divisor3 = 85 * 85 * 85;
@@ -222,6 +239,51 @@
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void EncodePartialThreeBytesSpan(ref byte sourceThreeBytes, ref char destination, ref char z85Encoder)
+        {
+            const uint divisor3 = 85 * 85 * 85;
+            const uint divisor2 = 85 * 85;
+            const uint divisor1 = 85;
+
+            var value = (uint)((sourceThreeBytes << 16) +
+                               (Unsafe.Add(ref sourceThreeBytes, 1) << 8) +
+                               (Unsafe.Add(ref sourceThreeBytes, 2) << 0));
+
+            //  Output value in base 85
+            Unsafe.Add(ref destination, 0) = Unsafe.Add(ref z85Encoder, (int)(value / divisor3 % 85));
+            Unsafe.Add(ref destination, 1) = Unsafe.Add(ref z85Encoder, (int)(value / divisor2 % 85));
+            Unsafe.Add(ref destination, 2) = Unsafe.Add(ref z85Encoder, (int)(value / divisor1 % 85));
+            Unsafe.Add(ref destination, 3) = Unsafe.Add(ref z85Encoder, (int)(value % 85));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void EncodePartialTwoBytesSpan(ref byte sourceTwoBytes, ref char destination, ref char z85Encoder)
+        {
+            const uint divisor2 = 85 * 85;
+            const uint divisor1 = 85;
+
+            var value = (uint)((sourceTwoBytes << 8) +
+                               Unsafe.Add(ref sourceTwoBytes, 1));
+
+            //  Output value in base 85
+            Unsafe.Add(ref destination, 0) = Unsafe.Add(ref z85Encoder, (int)(value / divisor2 % 85));
+            Unsafe.Add(ref destination, 1) = Unsafe.Add(ref z85Encoder, (int)(value / divisor1 % 85));
+            Unsafe.Add(ref destination, 2) = Unsafe.Add(ref z85Encoder, (int)(value % 85));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void EncodePartialOneByteSpan(ref byte sourceOneByte, ref char destination, ref char z85Encoder)
+        {
+            const uint divisor1 = 85;
+
+            var value = (uint)sourceOneByte;
+
+            //  Output value in base 85
+            Unsafe.Add(ref destination, 0) = Unsafe.Add(ref z85Encoder, (int)(value / divisor1 % 85));
+            Unsafe.Add(ref destination, 1) = Unsafe.Add(ref z85Encoder, (int)(value % 85));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void DecodeBlockSpan(ref char sourceFiveChars, ref byte destination, ref byte z85Decoder)
         {
             //  Accumulate value in base 85
@@ -234,8 +296,47 @@
             //  Output value in base 256
             Unsafe.Add(ref destination, 0) = (byte)(value >> 24);
             Unsafe.Add(ref destination, 1) = (byte)(value >> 16);
-            Unsafe.Add(ref destination, 2) = (byte)(value >> 08);
-            Unsafe.Add(ref destination, 3) = (byte)(value >> 00);
+            Unsafe.Add(ref destination, 2) = (byte)(value >> 8);
+            Unsafe.Add(ref destination, 3) = (byte)value;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void DecodePartialFourCharsSpan(ref char sourceFourChars, ref byte destination, ref byte z85Decoder)
+        {
+            //  Accumulate value in base 85
+            uint value = Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceFourChars, 0));
+            value = value * 85 + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceFourChars, 1));
+            value = value * 85 + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceFourChars, 2));
+            value = value * 85 + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceFourChars, 3));
+
+            //  Output value in base 256
+            Unsafe.Add(ref destination, 0) = (byte)(value >> 16);
+            Unsafe.Add(ref destination, 1) = (byte)(value >> 8);
+            Unsafe.Add(ref destination, 2) = (byte)value;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void DecodePartialThreeCharsSpan(ref char sourceThreeChars, ref byte destination, ref byte z85Decoder)
+        {
+            //  Accumulate value in base 85
+            uint value = Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceThreeChars, 0));
+            value = value * 85 + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceThreeChars, 1));
+            value = value * 85 + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceThreeChars, 2));
+
+            //  Output value in base 256
+            Unsafe.Add(ref destination, 0) = (byte)(value >> 8);
+            Unsafe.Add(ref destination, 1) = (byte)value;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void DecodePartialTwoCharsSpan(ref char sourceTwoChars, ref byte destination, ref byte z85Decoder)
+        {
+            //  Accumulate value in base 85
+            uint value = Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceTwoChars, 0));
+            value = value * 85 + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceTwoChars, 1));
+
+            //  Output value in base 256
+            Unsafe.Add(ref destination, 0) = (byte)value;
         }
     }
 #endif
