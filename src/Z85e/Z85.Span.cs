@@ -201,15 +201,32 @@
                 return OperationStatus.Done;
             }
 
-            var endEncoded = Z85Extended.Encode(source.Slice(sourceIndex).ToArray());
-            if (endEncoded.Length <= destLength - destIndex)
+            var nrBytesRemaining = srcLength - sourceIndex; // should be: 1 <= nrBytesRemaining < 4
+            if (destLength - destIndex >= nrBytesRemaining + 1)
             {
-                endEncoded.AsSpan().CopyTo(destination.Slice(destIndex));
-                destIndex += srcLength - sourceIndex + 1;
-                sourceIndex = srcLength;
-                bytesConsumed = sourceIndex;
-                charsWritten = destIndex;
-                return OperationStatus.Done;
+                if (nrBytesRemaining == 1)
+                {
+                    EncodePartialOneByteSpan(ref Unsafe.Add(ref src, sourceIndex), ref Unsafe.Add(ref dst, destIndex), ref encoded);
+                    bytesConsumed = sourceIndex + 1;
+                    charsWritten = destIndex + 2;
+                    return OperationStatus.Done;
+                }
+
+                if (nrBytesRemaining == 2)
+                {
+                    EncodePartialTwoBytesSpan(ref Unsafe.Add(ref src, sourceIndex), ref Unsafe.Add(ref dst, destIndex), ref encoded);
+                    bytesConsumed = sourceIndex + 2;
+                    charsWritten = destIndex + 3;
+                    return OperationStatus.Done;
+                }
+
+                if (nrBytesRemaining == 3)
+                {
+                    EncodePartialThreeBytesSpan(ref Unsafe.Add(ref src, sourceIndex), ref Unsafe.Add(ref dst, destIndex), ref encoded);
+                    bytesConsumed = sourceIndex + 3;
+                    charsWritten = destIndex + 4;
+                    return OperationStatus.Done;
+                }
             }
 
             bytesConsumed = sourceIndex;
