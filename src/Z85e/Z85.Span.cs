@@ -13,10 +13,10 @@
     public static partial class Z85
     {
         /// <summary>
-        /// Decode the span of UTF-8 encoded text represented as Z85 into binary data.
+        /// Decode the span of encoded text represented as Z85 into binary data.
         /// If the input is not a multiple of 5, it will decode as much as it can, to the closest multiple of 5.
         /// </summary>
-        /// <param name="source">The input span which contains UTF-8 encoded text in Z85 that needs to be decoded.</param>
+        /// <param name="source">The input span which contains encoded text in Z85 that needs to be decoded.</param>
         /// <param name="destination">The output span which contains the result of the operation, i.e. the decoded binary data.</param>
         /// <param name="charsConsumed">The number of input characters consumed during the operation. This can be used to slice the input for subsequent calls, if necessary.</param>
         /// <param name="bytesWritten">The number of bytes written into the output span. This can be used to slice the output for subsequent calls, if necessary.</param>
@@ -89,7 +89,7 @@
                 return OperationStatus.Done;
             }
 
-            var nrCharactersRemaining = srcLength - sourceIndex; // should be: 1 <= charactersRemainingCount < 5
+            var nrCharactersRemaining = srcLength - sourceIndex; // should be: [1 .. 5)
             if (nrCharactersRemaining == 1)
             {
                 // two chars are decoded to one byte
@@ -138,7 +138,7 @@
         /// Encode the span of binary data into text represented as Z85.
         /// </summary>
         /// <param name="source">The input span which contains binary data that needs to be encoded.</param>
-        /// <param name="destination">The output span which contains the result of the operation, i.e. the UTF-8 encoded text in Z85.</param>
+        /// <param name="destination">The output span which contains the result of the operation, i.e. the encoded text in Z85.</param>
         /// <param name="bytesConsumed">The number of input bytes consumed during the operation. This can be used to slice the input for subsequent calls, if necessary.</param>
         /// <param name="charsWritten">The number of characters written into the output span. This can be used to slice the output for subsequent calls, if necessary.</param>
         /// <param name="isFinalBlock"><c>True</c> (default) when the input span contains the entire data to encode.
@@ -201,7 +201,7 @@
                 return OperationStatus.Done;
             }
 
-            var nrBytesRemaining = srcLength - sourceIndex; // should be: 1 <= nrBytesRemaining < 4
+            var nrBytesRemaining = srcLength - sourceIndex; // should be: [1 .. 4)
             if (destLength - destIndex >= nrBytesRemaining + 1)
             {
                 if (nrBytesRemaining == 1)
@@ -232,6 +232,62 @@
             bytesConsumed = sourceIndex;
             charsWritten = destIndex;
             return OperationStatus.DestinationTooSmall;
+        }
+
+        /// <summary>
+        /// Calculate size required to decode the given source.
+        /// </summary>
+        /// <param name="source">Input to decode</param>
+        /// <returns>Byte length required to decode the given source <paramref name="source"/></returns>
+        [PublicAPI]
+        public static int GetDecodedSize(ReadOnlySpan<char> source) => GetDecodedSize(source.Length);
+
+        /// <summary>
+        /// Calculate size required to decode an encoded Span of size <paramref name="sourceLength"/>.
+        /// </summary>
+        /// <param name="sourceLength">Input size to decode. Should be positive.</param>
+        /// <returns>Byte length required to decode the given source length.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the specified <paramref name="sourceLength"/> is less then <c>0</c>.</exception>
+        [PublicAPI]
+        public static int GetDecodedSize(int sourceLength)
+        {
+            if (sourceLength < 0)
+                throw new ArgumentOutOfRangeException(nameof(sourceLength));
+
+            var remainder = sourceLength % 5;
+
+            if (remainder == 0)
+                return sourceLength / 5 * 4;
+
+            return sourceLength / 5 * 4 + remainder - 1;
+        }
+
+        /// <summary>
+        /// Calculate size required to encode the given source.
+        /// </summary>
+        /// <param name="source">Input to encode</param>
+        /// <returns>Character length required to encode the given source <paramref name="source"/></returns>
+        [PublicAPI]
+        public static int GetEncodedSize(ReadOnlySpan<byte> source) => GetEncodedSize(source.Length);
+
+        /// <summary>
+        /// Calculate size required to encode a Span of bytes of size <paramref name="sourceLength"/>.
+        /// </summary>
+        /// <param name="sourceLength">Input size to encode. Should be positive.</param>
+        /// <returns>Character length required to encode the given source length.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the specified <paramref name="sourceLength"/> is less then <c>0</c>.</exception>
+        [PublicAPI]
+        public static int GetEncodedSize(int sourceLength)
+        {
+            if (sourceLength < 0)
+                throw new ArgumentOutOfRangeException(nameof(sourceLength));
+
+            var remainder = sourceLength % 4;
+
+            if (remainder == 0)
+                return sourceLength / 4 * 5;
+
+            return sourceLength / 4 * 5 + remainder + 1;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
