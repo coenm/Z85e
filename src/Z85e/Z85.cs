@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using CoenM.Encoding.Internals;
 using JetBrains.Annotations;
 
@@ -8,8 +7,8 @@ namespace CoenM.Encoding
     /// <summary>
     /// Z85 Encoding library
     /// </summary>
-    /// <remarks>This implementation is heavily based on https://github.com/zeromq/rfc/blob/master/src/spec_32.c </remarks>
-    public static class Z85
+    // ReSharper disable once PartialTypeWithSinglePart
+    public static partial class Z85
     {
         /// <summary>
         /// Decode an encoded string into a byte array. Output size will be length of <paramref name="input"/> * 4 / 5.
@@ -19,7 +18,7 @@ namespace CoenM.Encoding
         /// <returns><c>null</c> when input is null, otherwise bytes containing the decoded input string.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when length of <paramref name="input"/> is not a multiple of 5.</exception>
         [PublicAPI]
-        public static unsafe IEnumerable<byte> Decode([NotNull] string input)
+        public static unsafe byte[] Decode([NotNull] string input)
         {
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             // ReSharper disable once HeuristicUnreachableCode
@@ -27,16 +26,10 @@ namespace CoenM.Encoding
                 return null;
 
             var len = input.Length;
-
-            //  Accepts only strings bounded to 5 bytes
-            if (len % 5 != 0)
-                throw new ArgumentOutOfRangeException(nameof(input), "Length of Input should be multiple of 5.");
-
-            var decodedSize = len * 4 / 5;
-            byte[] decoded = new byte[decodedSize];
-
-            int byteNbr = 0;
-            int charNbr = 0;
+            var decodedSize = Z85Size.CalculateDecodedSize(len);
+            var decoded = new byte[decodedSize];
+            var byteNbr = 0;
+            var charNbr = 0;
 
             const uint divisor3 = 256 * 256 * 256;
             const uint divisor2 = 256 * 256;
@@ -84,12 +77,7 @@ namespace CoenM.Encoding
                 return null;
 
             var size = data.Length;
-
-            //  Accepts only byte arrays bounded to 4 bytes
-            if (size % 4 != 0)
-                throw new ArgumentOutOfRangeException(nameof(data), "Data length should be multiple of 4.");
-
-            var encodedSize = size * 5 / 4;
+            var encodedSize = Z85Size.CalculateEncodedSize(size);
             var destination = new string('0', encodedSize);
             int charNbr = 0;
             int byteNbr = 0;
