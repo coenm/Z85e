@@ -262,6 +262,34 @@
             return sourceLength / 5 * 4 + remainder - 1;
         }
 
+        /// <summary>
+        /// Calculate size required to encode the given source.
+        /// </summary>
+        /// <param name="source">Input to encode</param>
+        /// <returns>Character length required to encode the given source <paramref name="source"/></returns>
+        [PublicAPI]
+        public static int GetEncodedSize(ReadOnlySpan<byte> source) => GetEncodedSize(source.Length);
+
+        /// <summary>
+        /// Calculate size required to encode a Span of bytes of size <paramref name="sourceLength"/>.
+        /// </summary>
+        /// <param name="sourceLength">Input size to encode. Should be positive.</param>
+        /// <returns>Character length required to encode the given source length.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the specified <paramref name="sourceLength"/> is less then <c>0</c>.</exception>
+        [PublicAPI]
+        public static int GetEncodedSize(int sourceLength)
+        {
+            if (sourceLength < 0)
+                throw new ArgumentOutOfRangeException(nameof(sourceLength));
+
+            var remainder = sourceLength % 4;
+
+            if (remainder == 0)
+                return sourceLength / 4 * 5;
+
+            return sourceLength / 4 * 5 + remainder + 1;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void EncodeBlockSpan(ref byte sourceFourBytes, ref char destination, ref char z85Encoder)
         {

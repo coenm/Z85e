@@ -24,6 +24,12 @@
   <member name="M:CoenM.Encoding.Z85.GetDecodedSize(System.ReadOnlySpan{System.Char})">
     <attribute ctor="M:JetBrains.Annotations.PublicAPIAttribute.#ctor" />
   </member>
+  <member name="M:CoenM.Encoding.Z85.GetEncodedSize(System.Int32)">
+    <attribute ctor="M:JetBrains.Annotations.PublicAPIAttribute.#ctor" />
+  </member>
+  <member name="M:CoenM.Encoding.Z85.GetEncodedSize(System.ReadOnlySpan{System.Byte})">
+    <attribute ctor="M:JetBrains.Annotations.PublicAPIAttribute.#ctor" />
+  </member>
   <member name="M:CoenM.Encoding.Z85Extended.Decode(System.String)">
     <attribute ctor="M:JetBrains.Annotations.PublicAPIAttribute.#ctor" />
     <parameter name="input">

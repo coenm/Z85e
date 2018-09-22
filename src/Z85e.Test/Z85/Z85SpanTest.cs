@@ -79,12 +79,52 @@ namespace CoenM.Encoding.Test.Z85
         [Theory]
         [InlineData(-1)]
         [InlineData(-108)]
-        public void GetDecodedSizeThrowsExceptionWhenInputSizeIsNegativeTest(int inputSize)
+        public void GetDecodedSize_ThrowsException_WhenInputSizeIsNegativeTest(int inputSize)
         {
             // arrange
 
             // act
             Action act = () => Sut.GetDecodedSize(inputSize);
+
+            // assert
+            act.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(1, 2)]
+        [InlineData(2, 3)]
+        [InlineData(3, 4)]
+        [InlineData(4, 5)]
+        [InlineData(5, 7)]
+        [InlineData(6, 8)]
+        [InlineData(7, 9)]
+        [InlineData(8, 10)]
+        [InlineData(9, 12)]
+        [InlineData(10, 13)]
+        public void GetEncodedSizeTest(int inputSize, int expectedOutput)
+        {
+            // arrange
+            Span<byte> input = new byte[inputSize];
+
+            // act
+            var result = Sut.GetEncodedSize(input);
+
+            // assert
+            result.Should().Be(expectedOutput);
+        }
+
+
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(-123)]
+        public void GetEncodedSize_ThrowsException_WhenInputSizeIsNegativeTest(int inputSize)
+        {
+            // arrange
+
+            // act
+            Action act = () => Sut.GetEncodedSize(inputSize);
 
             // assert
             act.Should().Throw<ArgumentOutOfRangeException>();
