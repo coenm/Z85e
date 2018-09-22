@@ -32,8 +32,8 @@ namespace Z85e.Benchmarks
             Add(MemoryDiagnoser.Default);
 
             // Columns
-            Add(DefaultColumnProviders.Instance);
-//            Add(new MinimalColumnProvider());
+//            Add(DefaultColumnProviders.Instance);
+            Add(new MinimalColumnProvider());
             Add(new ParamsColumnProvider());
             Add(new DiagnosersColumnProvider());
             // Add(RankColumn.Arabic);
@@ -61,8 +61,9 @@ namespace Z85e.Benchmarks
                 yield return TargetMethodColumn.Method;
 
                 //todo
-                foreach (var col in JobCharacteristicColumn.AllColumns)
+                foreach (var col in JobCharacteristicColumn.AllColumns.Where(x => x.ColumnName == "Job"))
                     yield return col;
+
 //                yield return new JobCharacteristicColumn(InfrastructureMode.ToolchainCharacteristic);
 
                 yield return StatisticColumn.Mean;
