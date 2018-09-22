@@ -22,12 +22,14 @@
         /// <param name="bytesWritten">The number of bytes written into the output span. This can be used to slice the output for subsequent calls, if necessary.</param>
         /// <param name="isFinalBlock">True (default) when the input span contains the entire data to decode.
         /// Set to false only if it is known that the input span contains partial data with more data to follow.</param>
-        /// <returns>It returns the OperationStatus enum values:
-        /// - Done - on successful processing of the entire input span
-        /// - DestinationTooSmall - if there is not enough space in the output span to fit the decoded input
-        /// - NeedMoreData - only if isFinalBlock is false and the input is not a multiple of 5, otherwise the partial input would be considered as InvalidData
-        /// - InvalidData - if the input contains bytes outside of the expected Z85 range, or if it contains invalid/more than two padding characters,
-        ///   or if the input is incomplete (i.e. not a multiple of 4) and isFinalBlock is true.
+        /// <returns>It returns the <see cref="OperationStatus" /> enum values:
+        ///   <list type="bullet">
+        ///     <item><term><see cref="OperationStatus.Done"/> - on successful processing of the entire input span</term></item>
+        ///     <item><term><see cref="OperationStatus.DestinationTooSmall"/> - if there is not enough space in the output span to fit the decoded input</term></item>
+        ///     <item><description><see cref="OperationStatus.NeedMoreData"/> - only if isFinalBlock is false and the input is not a multiple of 5, otherwise the partial input would be considered as InvalidData</description></item>
+        ///     <item><description><see cref="OperationStatus.InvalidData"/> - if the input contains bytes outside of the expected Z85 range, or if it contains invalid/more than two padding characters,
+        ///   or if the input is incomplete (i.e. not a multiple of 4) and isFinalBlock is true.</description></item>
+        ///   </list>
         /// </returns>
         [PublicAPI]
         public static OperationStatus Decode(
@@ -143,11 +145,14 @@
         /// <param name="charsWritten">The number of characters written into the output span. This can be used to slice the output for subsequent calls, if necessary.</param>
         /// <param name="isFinalBlock"><c>True</c> (default) when the input span contains the entire data to encode.
         /// Set to false only if it is known that the input span contains partial data with more data to follow.</param>
-        /// <returns>It returns the OperationStatus enum values:
-        /// - Done - on successful processing of the entire input span
-        /// - DestinationTooSmall - if there is not enough space in the output span to fit the encoded input
-        /// - NeedMoreData - only if isFinalBlock is false, otherwise the output is padded if the input is not a multiple of 4
-        /// It does not return InvalidData since that is not possible for Z85 encoding.</returns>
+        /// <returns>It returns the <see cref="OperationStatus" /> enum values:
+        ///   <list type="bullet">
+        ///     <item><term><see cref="OperationStatus.Done"/> - on successful processing of the entire input span</term></item>
+        ///     <item><term><see cref="OperationStatus.DestinationTooSmall"/> - if there is not enough space in the output span to fit the encoded input</term></item>
+        ///     <item><description><see cref="OperationStatus.NeedMoreData"/> - only if isFinalBlock is false, otherwise the output is padded if the input is not a multiple of 4</description></item>
+        ///   </list>
+        /// It does not return <see cref="OperationStatus.InvalidData"/> since that is not possible for Z85 encoding.
+        /// </returns>
         [PublicAPI]
         public static OperationStatus Encode(
             ReadOnlySpan<byte> source,
