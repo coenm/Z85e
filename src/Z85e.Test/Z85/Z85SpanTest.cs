@@ -1,3 +1,5 @@
+using FluentAssertions;
+
 namespace CoenM.Encoding.Test.Z85
 {
     using System;
@@ -47,6 +49,45 @@ namespace CoenM.Encoding.Test.Z85
 
             // assert
             expectedResult.AssertResult(result, bytesConsumed, charsWritten, destination);
+        }
+
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(1, 0)] // one remaining character cannot be decoded.
+        [InlineData(2, 1)]
+        [InlineData(3, 2)]
+        [InlineData(4, 3)]
+        [InlineData(5, 4)]
+        [InlineData(6, 4)] // one remaining character cannot be decoded.
+        [InlineData(7, 5)]
+        [InlineData(8, 6)]
+        [InlineData(9, 7)]
+        [InlineData(10, 8)]
+        public void GetDecodedSizeTest(int inputSize, int expectedOutput)
+        {
+            // arrange
+            Span<char> input = new char[inputSize];
+
+            // act
+            var result = Sut.GetDecodedSize(input);
+
+            // assert
+            result.Should().Be(expectedOutput);
+        }
+
+
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(-108)]
+        public void GetDecodedSizeThrowsExceptionWhenInputSizeIsNegativeTest(int inputSize)
+        {
+            // arrange
+
+            // act
+            Action act = () => Sut.GetDecodedSize(inputSize);
+
+            // assert
+            act.Should().Throw<ArgumentOutOfRangeException>();
         }
     }
 }
