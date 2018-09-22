@@ -9,8 +9,6 @@ namespace Z85e.Benchmarks
     {
         public static void Main(string[] args)
         {
-//            BenchmarkRunner.Run<EncodeZ85VsBase64>(new MainConfig());
-
             var switcher = new BenchmarkSwitcher(new[] {
                 typeof(EncodeZ85VsBase64),
                 typeof(DecodeZ85VsBase64),

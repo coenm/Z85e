@@ -11,7 +11,6 @@ namespace Z85e.Benchmarks.Benchmarks.Span
         private string _z85String;
         private byte[] _base64Bytes;
 
-
         [Params(120, 6000/*, 4000000*/)]
         public int Size { get; set; }
 

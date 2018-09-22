@@ -1,4 +1,4 @@
-#  Performance latest
+#  Performance version 1.2.0
 
 ## Configuration 
 
