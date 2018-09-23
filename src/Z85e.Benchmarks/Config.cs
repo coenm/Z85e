@@ -8,6 +8,7 @@ using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Reports;
+using BenchmarkDotNet.Toolchains;
 using BenchmarkDotNet.Toolchains.CsProj;
 
 namespace Z85e.Benchmarks
@@ -23,7 +24,6 @@ namespace Z85e.Benchmarks
             var defaultJob = Job.ShortRun.With(Platform.X64);
 
             // Toolchain
-            // Add(defaultJob.With(CsProjClassicNetToolchain.Net461).WithId("Net461"));
             Add(defaultJob.With(CsProjClassicNetToolchain.Net471).WithId("Net471"));
             Add(defaultJob.With(CsProjCoreToolchain.NetCoreApp20).WithId("Core20"));
             Add(defaultJob.With(CsProjCoreToolchain.NetCoreApp21).WithId("Core21"));
@@ -32,7 +32,7 @@ namespace Z85e.Benchmarks
             Add(MemoryDiagnoser.Default);
 
             // Columns
-            // Add(DefaultColumnProviders.Instance);
+//            Add(DefaultColumnProviders.Instance);
             Add(new MinimalColumnProvider());
             Add(new ParamsColumnProvider());
             Add(new DiagnosersColumnProvider());
@@ -59,7 +59,13 @@ namespace Z85e.Benchmarks
             {
                 yield return CategoriesColumn.Default;
                 yield return TargetMethodColumn.Method;
-                yield return new JobCharacteristicColumn(InfrastructureMode.ToolchainCharacteristic);
+
+                //todo
+                foreach (var col in JobCharacteristicColumn.AllColumns.Where(x => x.ColumnName == "Job"))
+                    yield return col;
+
+//                yield return new JobCharacteristicColumn(InfrastructureMode.ToolchainCharacteristic);
+
                 yield return StatisticColumn.Mean;
             }
         }
@@ -68,7 +74,7 @@ namespace Z85e.Benchmarks
         private class ParamsColumnProvider : IColumnProvider
         {
             public IEnumerable<IColumn> GetColumns(Summary summary) => summary
-                .Benchmarks
+                .BenchmarksCases
                 .SelectMany(b => b.Parameters.Items.Select(item => item.Name))
                 .Distinct()
                 .Select(name => new ParamColumn(name));

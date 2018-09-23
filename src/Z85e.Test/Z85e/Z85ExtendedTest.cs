@@ -1,13 +1,12 @@
 namespace CoenM.Encoding.Test.Z85e
 {
-    using Xunit.Categories;
-
     using System;
-    using System.Security.Cryptography;
 
     using CoenM.Encoding.Test.TestData;
+    using CoenM.Encoding.Test.TestInternals;
 
     using Xunit;
+    using Xunit.Categories;
 
     using Sut = Encoding.Z85Extended;
 
@@ -86,29 +85,13 @@ namespace CoenM.Encoding.Test.Z85e
         public void StressTest()
         {
             // arrange
-            var bytes = CreatePseudoRandomByteArray(1024 * 1024 * 300, 2343429);
+            var bytes = MyData.CreatePseudoRandomByteArray(1024 * 1024 * 300, 2343429);
 
             // act
             var result = Sut.Encode(bytes);
 
             // assert
-            Assert.Equal("Q*}EDu2563cEvhD{]baI.r&ub^P[heR9UY=fIwkM", CreateSha256Z85Encoded(result));
-        }
-
-        private static string CreateSha256Z85Encoded(string input)
-        {
-            var bytes = System.Text.Encoding.Unicode.GetBytes(input);
-            var hashstring = new SHA256Managed();
-            return Sut.Encode(hashstring.ComputeHash(bytes));
-        }
-
-        private static byte[] CreatePseudoRandomByteArray(uint size, int seed)
-        {
-            var random = new Random(seed);
-            var result = new byte[size];
-            for (var i = 0; i < size; i++)
-                result[i] = (byte) random.Next(0, 255);
-            return result;
+            Assert.Equal("pGPIAV1q2bYm0H4H+KkYxsHtH+bSXSZipUIPoDBLpQ8=", MyData.CreateSha256Base64Encoded(result));
         }
     }
 }
