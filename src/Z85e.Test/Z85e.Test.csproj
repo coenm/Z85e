@@ -8,7 +8,7 @@
     <RootNamespace>Z85e.Encoding.Z85e.Test</RootNamespace>
     <AssemblyName>CoenM.Encoding.Z85e.Test</AssemblyName>
     <LangVersion>7.3</LangVersion>
-
+    <CodeAnalysisRuleSet>..\..\Z85e.ruleset</CodeAnalysisRuleSet>
     <RootNamespace>CoenM.Encoding.Test</RootNamespace>
   </PropertyGroup>
 
@@ -24,6 +24,13 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta009">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>    
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="..\..\stylecop.json" /> 
   </ItemGroup>
 
   <ItemGroup>

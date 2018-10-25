@@ -1,8 +1,8 @@
-﻿using System;
-using System.Linq;
-
-namespace CoenM.Encoding.Test.TestData
+﻿namespace CoenM.Encoding.Test.TestData
 {
+    using System;
+    using System.Linq;
+
     internal static class Z85eSampleData
     {
         public static string GetHelloString(int charCount)

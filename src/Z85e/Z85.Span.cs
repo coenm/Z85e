@@ -2,13 +2,13 @@
 {
 #if FEATURE_SPAN
 
-    using System.Runtime.CompilerServices;
-    using System.Runtime.InteropServices;
-    using JetBrains.Annotations;
     using System;
     using System.Buffers;
+    using System.Runtime.CompilerServices;
+    using System.Runtime.InteropServices;
 
-    using Internals;
+    using CoenM.Encoding.Internals;
+    using JetBrains.Annotations;
 
     public static partial class Z85
     {
@@ -135,7 +135,6 @@
             return OperationStatus.DestinationTooSmall;
         }
 
-
         /// <summary>
         /// Encode the span of binary data into text represented as Z85.
         /// </summary>
@@ -242,8 +241,8 @@
         /// <summary>
         /// Calculate size required to decode the given source.
         /// </summary>
-        /// <param name="source">Input to decode</param>
-        /// <returns>Byte length required to decode the given source <paramref name="source"/></returns>
+        /// <param name="source">Input to decode.</param>
+        /// <returns>Byte length required to decode the given source <paramref name="source"/>.</returns>
         [PublicAPI]
         public static int GetDecodedSize(ReadOnlySpan<char> source) => GetDecodedSize(source.Length);
 
@@ -264,14 +263,14 @@
             if (remainder == 0)
                 return sourceLength / 5 * 4;
 
-            return sourceLength / 5 * 4 + remainder - 1;
+            return (sourceLength / 5 * 4) + remainder - 1;
         }
 
         /// <summary>
         /// Calculate size required to encode the given source.
         /// </summary>
-        /// <param name="source">Input to encode</param>
-        /// <returns>Character length required to encode the given source <paramref name="source"/></returns>
+        /// <param name="source">Input to encode.</param>
+        /// <returns>Character length required to encode the given source <paramref name="source"/>.</returns>
         [PublicAPI]
         public static int GetEncodedSize(ReadOnlySpan<byte> source) => GetEncodedSize(source.Length);
 
@@ -292,7 +291,7 @@
             if (remainder == 0)
                 return sourceLength / 4 * 5;
 
-            return sourceLength / 4 * 5 + remainder + 1;
+            return (sourceLength / 4 * 5) + remainder + 1;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -308,11 +307,11 @@
                                (Unsafe.Add(ref sourceFourBytes, 2) << 8) +
                                (Unsafe.Add(ref sourceFourBytes, 3) << 0));
 
-            //  Output value in base 85
-            Unsafe.Add(ref destination, 0) = Unsafe.Add(ref z85Encoder, (int)(value / divisor4 % 85));
-            Unsafe.Add(ref destination, 1) = Unsafe.Add(ref z85Encoder, (int)(value / divisor3 % 85));
-            Unsafe.Add(ref destination, 2) = Unsafe.Add(ref z85Encoder, (int)(value / divisor2 % 85));
-            Unsafe.Add(ref destination, 3) = Unsafe.Add(ref z85Encoder, (int)(value / divisor1 % 85));
+            // Output value in base 85
+            Unsafe.Add(ref destination, 0) = Unsafe.Add(ref z85Encoder, (int)((value / divisor4) % 85));
+            Unsafe.Add(ref destination, 1) = Unsafe.Add(ref z85Encoder, (int)((value / divisor3) % 85));
+            Unsafe.Add(ref destination, 2) = Unsafe.Add(ref z85Encoder, (int)((value / divisor2) % 85));
+            Unsafe.Add(ref destination, 3) = Unsafe.Add(ref z85Encoder, (int)((value / divisor1) % 85));
             Unsafe.Add(ref destination, 4) = Unsafe.Add(ref z85Encoder, (int)(value % 85));
         }
 
@@ -327,10 +326,10 @@
                                (Unsafe.Add(ref sourceThreeBytes, 1) << 8) +
                                (Unsafe.Add(ref sourceThreeBytes, 2) << 0));
 
-            //  Output value in base 85
-            Unsafe.Add(ref destination, 0) = Unsafe.Add(ref z85Encoder, (int)(value / divisor3 % 85));
-            Unsafe.Add(ref destination, 1) = Unsafe.Add(ref z85Encoder, (int)(value / divisor2 % 85));
-            Unsafe.Add(ref destination, 2) = Unsafe.Add(ref z85Encoder, (int)(value / divisor1 % 85));
+            // Output value in base 85
+            Unsafe.Add(ref destination, 0) = Unsafe.Add(ref z85Encoder, (int)((value / divisor3) % 85));
+            Unsafe.Add(ref destination, 1) = Unsafe.Add(ref z85Encoder, (int)((value / divisor2) % 85));
+            Unsafe.Add(ref destination, 2) = Unsafe.Add(ref z85Encoder, (int)((value / divisor1) % 85));
             Unsafe.Add(ref destination, 3) = Unsafe.Add(ref z85Encoder, (int)(value % 85));
         }
 
@@ -343,9 +342,9 @@
             var value = (uint)((sourceTwoBytes << 8) +
                                Unsafe.Add(ref sourceTwoBytes, 1));
 
-            //  Output value in base 85
-            Unsafe.Add(ref destination, 0) = Unsafe.Add(ref z85Encoder, (int)(value / divisor2 % 85));
-            Unsafe.Add(ref destination, 1) = Unsafe.Add(ref z85Encoder, (int)(value / divisor1 % 85));
+            // Output value in base 85
+            Unsafe.Add(ref destination, 0) = Unsafe.Add(ref z85Encoder, (int)((value / divisor2) % 85));
+            Unsafe.Add(ref destination, 1) = Unsafe.Add(ref z85Encoder, (int)((value / divisor1) % 85));
             Unsafe.Add(ref destination, 2) = Unsafe.Add(ref z85Encoder, (int)(value % 85));
         }
 
@@ -356,22 +355,22 @@
 
             var value = (uint)sourceOneByte;
 
-            //  Output value in base 85
-            Unsafe.Add(ref destination, 0) = Unsafe.Add(ref z85Encoder, (int)(value / divisor1 % 85));
+            // Output value in base 85
+            Unsafe.Add(ref destination, 0) = Unsafe.Add(ref z85Encoder, (int)((value / divisor1) % 85));
             Unsafe.Add(ref destination, 1) = Unsafe.Add(ref z85Encoder, (int)(value % 85));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void DecodeBlockSpan(ref char sourceFiveChars, ref byte destination, ref byte z85Decoder)
         {
-            //  Accumulate value in base 85
+            // Accumulate value in base 85
             uint value = Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceFiveChars, 0));
-            value = value * 85 + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceFiveChars, 1));
-            value = value * 85 + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceFiveChars, 2));
-            value = value * 85 + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceFiveChars, 3));
-            value = value * 85 + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceFiveChars, 4));
+            value = (value * 85) + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceFiveChars, 1));
+            value = (value * 85) + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceFiveChars, 2));
+            value = (value * 85) + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceFiveChars, 3));
+            value = (value * 85) + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceFiveChars, 4));
 
-            //  Output value in base 256
+            // Output value in base 256
             Unsafe.Add(ref destination, 0) = (byte)(value >> 24);
             Unsafe.Add(ref destination, 1) = (byte)(value >> 16);
             Unsafe.Add(ref destination, 2) = (byte)(value >> 8);
@@ -381,13 +380,13 @@
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void DecodePartialFourCharsSpan(ref char sourceFourChars, ref byte destination, ref byte z85Decoder)
         {
-            //  Accumulate value in base 85
+            // Accumulate value in base 85
             uint value = Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceFourChars, 0));
-            value = value * 85 + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceFourChars, 1));
-            value = value * 85 + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceFourChars, 2));
-            value = value * 85 + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceFourChars, 3));
+            value = (value * 85) + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceFourChars, 1));
+            value = (value * 85) + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceFourChars, 2));
+            value = (value * 85) + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceFourChars, 3));
 
-            //  Output value in base 256
+            // Output value in base 256
             Unsafe.Add(ref destination, 0) = (byte)(value >> 16);
             Unsafe.Add(ref destination, 1) = (byte)(value >> 8);
             Unsafe.Add(ref destination, 2) = (byte)value;
@@ -396,12 +395,12 @@
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void DecodePartialThreeCharsSpan(ref char sourceThreeChars, ref byte destination, ref byte z85Decoder)
         {
-            //  Accumulate value in base 85
+            // Accumulate value in base 85
             uint value = Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceThreeChars, 0));
-            value = value * 85 + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceThreeChars, 1));
-            value = value * 85 + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceThreeChars, 2));
+            value = (value * 85) + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceThreeChars, 1));
+            value = (value * 85) + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceThreeChars, 2));
 
-            //  Output value in base 256
+            // Output value in base 256
             Unsafe.Add(ref destination, 0) = (byte)(value >> 8);
             Unsafe.Add(ref destination, 1) = (byte)value;
         }
@@ -409,11 +408,11 @@
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void DecodePartialTwoCharsSpan(ref char sourceTwoChars, ref byte destination, ref byte z85Decoder)
         {
-            //  Accumulate value in base 85
+            // Accumulate value in base 85
             uint value = Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceTwoChars, 0));
-            value = value * 85 + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceTwoChars, 1));
+            value = (value * 85) + Unsafe.Add(ref z85Decoder, Unsafe.Add(ref sourceTwoChars, 1));
 
-            //  Output value in base 256
+            // Output value in base 256
             Unsafe.Add(ref destination, 0) = (byte)value;
         }
     }

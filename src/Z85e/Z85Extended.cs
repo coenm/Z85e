@@ -1,9 +1,10 @@
-﻿using System;
-using CoenM.Encoding.Internals;
-using JetBrains.Annotations;
-
-namespace CoenM.Encoding
+﻿namespace CoenM.Encoding
 {
+    using System;
+
+    using CoenM.Encoding.Internals;
+    using JetBrains.Annotations;
+
     /// <summary>
     /// Z85 Extended Encoding library. Z85 Extended doesn't require the length of the bytes to be a multiple of 4.
     /// </summary>
@@ -38,7 +39,7 @@ namespace CoenM.Encoding
                 throw new ArgumentException("Input length % 5 cannot be 1.");
 
             var extraBytes = remainder - 1;
-            var decodedSize = (int)((size - extraBytes) * 4 / 5 + extraBytes);
+            var decodedSize = (int)(((size - extraBytes) * 4 / 5) + extraBytes);
 
             var decoded = new byte[decodedSize];
 
@@ -58,18 +59,18 @@ namespace CoenM.Encoding
             {
                 while (charNbr < size2)
                 {
-                    //  Accumulate value in base 85
+                    // Accumulate value in base 85
                     value = z85Decoder[(byte)src[charNbr]];
-                    value = value * 85 + z85Decoder[(byte)src[charNbr + 1]];
-                    value = value * 85 + z85Decoder[(byte)src[charNbr + 2]];
-                    value = value * 85 + z85Decoder[(byte)src[charNbr + 3]];
-                    value = value * 85 + z85Decoder[(byte)src[charNbr + 4]];
+                    value = (value * 85) + z85Decoder[(byte)src[charNbr + 1]];
+                    value = (value * 85) + z85Decoder[(byte)src[charNbr + 2]];
+                    value = (value * 85) + z85Decoder[(byte)src[charNbr + 3]];
+                    value = (value * 85) + z85Decoder[(byte)src[charNbr + 4]];
                     charNbr += 5;
 
-                    //  Output value in base 256
-                    decoded[byteNbr + 0] = (byte)(value / divisor3 % 256);
-                    decoded[byteNbr + 1] = (byte)(value / divisor2 % 256);
-                    decoded[byteNbr + 2] = (byte)(value / divisor1 % 256);
+                    // Output value in base 256
+                    decoded[byteNbr + 0] = (byte)((value / divisor3) % 256);
+                    decoded[byteNbr + 1] = (byte)((value / divisor2) % 256);
+                    decoded[byteNbr + 2] = (byte)((value / divisor1) % 256);
                     decoded[byteNbr + 3] = (byte)(value % 256);
                     byteNbr += 4;
                 }
@@ -77,13 +78,13 @@ namespace CoenM.Encoding
 
             value = 0;
             while (charNbr < size)
-                value = value * 85 + Map.Decoder[(byte)input[(int)charNbr++]];
+                value = (value * 85) + Map.Decoder[(byte)input[(int)charNbr++]];
 
             // Take care of the remainder.
             var divisor = (uint)Math.Pow(256, extraBytes - 1);
             while (divisor != 0)
             {
-                decoded[byteNbr++] = (byte)(value / divisor % 256);
+                decoded[byteNbr++] = (byte)((value / divisor) % 256);
                 divisor /= 256;
             }
 
@@ -114,7 +115,7 @@ namespace CoenM.Encoding
             // three byte -> four chars
             var extraChars = remainder + 1;
 
-            var encodedSize = (size - remainder) * 5 / 4 + extraChars;
+            var encodedSize = ((size - remainder) * 5 / 4) + extraChars;
             var destination = new string('0', encodedSize);
             uint charNbr = 0;
             uint byteNbr = 0;
@@ -137,31 +138,30 @@ namespace CoenM.Encoding
                 while (byteNbr < size2)
                 {
                     // Accumulate value in base 256 (binary)
-                    value = (uint)(data[byteNbr + 0] * byte3 +
-                                   data[byteNbr + 1] * byte2 +
-                                   data[byteNbr + 2] * byte1 +
+                    value = (uint)((data[byteNbr + 0] * byte3) +
+                                   (data[byteNbr + 1] * byte2) +
+                                   (data[byteNbr + 2] * byte1) +
                                    data[byteNbr + 3]);
                     byteNbr += 4;
 
-                    //  Output value in base 85
-                    z85Dest[charNbr + 0] = z85Encoder[value / divisor4 % 85];
-                    z85Dest[charNbr + 1] = z85Encoder[value / divisor3 % 85];
-                    z85Dest[charNbr + 2] = z85Encoder[value / divisor2 % 85];
-                    z85Dest[charNbr + 3] = z85Encoder[value / divisor1 % 85];
+                    // Output value in base 85
+                    z85Dest[charNbr + 0] = z85Encoder[(value / divisor4) % 85];
+                    z85Dest[charNbr + 1] = z85Encoder[(value / divisor3) % 85];
+                    z85Dest[charNbr + 2] = z85Encoder[(value / divisor2) % 85];
+                    z85Dest[charNbr + 3] = z85Encoder[(value / divisor1) % 85];
                     z85Dest[charNbr + 4] = z85Encoder[value % 85];
                     charNbr += 5;
                 }
 
-
                 // Take care of the remainder.
                 value = 0;
                 while (byteNbr < size)
-                    value = value * 256 + data[byteNbr++];
+                    value = (value * 256) + data[byteNbr++];
 
                 var divisor = (uint)Math.Pow(85, remainder);
                 while (divisor != 0)
                 {
-                    z85Dest[charNbr++] = z85Encoder[value / divisor % 85];
+                    z85Dest[charNbr++] = z85Encoder[(value / divisor) % 85];
                     divisor /= 85;
                 }
             }

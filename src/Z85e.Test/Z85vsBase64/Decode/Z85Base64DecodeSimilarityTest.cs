@@ -1,16 +1,16 @@
-﻿using FluentAssertions;
-using Xunit;
-using Xunit.Abstractions;
-
-namespace CoenM.Encoding.Test.Z85vsBase64.Decode
+﻿namespace CoenM.Encoding.Test.Z85vsBase64.Decode
 {
+    using FluentAssertions;
+    using Xunit;
+    using Xunit.Abstractions;
+
     public class Z85Base64DecodeSimilarityTest
     {
-        private readonly ITestOutputHelper _output;
+        private readonly ITestOutputHelper output;
 
         public Z85Base64DecodeSimilarityTest(ITestOutputHelper output)
         {
-            _output = output;
+            this.output = output;
         }
 
         [Theory]
@@ -31,23 +31,23 @@ namespace CoenM.Encoding.Test.Z85vsBase64.Decode
 
         private void WritePreTestLog(Z85DecodeScenario z85Scenario, Base64DecodeScenario base64Scenario)
         {
-            _output.WriteLine("Z85 decode scenario:");
-            _output.WriteLine(z85Scenario.ToString());
-            _output.WriteLine(string.Empty);
-            _output.WriteLine("Base64 decode scenario:");
-            _output.WriteLine(base64Scenario.ToString());
+            output.WriteLine("Z85 decode scenario:");
+            output.WriteLine(z85Scenario.ToString());
+            output.WriteLine(string.Empty);
+            output.WriteLine("Base64 decode scenario:");
+            output.WriteLine(base64Scenario.ToString());
         }
 
         private void WritePostTestLog(Z85Base64DecodeResult z85Result, Z85Base64DecodeResult base64Result)
         {
-            _output.WriteLine(string.Empty);
-            _output.WriteLine("---------------------------------");
-            _output.WriteLine(string.Empty);
-            _output.WriteLine("Z85 decode result:");
-            _output.WriteLine(z85Result.ToString());
-            _output.WriteLine(string.Empty);
-            _output.WriteLine("Base64 decode result:");
-            _output.WriteLine(base64Result.ToString());
+            output.WriteLine(string.Empty);
+            output.WriteLine("---------------------------------");
+            output.WriteLine(string.Empty);
+            output.WriteLine("Z85 decode result:");
+            output.WriteLine(z85Result.ToString());
+            output.WriteLine(string.Empty);
+            output.WriteLine("Base64 decode result:");
+            output.WriteLine(base64Result.ToString());
         }
     }
 }
