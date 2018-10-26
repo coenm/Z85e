@@ -5,7 +5,7 @@
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
 
-    using TestInternals;
+    using CoenM.Encoding.Test.TestInternals;
 
     using FluentAssertions;
 
@@ -13,7 +13,7 @@
 
     using Xunit;
 
-    using Z85 = Encoding.Z85;
+    using Z85 = CoenM.Encoding.Z85;
 
     [SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "XUnit requires public properties to be used as data providers for tests.")]
     public class Z85RegularVsSpan

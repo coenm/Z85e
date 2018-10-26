@@ -10,6 +10,7 @@
     <Optimize>true</Optimize>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <IsPackable>false</IsPackable>
+    <CodeAnalysisRuleSet>..\..\Z85e.ruleset</CodeAnalysisRuleSet>    
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)'=='net461'">
@@ -20,7 +21,14 @@
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.11.1" />
     <PackageReference Include="System.Memory" Version="4.5.1" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta009">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="..\..\stylecop.json" /> 
+  </ItemGroup>  
 
     <ItemGroup>
       <ProjectReference Include="..\Z85e\Z85e.csproj" />

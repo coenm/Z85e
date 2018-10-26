@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-using Xunit;
-
-namespace CoenM.Encoding.Test.Z85vsBase64.Decode
+﻿namespace CoenM.Encoding.Test.Z85vsBase64.Decode
 {
+    using System.Collections.Generic;
+
+    using Xunit;
+
     internal class Z85Base64DecodeScenarios : TheoryData<Z85DecodeScenario, Base64DecodeScenario>
     {
         public Z85Base64DecodeScenarios()
@@ -20,33 +21,53 @@ namespace CoenM.Encoding.Test.Z85vsBase64.Decode
             };
 
             foreach (var encodedChars in encodedCharsCollection)
-            foreach (var isFinalBlock in new[] {true, false})
             {
-                Add(
-                    new Z85DecodeScenario(encodedChars.Z85, isFinalBlock, 0),
-                    new Base64DecodeScenario(encodedChars.Base64, isFinalBlock, 0));
+                foreach (var isFinalBlock in new[] { true, false })
+                {
+                    Add(
+                        new Z85DecodeScenario(encodedChars.Z85, isFinalBlock, 0),
+                        new Base64DecodeScenario(encodedChars.Base64, isFinalBlock, 0));
 
-                Add(
-                    new Z85DecodeScenario(encodedChars.Z85, isFinalBlock, Z85DecodeScenario.BLOCK_SIZE - 1),
-                    new Base64DecodeScenario(encodedChars.Base64, isFinalBlock,
-                        Base64DecodeScenario.BLOCK_SIZE - 1));
+                    Add(
+                        new Z85DecodeScenario(encodedChars.Z85, isFinalBlock, Z85DecodeScenario.BlockSize - 1),
+                        new Base64DecodeScenario(encodedChars.Base64, isFinalBlock, Base64DecodeScenario.BlockSize - 1));
 
-                Add(
-                    new Z85DecodeScenario(encodedChars.Z85, isFinalBlock,
-                        Z85DecodeScenario.BLOCK_SIZE), // 5 chars decode to 4 bytes (exactly one block)
-                    new Base64DecodeScenario(encodedChars.Base64, isFinalBlock,
-                        Base64DecodeScenario.BLOCK_SIZE)); // 4 chars decode to 3 bytes (exactly one block)
+                    Add(
+                        new Z85DecodeScenario(encodedChars.Z85, isFinalBlock, Z85DecodeScenario.BlockSize), // 5 chars decode to 4 bytes (exactly one block)
+                        new Base64DecodeScenario(encodedChars.Base64, isFinalBlock, Base64DecodeScenario.BlockSize)); // 4 chars decode to 3 bytes (exactly one block)
 
-                Add(
-                    new Z85DecodeScenario(encodedChars.Z85, isFinalBlock, Z85DecodeScenario.BLOCK_SIZE * 2),
-                    new Base64DecodeScenario(encodedChars.Base64, isFinalBlock,
-                        Base64DecodeScenario.BLOCK_SIZE * 2));
+                    Add(
+                        new Z85DecodeScenario(encodedChars.Z85, isFinalBlock, Z85DecodeScenario.BlockSize * 2),
+                        new Base64DecodeScenario(encodedChars.Base64, isFinalBlock, Base64DecodeScenario.BlockSize * 2));
+                }
             }
-
 
             // less then one block chars
             foreach (var encodedChars in new[] { new EncodedChars("aa", "aa") })
-            foreach (var isFinalBlock in new[] { false })
+            {
+                foreach (var isFinalBlock in new[] { false })
+                {
+                    Add(
+                        new Z85DecodeScenario(encodedChars.Z85, isFinalBlock, 0),
+                        new Base64DecodeScenario(encodedChars.Base64, isFinalBlock, 0));
+
+                    Add(
+                        new Z85DecodeScenario(encodedChars.Z85, isFinalBlock, Z85DecodeScenario.BlockSize - 1),
+                        new Base64DecodeScenario(encodedChars.Base64, isFinalBlock, Base64DecodeScenario.BlockSize - 1));
+
+                    Add(
+                        new Z85DecodeScenario(encodedChars.Z85, isFinalBlock, Z85DecodeScenario.BlockSize), // 5 chars decode to 4 bytes (exactly one block)
+                        new Base64DecodeScenario(encodedChars.Base64, isFinalBlock, Base64DecodeScenario.BlockSize)); // 4 chars decode to 3 bytes (exactly one block)
+
+                    Add(
+                        new Z85DecodeScenario(encodedChars.Z85, isFinalBlock, Z85DecodeScenario.BlockSize * 2),
+                        new Base64DecodeScenario(encodedChars.Base64, isFinalBlock, Base64DecodeScenario.BlockSize * 2));
+                }
+            }
+
+            /*
+            foreach (var encodedChars in new[] { new EncodedChars("aa", "aa==") })
+            foreach (var isFinalBlock in new[] { true })
             {
                 Add(
                     new Z85DecodeScenario(encodedChars.Z85, isFinalBlock, 0),
@@ -68,30 +89,7 @@ namespace CoenM.Encoding.Test.Z85vsBase64.Decode
                     new Base64DecodeScenario(encodedChars.Base64, isFinalBlock,
                         Base64DecodeScenario.BLOCK_SIZE * 2));
             }
-//            foreach (var encodedChars in new[] { new EncodedChars("aa", "aa==") })
-//            foreach (var isFinalBlock in new[] { true })
-//            {
-//                Add(
-//                    new Z85DecodeScenario(encodedChars.Z85, isFinalBlock, 0),
-//                    new Base64DecodeScenario(encodedChars.Base64, isFinalBlock, 0));
-//
-//                Add(
-//                    new Z85DecodeScenario(encodedChars.Z85, isFinalBlock, Z85DecodeScenario.BLOCK_SIZE - 1),
-//                    new Base64DecodeScenario(encodedChars.Base64, isFinalBlock,
-//                        Base64DecodeScenario.BLOCK_SIZE - 1));
-//
-//                Add(
-//                    new Z85DecodeScenario(encodedChars.Z85, isFinalBlock,
-//                        Z85DecodeScenario.BLOCK_SIZE), // 5 chars decode to 4 bytes (exactly one block)
-//                    new Base64DecodeScenario(encodedChars.Base64, isFinalBlock,
-//                        Base64DecodeScenario.BLOCK_SIZE)); // 4 chars decode to 3 bytes (exactly one block)
-//
-//                Add(
-//                    new Z85DecodeScenario(encodedChars.Z85, isFinalBlock, Z85DecodeScenario.BLOCK_SIZE * 2),
-//                    new Base64DecodeScenario(encodedChars.Base64, isFinalBlock,
-//                        Base64DecodeScenario.BLOCK_SIZE * 2));
-//            }
-
+            */
         }
 
         private struct EncodedChars
@@ -103,6 +101,7 @@ namespace CoenM.Encoding.Test.Z85vsBase64.Decode
             }
 
             public string Z85 { get; }
+
             public string Base64 { get; }
         }
     }

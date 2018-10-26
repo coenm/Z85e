@@ -1,22 +1,23 @@
-﻿using System;
-using System.Buffers;
-using JetBrains.Annotations;
-
-namespace CoenM.Encoding.Test.Z85vsBase64.Decode
+﻿namespace CoenM.Encoding.Test.Z85vsBase64.Decode
 {
+    using System;
+    using System.Buffers;
+
+    using JetBrains.Annotations;
+
     public class Z85Base64DecodeResult
     {
-        private readonly OperationStatus _status;
+        private readonly OperationStatus status;
 
         public Z85Base64DecodeResult(OperationStatus status, int charactersBlocksConsumed, bool allCharsConsumed, int byteBlocksWritten)
         {
-            _status = status;
+            this.status = status;
             CharactersBlocksConsumed = charactersBlocksConsumed;
             AllCharsConsumed = allCharsConsumed;
             ByteBlocksWritten = byteBlocksWritten;
         }
 
-        [PublicAPI] public string Status => _status.ToString();
+        [PublicAPI] public string Status => status.ToString();
 
         [PublicAPI] public int CharactersBlocksConsumed { get; }
 

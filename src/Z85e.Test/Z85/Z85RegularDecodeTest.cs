@@ -1,12 +1,12 @@
-namespace CoenM.Encoding.Test.Z85
+﻿namespace CoenM.Encoding.Test.Z85
 {
     using System;
 
-    using TestData;
+    using CoenM.Encoding.Test.TestData;
 
     using Xunit;
 
-    using Sut = Encoding.Z85;
+    using Sut = CoenM.Encoding.Z85;
 
     public class Z85RegularDecodeTest
     {

@@ -1,4 +1,4 @@
-namespace CoenM.Encoding.Test.Z85e
+﻿namespace CoenM.Encoding.Test.Z85e
 {
     using System;
 
@@ -8,7 +8,7 @@ namespace CoenM.Encoding.Test.Z85e
     using Xunit;
     using Xunit.Categories;
 
-    using Sut = Encoding.Z85Extended;
+    using Sut = CoenM.Encoding.Z85Extended;
 
     public class Z85ExtendedTest
     {
@@ -31,7 +31,6 @@ namespace CoenM.Encoding.Test.Z85e
             byte[] bytes2 = { 0xB5, 0x59 };
             byte[] bytes3 = { 0xB5, 0x59, 0xF7 };
             byte[] bytes4 = { 0xB5, 0x59, 0xF7, 0x5B };
-
 
             Assert.Equal("2b", Sut.Encode(bytes1));
             Assert.Equal("6Af", Sut.Encode(bytes2));

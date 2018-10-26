@@ -1,7 +1,7 @@
-﻿using Xunit;
-
-namespace CoenM.Encoding.Test.TestData
+﻿namespace CoenM.Encoding.Test.TestData
 {
+    using Xunit;
+
     internal class Z85InvalidEncodedStrings : TheoryData<string>
     {
         public Z85InvalidEncodedStrings()
