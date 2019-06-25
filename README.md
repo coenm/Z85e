@@ -1,5 +1,16 @@
-# About this project
-Z85 encoding extended targeting dotnet standard 1.0
+<h1 align="center">
+<img src="https://raw.githubusercontent.com/coenm/Z85e/develop/icon/Z85e.512.png" alt="Z85e" width="256"/>
+<br/>
+Z85e
+</h1>
+<div align="center">
+
+[![Build status](https://ci.appveyor.com/api/projects/status/s24908kye3ipfosw/branch/develop?svg=true)](https://ci.appveyor.com/project/coenm/z85e/) [![codecov](https://codecov.io/gh/coenm/z85e/branch/develop/graph/badge.svg)](https://codecov.io/gh/coenm/z85e)
+
+</div>
+
+
+Z85 encoding extended targeting dotnet standard 1.1 and higher.
 
 This project implements the Z85 encoding standard as described in this [rfc](https://rfc.zeromq.org/spec:32/Z85/) together with an extended version where you can encode bytes with no restriction on the length of the bytes (ie. it is not required to have a length of a multiple of 4).
 
