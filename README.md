@@ -9,9 +9,17 @@
 </div>
 
 
-Z85 encoding extended targeting dotnet standard 1.1 and higher.
-
+# Z85e
 This project implements the Z85 encoding standard as described in this [rfc](https://rfc.zeromq.org/spec:32/Z85/) together with an extended version where you can encode bytes with no restriction on the length of the bytes (ie. it is not required to have a length of a multiple of 4).
+The library targets netstandard 1.1 and higher.
+
+
+## Goals
+- Z85e uses the same output characters as Z85;
+- Z85e encodes an input byte array (with a length multiple of 4) exactly the same as Z85;
+- Z85e decodes an input string (with a length multiple of 5) exactly the same as Z85;
+- Z85e should be as fast and cheap as possible. Yes, this is rather vague. Lets compare it with a base64 encoding decoding.
+
 
 ## Branching model
 This project uses [GitFlow](http://nvie.com/posts/a-successful-git-branching-model/) as branching model.
@@ -20,15 +28,6 @@ This project uses [GitFlow](http://nvie.com/posts/a-successful-git-branching-mod
 The alpha releases can be found using this [MyGet feed](https://www.myget.org/F/coenm/api/v3/index.json). 
 Beta and final releases will be located at NuGet.
 
-
-# Z85e
-Originally, Z85 only encodes blocks of 4 bytes. To allow blocks of all lengths this library introduces Z85e (extended).
-
-## Goals
-- Z85e uses the same output characters as Z85;
-- Z85e encodes an input byte array (with a length multiple of 4) exactly the same as Z85;
-- Z85e decodes an input string (with a length multiple of 5) exactly the same as Z85;
-- Z85e should be as fast and cheap as possible. Yes, this is rather vague. Lets compare it with a base64 encoding decoding.
 
 ## API
 
