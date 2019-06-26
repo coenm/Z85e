@@ -4,14 +4,21 @@
 </h1>
 <div align="center">
 
-[![Build status](https://ci.appveyor.com/api/projects/status/s24908kye3ipfosw/branch/develop?svg=true)](https://ci.appveyor.com/project/coenm/z85e/) [![codecov](https://codecov.io/gh/coenm/z85e/branch/develop/graph/badge.svg)](https://codecov.io/gh/coenm/z85e)
+[![Build status](https://ci.appveyor.com/api/projects/status/s24908kye3ipfosw/branch/develop?svg=true)](https://ci.appveyor.com/project/coenm/z85e/) [![codecov](https://codecov.io/gh/coenm/z85e/branch/develop/graph/badge.svg)](https://codecov.io/gh/coenm/z85e) [![NuGet](https://img.shields.io/nuget/v/CoenM.Encoding.Z85e.svg)](https://www.nuget.org/packages/CoenM.Encoding.Z85e/) [![MyGet Pre Release](https://img.shields.io/myget/coenm/vpre/CoenM.Encoding.Z85e.svg?label=myget)](https://www.myget.org/feed/Packages/coenm/)
 
 </div>
 
 
-Z85 encoding extended targeting dotnet standard 1.1 and higher.
-
 This project implements the Z85 encoding standard as described in this [rfc](https://rfc.zeromq.org/spec:32/Z85/) together with an extended version where you can encode bytes with no restriction on the length of the bytes (ie. it is not required to have a length of a multiple of 4).
+The library targets netstandard 1.1 and higher.
+
+
+## Goals
+- Z85e uses the same output characters as Z85;
+- Z85e encodes an input byte array (with a length multiple of 4) exactly the same as Z85;
+- Z85e decodes an input string (with a length multiple of 5) exactly the same as Z85;
+- Z85e should be as fast and cheap as possible. Yes, this is rather vague. Lets compare it with a base64 encoding decoding.
+
 
 ## Branching model
 This project uses [GitFlow](http://nvie.com/posts/a-successful-git-branching-model/) as branching model.
@@ -20,20 +27,6 @@ This project uses [GitFlow](http://nvie.com/posts/a-successful-git-branching-mod
 The alpha releases can be found using this [MyGet feed](https://www.myget.org/F/coenm/api/v3/index.json). 
 Beta and final releases will be located at NuGet.
 
-| Branch  | Package |
-| :---    | :---    | 
-| develop | [![MyGet Pre Release](https://img.shields.io/myget/coenm/vpre/CoenM.Encoding.Z85e.svg?label=myget)](https://www.myget.org/feed/Packages/coenm/) |
-| master  | [![NuGet](https://img.shields.io/nuget/v/CoenM.Encoding.Z85e.svg)](https://www.nuget.org/packages/CoenM.Encoding.Z85e/) |
-
-
-# Z85e
-Originally, Z85 only encodes blocks of 4 bytes. To allow blocks of all lengths this library introduces Z85e (extended).
-
-## Goals
-- Z85e uses the same output characters as Z85;
-- Z85e encodes an input byte array (with a length multiple of 4) exactly the same as Z85;
-- Z85e decodes an input string (with a length multiple of 5) exactly the same as Z85;
-- Z85e should be as fast and cheap as possible. Yes, this is rather vague. Lets compare it with a base64 encoding decoding.
 
 ## API
 
@@ -196,17 +189,6 @@ and these map to:
 | 1 | 2 | 3 |
 +---+---+---+
 ```
-
-
-# Continuous integration status
-
-| Service | Status |
-| :--- | :--- |
-| Appveyor Windows build (last build): | [![Build status](https://ci.appveyor.com/api/projects/status/s24908kye3ipfosw/branch/develop?svg=true)](https://ci.appveyor.com/project/coenm/z85e/branch/develop) |
-| Appveyor Windows build (develop branch last build): | [![Build status](https://ci.appveyor.com/api/projects/status/s24908kye3ipfosw/branch/develop?svg=true)](https://ci.appveyor.com/project/coenm/z85e/) |
-| Coverage of develop branch: | [![codecov](https://codecov.io/gh/coenm/z85e/branch/develop/graph/badge.svg)](https://codecov.io/gh/coenm/z85e)
-
-[![Build history](https://buildstats.info/appveyor/chart/coenm/z85e)](https://ci.appveyor.com/project/coenm/z85e/history)
 
 
 ### Coverage
