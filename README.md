@@ -4,7 +4,7 @@
 </h1>
 <div align="center">
 
-[![Build status](https://ci.appveyor.com/api/projects/status/s24908kye3ipfosw/branch/develop?svg=true)](https://ci.appveyor.com/project/coenm/z85e/) [![codecov](https://codecov.io/gh/coenm/z85e/branch/develop/graph/badge.svg)](https://codecov.io/gh/coenm/z85e)
+[![Build status](https://ci.appveyor.com/api/projects/status/s24908kye3ipfosw/branch/develop?svg=true)](https://ci.appveyor.com/project/coenm/z85e/) [![codecov](https://codecov.io/gh/coenm/z85e/branch/develop/graph/badge.svg)](https://codecov.io/gh/coenm/z85e) [![NuGet](https://img.shields.io/nuget/v/CoenM.Encoding.Z85e.svg)](https://www.nuget.org/packages/CoenM.Encoding.Z85e/) [![MyGet Pre Release](https://img.shields.io/myget/coenm/vpre/CoenM.Encoding.Z85e.svg?label=myget)](https://www.myget.org/feed/Packages/coenm/)
 
 </div>
 
@@ -19,11 +19,6 @@ This project uses [GitFlow](http://nvie.com/posts/a-successful-git-branching-mod
 ## Nuget
 The alpha releases can be found using this [MyGet feed](https://www.myget.org/F/coenm/api/v3/index.json). 
 Beta and final releases will be located at NuGet.
-
-| Branch  | Package |
-| :---    | :---    | 
-| develop | [![MyGet Pre Release](https://img.shields.io/myget/coenm/vpre/CoenM.Encoding.Z85e.svg?label=myget)](https://www.myget.org/feed/Packages/coenm/) |
-| master  | [![NuGet](https://img.shields.io/nuget/v/CoenM.Encoding.Z85e.svg)](https://www.nuget.org/packages/CoenM.Encoding.Z85e/) |
 
 
 # Z85e
@@ -196,17 +191,6 @@ and these map to:
 | 1 | 2 | 3 |
 +---+---+---+
 ```
-
-
-# Continuous integration status
-
-| Service | Status |
-| :--- | :--- |
-| Appveyor Windows build (last build): | [![Build status](https://ci.appveyor.com/api/projects/status/s24908kye3ipfosw/branch/develop?svg=true)](https://ci.appveyor.com/project/coenm/z85e/branch/develop) |
-| Appveyor Windows build (develop branch last build): | [![Build status](https://ci.appveyor.com/api/projects/status/s24908kye3ipfosw/branch/develop?svg=true)](https://ci.appveyor.com/project/coenm/z85e/) |
-| Coverage of develop branch: | [![codecov](https://codecov.io/gh/coenm/z85e/branch/develop/graph/badge.svg)](https://codecov.io/gh/coenm/z85e)
-
-[![Build history](https://buildstats.info/appveyor/chart/coenm/z85e)](https://ci.appveyor.com/project/coenm/z85e/history)
 
 
 ### Coverage
