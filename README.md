@@ -9,7 +9,6 @@
 </div>
 
 
-# Z85e
 This project implements the Z85 encoding standard as described in this [rfc](https://rfc.zeromq.org/spec:32/Z85/) together with an extended version where you can encode bytes with no restriction on the length of the bytes (ie. it is not required to have a length of a multiple of 4).
 The library targets netstandard 1.1 and higher.
 
