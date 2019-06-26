@@ -1,7 +1,6 @@
 <h1 align="center">
 <img src="https://raw.githubusercontent.com/coenm/Z85e/develop/icon/Z85e.512.png" alt="Z85e" width="256"/>
 <br/>
-Z85e
 </h1>
 <div align="center">
 
