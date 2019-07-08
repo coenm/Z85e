@@ -21,7 +21,7 @@
         public void SutDecoderShouldCorrespondWithEncoderTable()
         {
             var sutDecoder = Map.Decoder;
-            var generatedDecoder = GenerateDecoder(32, 96);
+            var generatedDecoder = GenerateDecoder(32, 96).ToArray();
             Assert.Equal(sutDecoder, generatedDecoder);
         }
 
@@ -39,7 +39,7 @@
             var table = new byte[256];
             var index = 0;
 
-            foreach (var c in Internals.Map.Encoder)
+            foreach (var c in Map.Encoder)
             {
                 table[c] = (byte)index;
                 index++;
