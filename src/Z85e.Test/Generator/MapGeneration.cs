@@ -3,8 +3,8 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Text;
-    using Internals;
+
+    using CoenM.Encoding.Internals;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -21,8 +21,7 @@
         public void SutDecoderShouldCorrespondWithEncoderTable()
         {
             var sutDecoder = Map.Decoder;
-            var generatedDecoder = GenerateDecoder();
-
+            var generatedDecoder = GenerateDecoder(32, 96);
             Assert.Equal(sutDecoder, generatedDecoder);
         }
 
@@ -35,16 +34,20 @@
             output.WriteLine(sw.ToString());
         }
 
-        private byte[] GenerateDecoder()
+        private IEnumerable<byte> GenerateDecoder(int offset = 0, int count = 0)
         {
-            var result = new byte[256];
+            var table = new byte[256];
             var index = 0;
 
             foreach (var c in Internals.Map.Encoder)
             {
-                result[c] = (byte)index;
+                table[c] = (byte)index;
                 index++;
             }
+
+            var result = table.AsEnumerable().Skip(offset);
+            if (count > 0)
+                result = result.Take(count);
 
             return result;
         }
