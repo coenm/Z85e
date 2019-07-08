@@ -1,9 +1,10 @@
 ﻿namespace CoenM.Encoding.Test.Generator
 {
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Text;
-
+    using Internals;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -17,46 +18,40 @@
         }
 
         [Fact]
+        public void SutDecoderShouldCorrespondWithEncoderTable()
+        {
+            var sutDecoder = Map.Decoder;
+            var generatedDecoder = GenerateDecoder();
+
+            Assert.Equal(sutDecoder, generatedDecoder);
+        }
+
+        [Fact]
         public void GenerateDecoderTableTest()
         {
-            var s = new StringBuilder();
+            var decoder = GenerateDecoder();
+            var sw = new StringWriter();
+            GenerateDecoderTableInCSharp(decoder, 32, 96, 8, sw);
+            output.WriteLine(sw.ToString());
+        }
 
+        private byte[] GenerateDecoder()
+        {
             var result = new byte[256];
-            for (int ij = 0; ij < result.Length; ij++)
-            {
-                result[ij] = 0x00;
-            }
-
             var index = 0;
+
             foreach (var c in Internals.Map.Encoder)
             {
                 result[c] = (byte)index;
                 index++;
             }
 
-            //
-            //            int i = 0;
-            //            s.AppendLine("internal static readonly byte[] Decoder =");
-            //            s.AppendLine("{");
-            //            foreach (var b in result)
-            //            {
-            //                i++;
-            //                s.Append($"0x{b:X2}, ");
-            //
-            //                if (i % 8 == 0)
-            //                    s.AppendLine(string.Empty);
-            //            }
-            //
-            //            s.AppendLine("};");
-
-            var sw = new StringWriter(s);
-            GenerateDecoderTable(result, 32, 128, 8, sw);
-            output.WriteLine(sw.ToString());
+            return result;
         }
 
-        private void GenerateDecoderTable(byte[] bytes, int offset, int count, int lineBreak, StringWriter s)
+        private void GenerateDecoderTableInCSharp(IEnumerable<byte> bytes, int offset, int count, int lineBreak, TextWriter s)
         {
-            int i = 0;
+            var i = 0;
             s.WriteLine("internal static readonly byte[] Decoder =");
             s.WriteLine("{");
             foreach (var b in bytes.Skip(offset).Take(count))
