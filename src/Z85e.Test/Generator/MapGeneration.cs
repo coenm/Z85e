@@ -21,7 +21,7 @@
         public void SutDecoderShouldCorrespondWithEncoderTable()
         {
             var sutDecoder = Map.Decoder;
-            var generatedDecoder = GenerateDecoder(32, 96).ToArray();
+            var generatedDecoder = GenerateDecoder(0, 128).ToArray();
             Assert.Equal(sutDecoder, generatedDecoder);
         }
 
