@@ -20,8 +20,14 @@ dotnet_csproj:
 install:
 # install giversion.
 # gitversion will set some appveyor settings with version information
-- choco install gitversion.portable -pre -y
-- C:\ProgramData\chocolatey\lib/gitversion.portable/tools/gitversion.exe /l console /output buildserver /c %APPVEYOR_REPO_COMMIT%
+- choco install gitversion.portable --version 4.0.1-beta1-29 --pre -y
+- echo APPVEYOR_REPO_BRANCH  %APPVEYOR_REPO_BRANCH%
+- echo APPVEYOR_PULL_REQUEST_HEAD_REPO_BRANCH %APPVEYOR_PULL_REQUEST_HEAD_REPO_BRANCH%
+- cmd: IF [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] ( 
+       C:\ProgramData\chocolatey\lib\gitversion.portable\tools\gitversion.exe /output buildserver /b %APPVEYOR_REPO_BRANCH% /c %APPVEYOR_REPO_COMMIT% 
+    ) ELSE (
+       C:\ProgramData\chocolatey\lib\gitversion.portable\tools\gitversion.exe /output buildserver /c %APPVEYOR_REPO_COMMIT%
+    )
 
 before_build:
 - dotnet restore
@@ -47,6 +53,8 @@ after_test:
 artifacts:
   - path: '**\*.nupkg'
     name: NuGet Packages
+  - path: '**\*.snupkg'
+    name: NuGet Symbols Packages
 
 deploy:
   - provider: NuGet

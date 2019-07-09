@@ -1,11 +1,11 @@
-﻿using System;
-
-namespace CoenM.Encoding.Test.Z85vsBase64.Decode
+﻿namespace CoenM.Encoding.Test.Z85vsBase64.Decode
 {
+    using System;
+
     public class Z85DecodeScenario
     {
-        public const int CHARS_FOR_ONE_BLOCK = 5;
-        public const int BLOCK_SIZE = 4;
+        public const int CharsForOneBlock = 5;
+        public const int BlockSize = 4;
 
         public Z85DecodeScenario(string source, bool isFinalBlock, int destinationLength = -1)
         {
@@ -42,16 +42,15 @@ namespace CoenM.Encoding.Test.Z85vsBase64.Decode
                 CalculateFullOutputBlocks(bytesWritten));
         }
 
-        private int CalculateFullInputBlocks(int charsConsumed) => charsConsumed / CHARS_FOR_ONE_BLOCK;
-
-        private int CalculateFullOutputBlocks(int bytesWritten) => bytesWritten / BLOCK_SIZE;
-
-        private bool AllCharsConsumed(int charsConsumed) => charsConsumed == Source.Length;
-
-
         public override string ToString()
         {
             return $"{nameof(Source)}: {Source.ToString()}{Environment.NewLine}{nameof(Destination)} length: {Destination.Length}{Environment.NewLine}{nameof(IsFinalBlock)}: {IsFinalBlock}";
         }
+
+        private int CalculateFullInputBlocks(int charsConsumed) => charsConsumed / CharsForOneBlock;
+
+        private int CalculateFullOutputBlocks(int bytesWritten) => bytesWritten / BlockSize;
+
+        private bool AllCharsConsumed(int charsConsumed) => charsConsumed == Source.Length;
     }
 }

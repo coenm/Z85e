@@ -1,12 +1,11 @@
-namespace CoenM.Encoding.Test.Z85
+﻿namespace CoenM.Encoding.Test.Z85
 {
     using System;
 
-    using TestData;
-
+    using CoenM.Encoding.Test.TestData;
     using Xunit;
 
-    using Sut = Encoding.Z85;
+    using Sut = CoenM.Encoding.Z85;
 
     public class Z85RegularEncodeTest
     {
@@ -41,12 +40,12 @@ namespace CoenM.Encoding.Test.Z85
         public void MultipleEncodedStringsDecodeToSameBytes()
         {
             // arrange
-            const string ENCODED1 = "00000";
-            const string ENCODED2 = "%nSc1";
+            const string encoded1 = "00000";
+            const string encoded2 = "%nSc1";
 
             // act
-            var result1 = Sut.Decode(ENCODED1);
-            var result2 = Sut.Decode(ENCODED2);
+            var result1 = Sut.Decode(encoded1);
+            var result2 = Sut.Decode(encoded2);
 
             // assert
             Assert.Equal(result1, result2);

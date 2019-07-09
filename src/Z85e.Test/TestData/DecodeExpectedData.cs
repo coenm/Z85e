@@ -1,35 +1,9 @@
-﻿using System;
-using System.Buffers;
-using Xunit;
-
-namespace CoenM.Encoding.Test.TestData
+﻿namespace CoenM.Encoding.Test.TestData
 {
-    public class DecodeInputData
-    {
-        private readonly int _destinationLength;
+    using System;
+    using System.Buffers;
 
-        public DecodeInputData(string source, bool isFinalBlock, int destinationLength = -1)
-        {
-            _destinationLength = destinationLength;
-            IsFinalBlock = isFinalBlock;
-            Source = source.ToCharArray();
-        }
-
-        public bool IsFinalBlock { get; }
-
-        public Memory<char> Source { get; }
-
-        public Memory<byte> CreateDestination()
-        {
-            if (_destinationLength == 0)
-                return Memory<byte>.Empty;
-
-            if (_destinationLength > 0)
-                return new byte[_destinationLength];
-
-            return new byte[Source.Length]; // should always be enough
-        }
-    }
+    using Xunit;
 
     public class DecodeExpectedData
     {

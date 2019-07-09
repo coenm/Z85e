@@ -4,14 +4,14 @@
 
     internal class StrictZ85Samples : TheoryData<byte[], string>
     {
-        private const string HELLO_WORLD_STRING = "HelloWorld";
-        private static readonly byte[] _helloWorldBytes = { 0x86, 0x4F, 0xD2, 0x6F, 0xB5, 0x59, 0xF7, 0x5B };
+        private const string HelloWorldString = "HelloWorld";
+        private static readonly byte[] HelloWorldBytes = { 0x86, 0x4F, 0xD2, 0x6F, 0xB5, 0x59, 0xF7, 0x5B };
 
         public StrictZ85Samples()
         {
             Add(
-                _helloWorldBytes,
-                HELLO_WORLD_STRING);
+                HelloWorldBytes,
+                HelloWorldString);
 
             Add(
                 new byte[]
@@ -23,9 +23,8 @@
                 "WorldWorldHello");
         }
 
+        public static string HelloWorldEncoded { get; } = HelloWorldString;
 
-        public static string HelloWorldEncoded { get; } = HELLO_WORLD_STRING;
-
-        public static byte[] HelloWorldData { get; } = _helloWorldBytes;
+        public static byte[] HelloWorldData { get; } = HelloWorldBytes;
     }
 }

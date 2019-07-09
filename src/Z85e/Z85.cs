@@ -1,11 +1,12 @@
-﻿using System;
-using CoenM.Encoding.Internals;
-using JetBrains.Annotations;
-
-namespace CoenM.Encoding
+﻿namespace CoenM.Encoding
 {
+    using System;
+
+    using CoenM.Encoding.Internals;
+    using JetBrains.Annotations;
+
     /// <summary>
-    /// Z85 Encoding library
+    /// Z85 Encoding library.
     /// </summary>
     // ReSharper disable once PartialTypeWithSinglePart
     public static partial class Z85
@@ -41,18 +42,18 @@ namespace CoenM.Encoding
             {
                 while (charNbr < len)
                 {
-                    //  Accumulate value in base 85
+                    // Accumulate value in base 85
                     uint value = z85Decoder[(byte)src[charNbr]];
-                    value = value * 85 + z85Decoder[(byte)src[charNbr + 1]];
-                    value = value * 85 + z85Decoder[(byte)src[charNbr + 2]];
-                    value = value * 85 + z85Decoder[(byte)src[charNbr + 3]];
-                    value = value * 85 + z85Decoder[(byte)src[charNbr + 4]];
+                    value = (value * 85) + z85Decoder[(byte)src[charNbr + 1]];
+                    value = (value * 85) + z85Decoder[(byte)src[charNbr + 2]];
+                    value = (value * 85) + z85Decoder[(byte)src[charNbr + 3]];
+                    value = (value * 85) + z85Decoder[(byte)src[charNbr + 4]];
                     charNbr += 5;
 
-                    //  Output value in base 256
-                    decoded[byteNbr + 0] = (byte)(value / divisor3 % 256);
-                    decoded[byteNbr + 1] = (byte)(value / divisor2 % 256);
-                    decoded[byteNbr + 2] = (byte)(value / divisor1 % 256);
+                    // Output value in base 256
+                    decoded[byteNbr + 0] = (byte)((value / divisor3) % 256);
+                    decoded[byteNbr + 1] = (byte)((value / divisor2) % 256);
+                    decoded[byteNbr + 2] = (byte)((value / divisor1) % 256);
                     decoded[byteNbr + 3] = (byte)(value % 256);
                     byteNbr += 4;
                 }
@@ -97,17 +98,17 @@ namespace CoenM.Encoding
                 while (byteNbr < size)
                 {
                     // Accumulate value in base 256 (binary)
-                    var value = (uint)(data[byteNbr + 0] * byte3 +
-                                       data[byteNbr + 1] * byte2 +
-                                       data[byteNbr + 2] * byte1 +
+                    var value = (uint)((data[byteNbr + 0] * byte3) +
+                                       (data[byteNbr + 1] * byte2) +
+                                       (data[byteNbr + 2] * byte1) +
                                        data[byteNbr + 3]);
                     byteNbr += 4;
 
-                    //  Output value in base 85
-                    z85Dest[charNbr + 0] = z85Encoder[value / divisor4 % 85];
-                    z85Dest[charNbr + 1] = z85Encoder[value / divisor3 % 85];
-                    z85Dest[charNbr + 2] = z85Encoder[value / divisor2 % 85];
-                    z85Dest[charNbr + 3] = z85Encoder[value / divisor1 % 85];
+                    // Output value in base 85
+                    z85Dest[charNbr + 0] = z85Encoder[(value / divisor4) % 85];
+                    z85Dest[charNbr + 1] = z85Encoder[(value / divisor3) % 85];
+                    z85Dest[charNbr + 2] = z85Encoder[(value / divisor2) % 85];
+                    z85Dest[charNbr + 3] = z85Encoder[(value / divisor1) % 85];
                     z85Dest[charNbr + 4] = z85Encoder[value % 85];
                     charNbr += 5;
                 }

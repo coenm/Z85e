@@ -1,20 +1,20 @@
-using System.Collections.Generic;
-using System.Linq;
-using BenchmarkDotNet.Columns;
-using BenchmarkDotNet.Configs;
-using BenchmarkDotNet.Diagnosers;
-using BenchmarkDotNet.Environments;
-using BenchmarkDotNet.Exporters;
-using BenchmarkDotNet.Jobs;
-using BenchmarkDotNet.Loggers;
-using BenchmarkDotNet.Reports;
-using BenchmarkDotNet.Toolchains;
-using BenchmarkDotNet.Toolchains.CsProj;
-
-namespace Z85e.Benchmarks
+﻿namespace Z85e.Benchmarks
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using BenchmarkDotNet.Columns;
+    using BenchmarkDotNet.Configs;
+    using BenchmarkDotNet.Diagnosers;
+    using BenchmarkDotNet.Environments;
+    using BenchmarkDotNet.Exporters;
+    using BenchmarkDotNet.Jobs;
+    using BenchmarkDotNet.Loggers;
+    using BenchmarkDotNet.Reports;
+    using BenchmarkDotNet.Toolchains.CsProj;
+
     /// <remarks>
-    /// Based on <see cref="https://blogs.msdn.microsoft.com/dotnet/2018/04/18/performance-improvements-in-net-core-2-1/"/>
+    /// Based on <see href="https://blogs.msdn.microsoft.com/dotnet/2018/04/18/performance-improvements-in-net-core-2-1/"/>.
     /// </remarks>
     public class MainConfig : ManualConfig
     {
@@ -32,11 +32,11 @@ namespace Z85e.Benchmarks
             Add(MemoryDiagnoser.Default);
 
             // Columns
-//            Add(DefaultColumnProviders.Instance);
+            // Add(DefaultColumnProviders.Instance);
             Add(new MinimalColumnProvider());
             Add(new ParamsColumnProvider());
             Add(new DiagnosersColumnProvider());
-            // Add(RankColumn.Arabic);
+            /*Add(RankColumn.Arabic);*/
 
             // Ordering
             // Set(new DefaultOrderProvider(SummaryOrderPolicy.SlowestToFastest));
@@ -46,8 +46,10 @@ namespace Z85e.Benchmarks
 
             // Exporters
             Add(MarkdownExporter.GitHub);
-            // Add(CsvMeasurementsExporter.Default);
-            // Add(RPlotExporter.Default);
+            /*
+            Add(CsvMeasurementsExporter.Default);
+            Add(RPlotExporter.Default);
+            */
 
             // Logger
             Add(new ConsoleLogger());
@@ -60,17 +62,16 @@ namespace Z85e.Benchmarks
                 yield return CategoriesColumn.Default;
                 yield return TargetMethodColumn.Method;
 
-                //todo
+                // todo
                 foreach (var col in JobCharacteristicColumn.AllColumns.Where(x => x.ColumnName == "Job"))
                     yield return col;
 
-//                yield return new JobCharacteristicColumn(InfrastructureMode.ToolchainCharacteristic);
-
+                // yield return new JobCharacteristicColumn(InfrastructureMode.ToolchainCharacteristic);
                 yield return StatisticColumn.Mean;
             }
         }
 
-        /// <remarks>taken from https://github.com/dotnet/BenchmarkDotNet/blob/master/src/BenchmarkDotNet/Columns/DefaultColumnProvider.cs</remarks>>
+        /// <remarks>taken from <seealso href="https://github.com/dotnet/BenchmarkDotNet/blob/master/src/BenchmarkDotNet/Columns/DefaultColumnProvider.cs"/>.</remarks>
         private class ParamsColumnProvider : IColumnProvider
         {
             public IEnumerable<IColumn> GetColumns(Summary summary) => summary
@@ -80,7 +81,7 @@ namespace Z85e.Benchmarks
                 .Select(name => new ParamColumn(name));
         }
 
-        /// <remarks>taken from https://github.com/dotnet/BenchmarkDotNet/blob/master/src/BenchmarkDotNet/Columns/DefaultColumnProvider.cs</remarks>>
+        /// <remarks>taken from <seealso href="https://github.com/dotnet/BenchmarkDotNet/blob/master/src/BenchmarkDotNet/Columns/DefaultColumnProvider.cs"/>.</remarks>>
         private class DiagnosersColumnProvider : IColumnProvider
         {
             public IEnumerable<IColumn> GetColumns(Summary summary) => summary

@@ -1,14 +1,12 @@
-using FluentAssertions;
-
-namespace CoenM.Encoding.Test.Z85
+﻿namespace CoenM.Encoding.Test.Z85
 {
     using System;
 
-    using TestData;
-
+    using CoenM.Encoding.Test.TestData;
+    using FluentAssertions;
     using Xunit;
 
-    using Sut = Encoding.Z85;
+    using Sut = CoenM.Encoding.Z85;
 
     public class Z85SpanTest
     {
@@ -30,7 +28,6 @@ namespace CoenM.Encoding.Test.Z85
             // assert
             expectedResult.AssertResult(result, charsConsumed, bytesWritten, destination);
         }
-
 
         [Theory]
         [ClassData(typeof(AllEncodeScenarios))]
@@ -75,7 +72,6 @@ namespace CoenM.Encoding.Test.Z85
             result.Should().Be(expectedOutput);
         }
 
-
         [Theory]
         [InlineData(-1)]
         [InlineData(-108)]
@@ -89,7 +85,6 @@ namespace CoenM.Encoding.Test.Z85
             // assert
             act.Should().Throw<ArgumentOutOfRangeException>();
         }
-
 
         [Theory]
         [InlineData(0, 0)]
@@ -114,7 +109,6 @@ namespace CoenM.Encoding.Test.Z85
             // assert
             result.Should().Be(expectedOutput);
         }
-
 
         [Theory]
         [InlineData(-1)]
