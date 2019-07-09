@@ -1,18 +1,17 @@
-﻿namespace CoenM.Encoding.Test.Generator
+﻿namespace CoenM.Encoding.Test.Internals
 {
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
 
-    using CoenM.Encoding.Internals;
     using Xunit;
     using Xunit.Abstractions;
 
-    public class MapGeneration
+    public class MapTest
     {
         private readonly ITestOutputHelper output;
 
-        public MapGeneration(ITestOutputHelper output)
+        public MapTest(ITestOutputHelper output)
         {
             this.output = output;
         }
@@ -20,7 +19,7 @@
         [Fact]
         public void SutDecoderShouldCorrespondWithEncoderTable()
         {
-            var sutDecoder = Map.Decoder;
+            var sutDecoder = Encoding.Internals.Map.Decoder;
             var generatedDecoder = GenerateDecoder(0, 128).ToArray();
             Assert.Equal(sutDecoder, generatedDecoder);
         }
@@ -30,7 +29,7 @@
         {
             var decoder = GenerateDecoder();
             var sw = new StringWriter();
-            GenerateDecoderTableInCSharp(decoder, 32, 96, 8, sw);
+            GenerateDecoderTableInCSharp(decoder, 0, 128, 8, sw);
             output.WriteLine(sw.ToString());
         }
 
@@ -39,7 +38,7 @@
             var table = new byte[256];
             var index = 0;
 
-            foreach (var c in Map.Encoder)
+            foreach (var c in Encoding.Internals.Map.Encoder)
             {
                 table[c] = (byte)index;
                 index++;
