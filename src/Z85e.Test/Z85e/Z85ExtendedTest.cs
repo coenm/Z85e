@@ -4,7 +4,6 @@
 
     using CoenM.Encoding.Test.TestData;
     using CoenM.Encoding.Test.TestInternals;
-
     using Xunit;
     using Xunit.Categories;
 

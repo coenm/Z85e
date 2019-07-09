@@ -6,11 +6,8 @@
     using System.Diagnostics.CodeAnalysis;
 
     using CoenM.Encoding.Test.TestInternals;
-
     using FluentAssertions;
-
     using JetBrains.Annotations;
-
     using Xunit;
 
     using Z85 = CoenM.Encoding.Z85;

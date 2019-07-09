@@ -3,7 +3,6 @@
     using System;
 
     using CoenM.Encoding.Test.TestData;
-
     using Xunit;
 
     using Sut = CoenM.Encoding.Z85;
