@@ -6,7 +6,6 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <RootNamespace>Z85e.Benchmarks</RootNamespace>
     <AssemblyName>Z85e.Benchmarks</AssemblyName>
-    <LangVersion>7.3</LangVersion>
     <Optimize>true</Optimize>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <IsPackable>false</IsPackable>
@@ -28,10 +27,9 @@
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="..\..\stylecop.json" /> 
-  </ItemGroup>  
-
-    <ItemGroup>
-      <ProjectReference Include="..\Z85e\Z85e.csproj" />
-    </ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Z85e\Z85e.csproj" />
+  </ItemGroup>
 
 </Project>
