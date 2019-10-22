@@ -13,7 +13,7 @@
     <PackageId>CoenM.Encoding.Z85e</PackageId>
     <PackageTags>Z85;Z85extended;encoding;zeromq</PackageTags>
     <PackageProjectUrl>https://github.com/coenm/Z85e</PackageProjectUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/coenm/Z85e/master/icon/Z85e.128.png</PackageIconUrl>
+    <PackageIcon>Z85e.64.png</PackageIcon>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/coenm/Z85e.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -56,6 +56,8 @@
 
   <ItemGroup>
     <AdditionalFiles Include="..\..\stylecop.json" />
+    <None Include="..\..\icon\Z85e.64.png" Pack="true" PackagePath="\"/>
+   
     <None Update="CoenM.Encoding.Z85e.ExternalAnnotations.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
