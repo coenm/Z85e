@@ -4,7 +4,7 @@
 </h1>
 <div align="center">
 
-[![Build status](https://ci.appveyor.com/api/projects/status/s24908kye3ipfosw/branch/develop?svg=true)](https://ci.appveyor.com/project/coenm/z85e/) [![codecov](https://codecov.io/gh/coenm/z85e/branch/develop/graph/badge.svg)](https://codecov.io/gh/coenm/z85e) [![NuGet](https://img.shields.io/nuget/v/CoenM.Encoding.Z85e.svg)](https://www.nuget.org/packages/CoenM.Encoding.Z85e/) [![MyGet Pre Release](https://img.shields.io/myget/coenm/vpre/CoenM.Encoding.Z85e.svg?label=myget)](https://www.myget.org/feed/Packages/coenm/)
+[![Build Status](https://dev.azure.com/cmunckhof/Z85e/_apis/build/status/coenm.Z85e?branchName=develop)](https://dev.azure.com/cmunckhof/Z85e/_build/latest?definitionId=3&branchName=develop) [![codecov](https://codecov.io/gh/coenm/z85e/branch/develop/graph/badge.svg)](https://codecov.io/gh/coenm/z85e) [![NuGet](https://img.shields.io/nuget/v/CoenM.Encoding.Z85e.svg)](https://www.nuget.org/packages/CoenM.Encoding.Z85e/) [![MyGet Pre Release](https://img.shields.io/myget/coenm/vpre/CoenM.Encoding.Z85e.svg?label=myget)](https://www.myget.org/feed/Packages/coenm/)
 
 </div>
 
@@ -24,7 +24,7 @@ The library targets netstandard 1.1 and higher.
 This project uses [GitFlow](http://nvie.com/posts/a-successful-git-branching-model/) as branching model.
 
 ## Nuget
-The alpha releases can be found using this [MyGet feed](https://www.myget.org/F/coenm/api/v3/index.json). 
+The alpha releases can be found using this [MyGet feed](https://www.myget.org/F/coenm/api/v3/index.json). In the feature these will probably be hosted at azure devops.
 Beta and final releases will be located at NuGet.
 
 
@@ -189,8 +189,3 @@ and these map to:
 | 1 | 2 | 3 |
 +---+---+---+
 ```
-
-
-### Coverage
-Coverage trend of the develop branch.
- ![Coverage trend of develop](https://codecov.io/gh/coenm/z85e/branch/develop/graphs/commits.svg)

@@ -47,7 +47,7 @@ test_script:
 - C:\ProgramData\chocolatey\lib\opencover.portable\tools\OpenCover.Console.exe -register:user -target:dotnet.exe -targetargs:"test src/Z85e.Test/Z85e.Test.csproj --filter Category!=SystemTest" -oldstyle -filter:"+[CoenM*]* -[CoenM*.Test]*" -hideskipped:Filter -returntargetcode -mergeoutput -output:".\coverage-dotnet.xml"
 
 after_test:
-- codecov -f coverage-dotnet.xml
+# - codecov -f coverage-dotnet.xml
 - ps: .scripts\pack.ps1
 
 artifacts:
