@@ -13,7 +13,7 @@
     <PackageId>CoenM.Encoding.Z85e</PackageId>
     <PackageTags>Z85;Z85extended;encoding;zeromq</PackageTags>
     <PackageProjectUrl>https://github.com/coenm/Z85e</PackageProjectUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/coenm/Z85e/master/icon/Z85e.128.png</PackageIconUrl>
+    <PackageIcon>Z85e.64.png</PackageIcon>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/coenm/Z85e.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -39,7 +39,11 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2018.2.1">
+    <PackageReference Include="GitVersionTask" Version="5.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="JetBrains.Annotations" Version="2019.1.3">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="JetBrainsAnnotations.Fody" Version="2.2.0">
@@ -49,13 +53,14 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta009">
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>    
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\..\icon\Z85e.64.png" Pack="true" PackagePath="\" />
     <AdditionalFiles Include="..\..\stylecop.json" />   
     <None Update="CoenM.Encoding.Z85e.ExternalAnnotations.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
