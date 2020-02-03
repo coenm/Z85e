@@ -289,3 +289,5 @@ __pycache__/
 BenchmarkDotNet.Artifacts
 *.diff
 *.patch
+
+*ExternalAnnotations.xml

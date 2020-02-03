@@ -7,7 +7,6 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <RootNamespace>Z85e.Encoding.Z85e.Test</RootNamespace>
     <AssemblyName>CoenM.Encoding.Z85e.Test</AssemblyName>
-    <LangVersion>7.3</LangVersion>
     <CodeAnalysisRuleSet>..\..\Z85e.ruleset</CodeAnalysisRuleSet>
     <RootNamespace>CoenM.Encoding.Test</RootNamespace>
   </PropertyGroup>
@@ -19,7 +18,6 @@
     </PackageReference>
     <PackageReference Include="FluentAssertions" Version="5.9.0" />
     <PackageReference Include="FluentAssertions.Analyzers" Version="0.11.4" />
-    <PackageReference Include="JetBrains.Annotations" Version="2019.1.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.analyzers" Version="0.10.0" />
@@ -31,10 +29,10 @@
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>    
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <AdditionalFiles Include="..\..\stylecop.json" /> 
+    <AdditionalFiles Include="..\..\stylecop.json" />
   </ItemGroup>
 
   <ItemGroup>

@@ -6,11 +6,10 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <RootNamespace>Z85e.Benchmarks</RootNamespace>
     <AssemblyName>Z85e.Benchmarks</AssemblyName>
-    <LangVersion>7.3</LangVersion>
     <Optimize>true</Optimize>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <IsPackable>false</IsPackable>
-    <CodeAnalysisRuleSet>..\..\Z85e.ruleset</CodeAnalysisRuleSet>    
+    <CodeAnalysisRuleSet>..\..\Z85e.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)'=='net461'">
@@ -27,8 +26,8 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <AdditionalFiles Include="..\..\stylecop.json" /> 
-  </ItemGroup>  
+    <AdditionalFiles Include="..\..\stylecop.json" />
+  </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Z85e\Z85e.csproj" />

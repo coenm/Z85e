@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <!--Include in every project -->
+  <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" Version="2019.1.3" PrivateAssets="all" />
+  </ItemGroup>
+
+  <!--Need to be opted in -->
+  <ItemGroup>
+  </ItemGroup>
+
+</Project>
