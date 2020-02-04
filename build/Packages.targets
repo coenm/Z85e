@@ -8,6 +8,12 @@
 
   <!--Need to be opted in -->
   <ItemGroup>
+    <PackageReference Update="GitVersionTask" Version="5.0.1" />
+    <PackageReference Update="JetBrainsAnnotations.Fody" Version="2.2.0" />
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.0.0" />
+    <PackageReference Update="StyleCop.Analyzers" Version="1.1.118" />
+    <PackageReference Update="System.Memory" Version="4.5.3" />
+    <PackageReference Update="System.Runtime.CompilerServices.Unsafe" Version="4.5.2" />
   </ItemGroup>
 
 </Project>

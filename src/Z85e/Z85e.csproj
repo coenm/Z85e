@@ -35,18 +35,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GitVersionTask" Version="5.0.1">
+    <PackageReference Include="GitVersionTask">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="JetBrainsAnnotations.Fody" Version="2.2.0">
+    <PackageReference Include="JetBrainsAnnotations.Fody">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+    <PackageReference Include="Microsoft.SourceLink.GitHub">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+    <PackageReference Include="StyleCop.Analyzers">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
@@ -58,27 +58,27 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.1'">
-    <PackageReference Include="System.Memory" Version="4.5.3" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.2" />
+    <PackageReference Include="System.Memory" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="System.Memory" Version="4.5.3" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.2" />
+    <PackageReference Include="System.Memory" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
-    <PackageReference Include="System.Memory" Version="4.5.3" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.2" />
+    <PackageReference Include="System.Memory" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.2" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
-    <PackageReference Include="System.Memory" Version="4.5.3" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.2" />
+    <PackageReference Include="System.Memory" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" />
   </ItemGroup>
 
 </Project>
