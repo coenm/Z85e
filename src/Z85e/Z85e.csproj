@@ -1,8 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <!-- do not manually update version, this will be done using appvayor -->
-    <Version>1.1.1</Version>
     <Description>ZeroMQ's Z85 Encoding and the extended version. Formats for representing binary data as printable text.</Description>
     <Authors>Coen van den Munckhof</Authors>
     <TargetFrameworks>netstandard1.0;netstandard1.1;netstandard2.0;netcoreapp2.0;netcoreapp2.1;net461</TargetFrameworks>
@@ -15,13 +13,10 @@
     <PackageProjectUrl>https://github.com/coenm/Z85e</PackageProjectUrl>
     <PackageIcon>Z85e.64.png</PackageIcon>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/coenm/Z85e.git</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>$(PackageProjectUrl)</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/coenm/Z85e.git</RepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <!-- Used by SourceLink -->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
   </PropertyGroup>
 
@@ -39,9 +34,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="JetBrainsAnnotations.Fody">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
+    <PackageReference Include="JetBrainsAnnotations.Fody" PrivateAssets="all" />
     <PackageReference Include="Microsoft.SourceLink.GitHub">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

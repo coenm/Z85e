@@ -13,9 +13,10 @@
     using BenchmarkDotNet.Reports;
     using BenchmarkDotNet.Toolchains.CsProj;
 
-    /// <remarks>
-    /// Based on <see href="https://blogs.msdn.microsoft.com/dotnet/2018/04/18/performance-improvements-in-net-core-2-1/"/>.
-    /// </remarks>
+    /// <summary>
+    /// Configuration for the benchmarks.
+    /// </summary>
+    /// <remarks>Based on <see href="https://blogs.msdn.microsoft.com/dotnet/2018/04/18/performance-improvements-in-net-core-2-1/"/>.</remarks>
     public class MainConfig : ManualConfig
     {
         public MainConfig()
@@ -71,7 +72,7 @@
             }
         }
 
-        /// <remarks>taken from <seealso href="https://github.com/dotnet/BenchmarkDotNet/blob/master/src/BenchmarkDotNet/Columns/DefaultColumnProvider.cs"/>.</remarks>
+        // https://github.com/dotnet/BenchmarkDotNet/blob/master/src/BenchmarkDotNet/Columns/DefaultColumnProvider.cs
         private class ParamsColumnProvider : IColumnProvider
         {
             public IEnumerable<IColumn> GetColumns(Summary summary) => summary
@@ -81,7 +82,7 @@
                 .Select(name => new ParamColumn(name));
         }
 
-        /// <remarks>taken from <seealso href="https://github.com/dotnet/BenchmarkDotNet/blob/master/src/BenchmarkDotNet/Columns/DefaultColumnProvider.cs"/>.</remarks>>
+        // https://github.com/dotnet/BenchmarkDotNet/blob/master/src/BenchmarkDotNet/Columns/DefaultColumnProvider.cs
         private class DiagnosersColumnProvider : IColumnProvider
         {
             public IEnumerable<IColumn> GetColumns(Summary summary) => summary
