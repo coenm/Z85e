@@ -7,23 +7,21 @@
     {
         public static string GetHelloString(int charCount)
         {
-            switch (charCount)
+            return charCount switch
             {
-                case 0: return string.Empty;
-                case 1: return "H"; // should not be possible
-                case 2: return "1N";
-                case 3: return "4:H";
-                case 4: return "esp$";
-                case 5: return "Hello";
-                case 6: return "HelloW"; // should not be possible
-                case 7: return "Hello2b";
-                case 8: return "Hello6Af";
-                case 9: return "Hellojt#7";
-                case 10: return "HelloWorld";
-
-                default:
-                    throw new NotImplementedException();
-            }
+                0 => string.Empty,
+                1 => "H", // should not be possible
+                2 => "1N",
+                3 => "4:H",
+                4 => "esp$",
+                5 => "Hello",
+                6 => "HelloW", // should not be possible
+                7 => "Hello2b",
+                8 => "Hello6Af",
+                9 => "Hellojt#7",
+                10 => "HelloWorld",
+                _ => throw new NotImplementedException()
+            };
         }
 
         public static byte[] HelloWorldBytes(int count)
