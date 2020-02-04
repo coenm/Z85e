@@ -1,13 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Z85e", "src\Z85e\Z85e.csproj", "{3B226522-EE55-4517-957A-A3E35DCE9CF4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Z85e.Test", "src\Z85e.Test\Z85e.Test.csproj", "{A2EABDC4-F392-4C21-8A5F-B08EFA7237E8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Z85e.Benchmarks", "src\Z85e.Benchmarks\Z85e.Benchmarks.csproj", "{D4C67591-14D8-46C4-9653-140B5D9EE34C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{47E1E35C-8E9B-456E-9749-E0471B3110C1}"
+	ProjectSection(SolutionItems) = preProject
+		build\Packages.targets = build\Packages.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
