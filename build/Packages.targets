@@ -24,7 +24,5 @@
     <PackageReference Update="xunit.categories" Version="2.0.4" />
     <PackageReference Update="xunit.runner.visualstudio" Version="2.4.1" />
     <PackageReference Update="BenchmarkDotNet" Version="0.11.1" />
-
   </ItemGroup>
-
 </Project>

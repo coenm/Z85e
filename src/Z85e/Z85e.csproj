@@ -1,8 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <!-- do not manually update version, this will be done using appvayor -->
-    <Version>1.1.1</Version>
     <Description>ZeroMQ's Z85 Encoding and the extended version. Formats for representing binary data as printable text.</Description>
     <Authors>Coen van den Munckhof</Authors>
     <TargetFrameworks>netstandard1.0;netstandard1.1;netstandard2.0;netcoreapp2.0;netcoreapp2.1;net461</TargetFrameworks>
